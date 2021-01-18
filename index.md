@@ -13,18 +13,14 @@ Lectures: Mon/Wed/Fri, 10:55am - 11:40am Tilton Memorial Hall 301 with zoom link
 
 ## Instructor
 
-[Dr. Xiang Ji](https://sse.tulane.edu/math/faculty/ji)
-
-Office: N.A. due to COVID
-
-Email: <xji4@tulane.edu>
-
+[Dr. Xiang Ji](https://sse.tulane.edu/math/faculty/ji)\
+Office: N.A. due to COVID\
+Email: <xji4@tulane.edu>\
 Office hours: Friday 9:30am - 10:45am with zoom link <https://tulane.zoom.us/j/96341432148>, or by appointment.
 
 
 ## Teaching Assistant
 
-Louis Nass <lnass@tulane.edu>
-
+Louis Nass <lnass@tulane.edu>\
 Office hours: Tuesday 1:00pm - 3:00pm
 
