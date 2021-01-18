@@ -5,9 +5,9 @@ title: Tulane 6040/7260
 
 ## Course Schedule
 
-Biomath 211 tentative schedule and handouts (expect frequent updates)
+Math 6040/7260 tentative schedule and handouts (expect frequent updates)
 
-Zoom link: <https://ucla.zoom.us/j/97761191576>, for call in dial +1-669-900-6833 and enter meeting ID `977 6119 1576`
+Zoom link: <https://tulane.zoom.us/j/96066182198>, for call in dial +1-669-900-6833 and enter meeting ID `960 6618 2198`
 
 | Week | Class Dates | Tentative Topic | Posts | Due |
 |:-----------|:-----------|:------------|:------------|:------------|:------------|
