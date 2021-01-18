@@ -1,9 +1,9 @@
 ---
 layout: course
-title: Biomath 211
+title: Math 6040/7260
 ---
 
-# Biomath 211 - Mathematical and Statistical Phylogenetics - Winter 2021
+# Math 6040/7260 - Linear Models - Spring 2021
 
 ## Syllabus
 
