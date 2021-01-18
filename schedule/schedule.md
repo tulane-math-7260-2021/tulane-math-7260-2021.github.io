@@ -1,6 +1,6 @@
 ---
 layout: course
-title: Tulane 6040/7260
+title: Math 6040/7260
 ---
 
 ## Course Schedule
