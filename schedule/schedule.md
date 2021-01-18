@@ -1,6 +1,6 @@
 ---
 layout: course
-title: Biomath 211
+title: Tulane 6040/7260
 ---
 
 ## Course Schedule
