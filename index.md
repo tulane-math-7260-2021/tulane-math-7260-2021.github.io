@@ -24,3 +24,7 @@ Office hours: Friday 9:30am - 10:45am with zoom link <https://tulane.zoom.us/j/9
 Louis Nass <lnass@tulane.edu>\
 Office hours: Tuesday 1:00pm - 3:00pm
 
+## Acknowledgement
+
+Special thanks to [Dr. Michelle Lacey](https://sse.tulane.edu/math/faculty/lacey), [Dr. Hua Zhou](http://hua-zhou.github.io/) and [Dr. Marc Suchard](https://ph.ucla.edu/faculty/suchard) for sharing their course materials.
+
