@@ -21,7 +21,8 @@ Office hours: Friday 9:30am - 10:45am with zoom link <https://tulane.zoom.us/j/9
 
 ## Teaching Assistant
 
-Louis Nass <lnass@tulane.edu>\
+Louis Nass\
+Email: <lnass@tulane.edu>\
 Office hours: Tuesday 1:00pm - 3:00pm
 
 ## Acknowledgement
