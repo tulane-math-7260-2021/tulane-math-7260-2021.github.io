@@ -13,9 +13,9 @@ The term “linear models” describes a wide class of methods for the statistic
 
 ### Lecture and Practicals
 
-Mon 10:55am - 11:40am @ Tilton Memorial Hall 301 and Zoom <https://ucla.zoom.us/j/97761191576>\
-Wed 10:55am - 11:40am @ Tilton Memorial Hall 301 and Zoom <https://ucla.zoom.us/j/97761191576>\
-Fri 10:55am - 11:40am @ Zoom <https://ucla.zoom.us/j/97761191576>
+Mon 10:55am - 11:40am @ Tilton Memorial Hall 301 and Zoom <https://tulane.zoom.us/j/96066182198>\
+Wed 10:55am - 11:40am @ Tilton Memorial Hall 301 and Zoom <https://tulane.zoom.us/j/96066182198>\
+Fri 10:55am - 11:40am @ Zoom <https://tulane.zoom.us/j/96066182198>
 
 ### Instructor
 
