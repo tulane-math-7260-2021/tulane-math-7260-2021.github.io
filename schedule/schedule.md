@@ -7,6 +7,8 @@ title: Math 6040/7260
 
 Math 6040/7260 tentative schedule and handouts (expect frequent updates)
 
+[pre-lecture notes](../notes/current.pdf)
+
 Topics:
 
 - linear algebra review
