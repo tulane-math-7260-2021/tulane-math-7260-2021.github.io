@@ -14,10 +14,10 @@ Topics:
 - linear algebra review
 - simple linear regression
 - multiple linear regression
-- normal and related distributions
-- ANOVA models
+- hypothesis testing
 - variance components and mixed models
 - bootstrap
+- normal and related distributions (if time permits)
 
 
 | Monday | Wednesday | Friday |
