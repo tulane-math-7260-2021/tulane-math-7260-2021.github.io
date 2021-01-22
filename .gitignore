@@ -5,3 +5,5 @@ _site/
 
 notes/*
 !notes/current.pdf
+!notes/combined.pdf
+
