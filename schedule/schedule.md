@@ -1,13 +1,16 @@
 ---
 layout: course
 title: Math 6040/7260
+date: "`r format(Sys.time(), '%d %B')`"
 ---
 
 ## Course Schedule
 
 Math 6040/7260 tentative schedule and handouts (expect frequent updates)
 
-[pre-lecture notes](../notes/current.pdf)
+[lecture notes](../notes/combined.pdf)
+
+[pre-lecture notes](../notes/current.pdf)(last update: {page.date})
 
 Topics:
 
@@ -22,4 +25,4 @@ Topics:
 
 | Monday | Wednesday | Friday |
 |:-----------|:-----------|:------------|
-|   | **01/20** intro, linear algebra  |  | 
+|   | **01/20** intro, linear algebra  | | 
