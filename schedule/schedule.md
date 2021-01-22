@@ -9,7 +9,9 @@ Math 6040/7260 tentative schedule and handouts (expect frequent updates)
 
 [lecture notes](../notes/combined.pdf)
 
-[pre-lecture notes](../notes/current.pdf)(last update: {{ "now" | date: "%b %d" }})
+[pre-lecture notes](../notes/current.pdf)(last update: Jan 22)
+
+<!--{{ "now" | date: "%b %d" }}-->
 
 Topics:
 
@@ -24,4 +26,7 @@ Topics:
 
 | Monday | Wednesday | Friday |
 |:-----------|:-----------|:------------|
-|   | **01/20** intro, linear algebra  | | 
+|   | **01/20** intro, linear algebra  | |
+| | 03/10 no class| |
+| 03/22 no class| | |
+| | | 04/30 no class|
