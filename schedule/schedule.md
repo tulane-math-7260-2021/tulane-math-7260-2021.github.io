@@ -27,7 +27,7 @@ Topics:
 | Monday | Wednesday | Friday |
 |:-----------|:-----------|:------------|
 |   | **01/20** intro  | **01/22**  linear algebra review|
-| **01/25** linear algebra review, simple linear regression | |
+| **01/25** linear algebra review, simple linear regression [Rmd](../notes/Lecture3/Lecture3.Rmd) | |
 | | 03/10 no class| |
 | 03/22 no class| | |
 | | | 04/30 no class|
