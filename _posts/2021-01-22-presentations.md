@@ -29,8 +29,8 @@ The topics are given by key words only.  Please practice your ability of "educat
 |Mar 5 | | |
 |Mar 12| | |
 |Mar 19| | |
-|Mar 26| | |
+|Mar 26| OpenCL | SL |
 |April 2| | |
-|April 9| | |
-|April 16| | |
+|April 9| Causal Inference | LD |
+|April 16| Bayesian Statistics | CF |
 |April 23| | |
