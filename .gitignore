@@ -1,3 +1,4 @@
+.DS_Store
 _site/
 .sass-cache/
 .jekyll-cache/
@@ -7,3 +8,6 @@ notes/*
 !notes/current.pdf
 !notes/combined.pdf
 !notes/*.Rmd
+
+HW/*
+!HW/*.pdf
