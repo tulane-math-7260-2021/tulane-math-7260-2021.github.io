@@ -24,10 +24,10 @@ Topics:
 - normal and related distributions (if time permits)
 
 
-| Monday | Wednesday | Friday |
-|:-----------|:-----------|:------------|
-|   | **01/20** intro  | **01/22**  linear algebra review|
-| **01/25** linear algebra review, simple linear regression \[[Rmd](../notes/Lecture3/Lecture3.Rmd)\] | |
+| Monday | Wednesday | Friday | HW |
+|:-----------|:-----------|:------------|:---:|
+|   | **01/20** intro  | **01/22**  linear algebra review| |
+| **01/25** linear algebra review, simple linear regression \[[Rmd](../notes/Lecture3/Lecture3.Rmd)\] | ||  [HW1](../HW/HW1.pdf)|
 | | 03/10 no class| |
 | 03/22 no class| | |
 | | | 04/30 no class|
