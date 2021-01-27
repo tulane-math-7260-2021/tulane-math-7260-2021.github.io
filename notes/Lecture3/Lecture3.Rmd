@@ -22,9 +22,12 @@ Figure 5.1
 
 ```{r}
 weights.data <- tibble(read.table("./Davis.txt"))
+weights.data[12, "height"] <- 166
+weights.data[12, "weight"] <- 57
 ggplot(data = weights.data, mapping = aes(x = reportedWeight, y = weight)) +
   geom_point(shape = 1) +
   geom_abline(slope = 1.0, intercept = 0.0, linetype = 2) + 
+  geom_abline(slope = 0.97722, intercept = 1.7776) +
   coord_cartesian(xlim = c(38, 80), ylim = c(35, 80)) +
   theme_bw() +
   ggsave("./figure_5_1.pdf", width = 8, height = 6)
