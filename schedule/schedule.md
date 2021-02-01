@@ -28,6 +28,7 @@ Topics:
 |:-----------|:-----------|:------------|:---:|
 |   | **01/20** intro  | **01/22**  linear algebra review| |
 | **01/25** linear algebra review, simple linear regression \[[Rmd](../notes/Lecture3/Lecture3.Rmd)\] | **01/27** simple linear regression | **01/29** R intro [notes](../notes/Lecture5/lecture5.pdf)|  [HW1](../HW/HW1.pdf)|
-| | 03/10 no class| |
-| 03/22 no class| | |
-| | | 04/30 no class|
+| **02/01** statistical model of SLR| | | |
+| | 03/10 no class| | |
+| 03/22 no class| | | |
+| | | 04/30 no class| |
