@@ -23,7 +23,7 @@ Office hours: Friday 9:30am - 10:45am with zoom link <https://tulane.zoom.us/j/9
 
 Louis Nass\
 Email: <lnass@tulane.edu>\
-Office hours: Tuesday 1:00pm - 3:00pm with zoom link
+Office hours: Tuesday, Thursday 2:00pm - 3:00pm with zoom link
 <https://tulane.zoom.us/j/6803916125>
 
 ## Acknowledgement
