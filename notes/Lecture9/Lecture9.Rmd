@@ -20,6 +20,9 @@ prestige.df <- tibble(prestige.data)
 ggpairs(data = prestige.df, columns = c("income", "education", "prestige"))
 ```
 
+-------------------------------------
+
+
 Construct X, X'X, etc
 
 ```{r}
