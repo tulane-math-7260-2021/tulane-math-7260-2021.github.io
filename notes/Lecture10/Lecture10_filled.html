@@ -391,10 +391,10 @@ X &lt;- as.matrix(cbind(1, prestige.data[, c(&quot;income&quot;, &quot;education
 # construct the Gramian matrix
 system.time(gramian.mat &lt;- t(X) %*% X)</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.000   0.000   0.001</code></pre>
+##       0       0       0</code></pre>
 <pre class="r"><code>system.time(gramian.mat &lt;- crossprod(X))</code></pre>
 <pre><code>##    user  system elapsed 
-##       0       0       0</code></pre>
+##   0.000   0.000   0.001</code></pre>
 <pre class="r"><code>gramian.mat</code></pre>
 <pre><code>##              1 income education
 ## 1           45   1884      2365
