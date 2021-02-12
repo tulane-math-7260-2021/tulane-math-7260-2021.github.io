@@ -110,7 +110,8 @@ confidence.interval
 Use `lm` to check
 
 ```{r}
-(lmod <- lm(prestige ~ income + education, prestige.data))
+(lmod <- lm(prestige ~ income + education, data = prestige.data))
+beta.estimate
 summary(lmod)
 
 predict(lmod, newdata = data.frame("1" = 1, "income" = 42, "education" = 84), interval = "confidence")

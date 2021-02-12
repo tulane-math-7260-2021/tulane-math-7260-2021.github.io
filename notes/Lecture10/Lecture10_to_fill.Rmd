@@ -48,6 +48,9 @@ Q1. Now let's calculate the least square estimates
 
 ```{r, eval=FALSE}
 # Now calculate the LS estimate
+beta.estimate <- solve(t(X) %*% X) %*% t(X) %*% Y
+beta.estimate <- solve(t(X) %*% X) %*% (t(X) %*% Y)
+beta.estimate <- solve(t(X) %*% X, t(X) %*% Y)
 beta.estimate
 ```
 
