@@ -511,6 +511,16 @@ summary(lmod)</code></pre>
 ##   (17 observations deleted due to missingness)
 ## Multiple R-squared:  0.6986, Adjusted R-squared:  0.697 
 ## F-statistic: 419.6 on 1 and 181 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code># sum of squares
+anova(lmod)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: weight
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## repwt       1  29738 29737.8  419.59 &lt; 2.2e-16 ***
+## Residuals 181  12828    70.9                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div id="q7.-repeat-q2-to-q6-for-the-dataset-mandel-to-regress-y-on-x1." class="section level3">
 <h3>Q7. Repeat Q2 to Q6 for the dataset <code>Mandel</code> to regress <code>y</code> on <code>x1</code>.</h3>

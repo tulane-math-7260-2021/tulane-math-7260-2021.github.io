@@ -93,6 +93,8 @@ p.value
 ```{r}
 lmod <- lm(weight ~ repwt, data = Davis)
 summary(lmod)
+# sum of squares
+anova(lmod)
 ```
 
 ### Q7. Repeat Q2 to Q6 for the dataset `Mandel` to regress `y` on `x1`.
