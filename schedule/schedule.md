@@ -31,7 +31,7 @@ Topics:
 | **02/01** statistical model of SLR| **02/03** properties of LS estimators | **02/05** inference of SLR | Lab 1 \[[Rmd](../notes/Lecture8/lab_01_preparation.Rmd)\]\[[html](../notes/Lecture8/lab_01_preparation.html)\] |
 | **02/08** multiple linear regression \[[Rmd](../notes/Lecture9/Lecture9.Rmd)\]\[[html](../notes/Lecture9/Lecture9.html)\]| **02/10** more on MLR \[[Duncan's data](../notes/Lecture10/Duncan.txt)\]\[[Lecture10\_to\_fill.Rmd](../notes/Lecture10/Lecture10_to_fill.Rmd)\]\[[Lecture10\_filled.Rmd](../notes/Lecture10/Lecture10_filled.Rmd)\] | **02/12** R practice | |
 | **02/15** probability theory review| **02/17** HW1 and probability review  | **02/19** Lab session \[[Lecture14\_to\_fill.Rmd](../notes/Lecture14/Lecture14_to_fill.Rmd)\] | [HW2](../HW/HW2/HW2.pdf) |
-| **02/22** Dummy variable regression | | | |
+| **02/22** Dummy variable regression | **02/24** Unusual and influential data| | |
 | | 03/10 no class (mid-term exam begins)| **03/12** mid term exam | |
 | 03/22 no class| | | |
 | | | 04/30 no class| |
