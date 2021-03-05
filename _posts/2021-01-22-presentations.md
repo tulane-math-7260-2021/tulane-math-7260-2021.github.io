@@ -22,15 +22,15 @@ The topics are given by key words only.  Please practice your ability of "educat
 
 |Date |Topic| Presenter|
 |:---:|:---:|:---:|
-|Feb 5|  | |
-|Feb 12| | |
-|Feb 19| | |
-|Feb 26| | |
-|Mar 5 | | |
-|Mar 12| | |
-|Mar 19| | |
-|Mar 26| OpenCL | SL |
-|April 2| | |
+|Feb 5| Forensic Statistics | KG |
+|Feb 12|Carl Friedrich Gauss | ES |
+|Feb 19| Hamiltonian Monte Carlo |XJ|
+|Feb 26| Variational Bayes| BZ |
+|Mar 5 |Precision Medicine | MMYP |
+|Mar 12|Andrey Markov | AT|
+|Mar 19|Fingerprints \& DNA fingerprints | CZ |
+|Mar 26| Francis Galton | GOB |
+|April 2| Karl Pearson| HC |
 |April 9| Causal Inference | LD |
-|April 16| Bayesian Statistics | CF |
-|April 23| | |
+|April 16| Bayesian Statistics | JJLS |
+|April 23| OpenCL| SL |
