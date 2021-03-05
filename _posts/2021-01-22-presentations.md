@@ -28,7 +28,7 @@ The topics are given by key words only.  Please practice your ability of "educat
 |Feb 26| Variational Bayes| BZ |
 |Mar 5 |Precision Medicine | MMYP |
 |Mar 12|Andrey Markov | AT|
-|Mar 19|Fingerprints \& DNA fingerprints | CZ |
+|Mar 19|Fingerprints & DNA fingerprints | CZ |
 |Mar 26| Francis Galton | GOB |
 |April 2| Karl Pearson| HC |
 |April 9| Causal Inference | LD |
