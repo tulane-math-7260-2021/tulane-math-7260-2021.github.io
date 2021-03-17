@@ -34,6 +34,6 @@ Topics:
 | **02/22** Dummy variable regression | **02/24** Unusual and influential data| **02/26** Added-variable plot | |
 | **03/01** Diagnosing non-normality, non-constant error variance | **03/03** Disgnosing nonlinearity and data transformation | **03/05**  Presentations | |
 | **03/08** R practice \[[Lecture20.Rmd](../notes/Lecture20/Lecture20.Rmd)\]\[[Lecture20.html](../notes/Lecture20/Lecture20.html)\] | 03/10 no class (mid-term exam begins)| **03/12** mid term exam | |
-|**03/15** Collinearity and principal component analysis||||
+|**03/15** Collinearity and principal component analysis| **03/17** Ridge and Lasso regression |||
 | 03/22 no class| | | |
 | | | 04/30 no class| |
