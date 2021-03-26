@@ -35,5 +35,5 @@ Topics:
 | **03/01** Diagnosing non-normality, non-constant error variance | **03/03** Disgnosing nonlinearity and data transformation | **03/05**  Presentations | |
 | **03/08** R practice \[[Lecture20.Rmd](../notes/Lecture20/Lecture20.Rmd)\]\[[Lecture20.html](../notes/Lecture20/Lecture20.html)\] | 03/10 no class (mid-term exam begins)| **03/12** mid term exam | |
 |**03/15** Collinearity and principal component analysis| **03/17** Midterm exam review |**03/19** Ridge and Lasso regression||
-| 03/22 no class| **03/24** Model selection | | |
+| 03/22 no class| **03/24** Model selection | **03/26** Lab session \[[Lecture24\_to\_fill.Rmd](../notes/Lecture24/Lecture_24_to_fill.Rmd)\] | |
 | | | 04/30 no class| |
