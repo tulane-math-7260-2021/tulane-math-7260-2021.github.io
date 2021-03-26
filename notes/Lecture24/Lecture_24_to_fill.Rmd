@@ -167,7 +167,8 @@ Just recall...
   
 Now perform Model selection on the Fish dataset.
 
-### Q2c. perform backward elimination initiated from the model 3, use AIC as your ranking function.  
+### Q2c. perform backward elimination initiated from the model 3, use AIC as your ranking function.
+Checkout the documentation of function `step` in R.
 `Weight ~ Species * (Length1 + Length2 + Length3 + Height + Width)`
 
 insert your code below
