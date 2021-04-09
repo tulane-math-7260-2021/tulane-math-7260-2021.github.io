@@ -37,5 +37,5 @@ Topics:
 |**03/15** Collinearity and principal component analysis| **03/17** Midterm exam review |**03/19** Ridge and Lasso regression||
 | 03/22 no class| **03/24** Model selection | **03/26** Lab session \[[Lecture24\_to\_fill.Rmd](../notes/Lecture24/Lecture_24_to_fill.Rmd)\] | |
 |**03/29** Analysis of Variance| **03/31** Two-way ANOVA \[[honey_bee.csv](../notes/Lecture26/honey_bee.csv)\]| **04/02** Lab session \[[Lecture27\_to\_fill.Rmd](../notes/Lecture27/Lecture_27_to_fill.Rmd)\] |[HW3](../HW/HW3/HW3.pdf)|
-| **04/05** Analysis of Covariance  \[[vitamin_supplement.csv](../notes/Lecture28/vitamin_supplement.csv)\] | **04/07** Multiple comparisons, sample size computations for one-way ANOVA | | |
+| **04/05** Analysis of Covariance  \[[vitamin_supplement.csv](../notes/Lecture28/vitamin_supplement.csv)\] | **04/07** Multiple comparisons, sample size computations for one-way ANOVA | **04/09** Lab session \[[Lecture30\_to\_fill.Rmd](../notes/Lecture30/Lecture_30_to_fill.Rmd)\]| |
 | | | 04/30 no class (final exam begins)| |
