@@ -41,4 +41,4 @@ Topics:
 | **04/12** sample size computations for one-way ANOVA, Lack-of-fit test, One-way random effects model| **04/14** Interval estimates for one-way random effects model | **04/16** Lab session \[[Lecture33\_to\_fill.Rmd](../notes/Lecture33/Lecture_33_to_fill.Rmd)\] | |
 | **04/19** Two-factor mixed-effects models| **04/21** Theoretical background| **04/23** Lab session \[[Lecture36\_to\_fill.Rmd](../notes/Lecture36/Lecture_36_to_fill.Rmd)\]||
 | **04/26** Theoretical background cont. | **04/28** Theoretical background | 04/30 no class (final exam begins)| |
-| **05/03** Bootstrap |  | | |
+| **05/03** Bootstrap and logistic regression |  | | |
