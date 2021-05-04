@@ -1,0 +1,256 @@
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+%\usepackage{setspace}
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{amsbsy}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{amsthm}
+\usepackage{mathabx}
+\usepackage{cite}
+\usepackage{dutchcal}
+\usepackage{float}
+\usepackage[toc,page]{appendix}
+%\usepackage{natbib}
+%\usepackage{lineno}
+\usepackage{mathrsfs}
+%\usepackage[nolists]{endfloat}
+\usepackage{todonotes}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{parskip}
+%\usepackage{mathptmx}
+%\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+%Variable Declarations
+%Matricies
+%\graphicspath{{Figures/}}
+
+\def\diffvar{\boldsymbol{\Sigma}}
+
+\newcommand{\vecEpsilon}[0]{\boldsymbol{\epsilon}}
+\newcommand{\Expected}[1]{{\mathbf{E}\left(#1\right)}}
+\newcommand{\Var}[1]{\mathbf{Var}\left(#1\right)}
+\newcommand{\vecc}[1]{\mathbf{#1}}
+\newcommand{\p}[1]{{\mathbf{p}}_{#1}}
+\newcommand{\q}[1]{{\mathbf{q}}_{#1}}
+\newcommand{\M}[1]{{\mathbf{M}}_{#1}}
+\newcommand{\Q}[1]{{\mathbf{Q}}_{#1}}
+\newcommand{\Smat}[1]{{\mathbf{S}}_{#1}}
+\newcommand{\X}[1]{{\mathbf{X}_{#1}}}
+\newcommand{\D}[1]{{\mathbf{D}_{#1}}}
+\newcommand{\V}[1]{{\mathbf{V}_{#1}}}
+\newcommand{\G}[1]{{\mathbf{G}_{#1}}}
+\newcommand{\bl}[1]{{b}_{#1}} % for branch length
+\newcommand{\br}[1]{{r}_{#1}} % for branch rate
+\newcommand{\bp}[1]{{\nu}_{#1}} % for branch parameter
+\newcommand{\sr}[1]{{\gamma}_{#1}} % for site rate
+\newcommand{\Ptr}[1]{\mathbf{P}_{#1}}
+
+\newcommand{\cDensity}[2]{\ensuremath{P(#1 \,|\,#2)}}
+\newcommand{\veccDensity}[2]{\mathbf{p}(#1 \,|\,#2)}
+\newcommand{\matcDensity}[2]{\mathbf{P}(#1 \,|\,#2)}
+\newcommand{\secondDerivative}[3]{\frac{\partial ^2}{\partial #1 _i\partial #2 _j}{#3}}
+\newcommand{\density}[1]{\ensuremath{p(#1 )}}
+\newcommand{\vecOperator}[1]{\mbox{vec}\hspace{-0.1em}\left[ #1 \right]}
+\newcommand{\trOperator}[1]{\mbox{tr}\hspace{-0.1em}\left[ #1 \right]}
+\newcommand{\oneVector}[1]{\mathbf{1}_{#1}}
+\newcommand{\order}[1]{{\cal O}\hspace{-0.1em}\left( #1 \right)}
+\newcommand{\specialInverse}{-}
+\newcommand{\inverse}{^{-1}}
+\newcommand{\transpose}{^T}
+\newcommand{\vectorize}[1]{\text{vec}\left(#1\right)}
+\newcommand{\kronecker}{\otimes}
+
+\newcommand{\parent}[1]{\text{pa}(#1)}
+\newcommand{\parentNth}[2]{\text{pa}^{(#2)}(#1)}
+\newcommand{\sibling}[1]{\text{sib}(#1)}
+\newcommand{\smallParent}[1]{\text{\tiny pa}(#1)}
+\newcommand{\nodePrecision}[1]{\mathbf{P}_{#1}}
+\newcommand{\nodeVariance}[1]{\mathbf{\Sigma}_{#1}}
+\newcommand{\nodeVarianceFunction}[1]{\nodeVariance{}\hspace{-0.1em}\left( #1 \right)}
+\newcommand{\deflatedNodePrecision}[1]{\nodePrecision{#1}^{\star}}
+\newcommand{\nodeMean}[1]{\mathbf{m}_{#1}}
+\newcommand{\nodeIndexOne}{i}
+\newcommand{\nodeIndexTwo}{j}
+\newcommand{\nodeIndexThree}{k}
+\newcommand{\branchLength}[1]{t_{#1}}
+\newcommand{\diffusionVariance}{\diffvar}
+\newcommand{\remainder}[1]{r_{#1}}
+\newcommand{\backback}{-0.15em}
+\newcommand{\zeroDimension}[1]{d\hspace{\backback}\left(#1\right)}
+\newcommand{\infiniteDimension}[1]{e\hspace{\backback}\left(#1\right)}
+\newcommand{\finiteNonZeroDimension}[1]{f\hspace{\backback}\left(#1\right)}
+\newcommand{\permutationMatrix}{\mathbf{Q}}
+\newcommand{\nodePermutationMatrix}[1]{\permutationMatrix_{#1}}
+%\newcommand{\transpose}{^{'}}
+\newcommand{\missing}[2]{\delta_{#1 #2}}
+\newcommand{\traitIndex}{p}
+\newcommand{\arbitraryMatrix}{\mathbf{Z}}
+\newcommand{\identityMatrix}[1]{\mathbf{I}_{#1}}
+\newcommand{\bigzero}[2]{\makebox(0,0){\hspace{#1}\vspace{#2}\text{\huge0}}}
+\newcommand{\altDet}[1]{\hat{\text{det}}\left( #1 \right)}
+\newcommand{\changeDimension}[1]{\Delta_{#1}}
+\newcommand{\notMissingMatrix}[1]{\boldsymbol{\delta}_{#1}}
+
+\newcommand{\nodePreMean}[1]{\mathbf{n}_{#1}}
+\newcommand{\nodePreVariance}[1]{\mathbf{W}_{#1}}
+\newcommand{\nodePrePrecision}[1]{\mathbf{Q}_{#1}}
+\newcommand{\deflatedNodePrePrecision}[1]{\nodePrePrecision{#1}^{\star}}
+%\newcommand{\MVN}{\text{MVN}}
+\newcommand{\Indexobs}{\mathcal{I}^{\text{\tiny obs}}_ \nodeIndexOne}
+\newcommand{\Indexmis}{\mathcal{I}^{\text{\tiny mis}}_ \nodeIndexOne}
+
+\newcommand{\normalDensityFunction}[3]{{\cal N}\hspace{-0.25em}\left( #1; #2, #3 \right)}
+\newcommand{\conditionalMean}[1]{\boldsymbol{\mu}_{#1}}
+\newcommand{\dd}{\text{d}}
+\def\rowvarresidMissing{\rowvarresid_{{mis}_\nodeIndexOne}}
+
+\newcommand{\symbolicObservedVariance}{0}
+\newcommand{\symbolicMissingVariance}{\infty}
+\newcommand{\symbolicFiniteVariance}{+}
+\newcommand{\partialDiffusionVariance}[2]{\diffusionVariance_{#1 #2}}
+
+\newcommand{\observedVariance}{\partialDiffusionVariance{\symbolicObservedVariance}{\symbolicObservedVariance}}
+\newcommand{\missingVariance}{\partialDiffusionVariance{\symbolicMissingVariance}{\symbolicMissingVariance}}
+\newcommand{\finiteVariance}{\partialDiffusionVariance{\symbolicFiniteVariance}{\symbolicFiniteVariance}}
+\newcommand{\tipLatentPrecision}[1]{\mathbf{R}_{#1}}
+
+\newcommand{\finiteObservedVariance}{\partialDiffusionVariance{\symbolicFiniteVariance}{\symbolicObservedVariance}}
+\newcommand{\finiteMissingVariance}{\partialDiffusionVariance{\symbolicFiniteVariance}{\symbolicMissingVariance}}
+\newcommand{\observedMissingVariance}{\partialDiffusionVariance{\symbolicObservedVariance}{\symbolicMissingVariance}}
+\newcommand{\diag}[1]{\text{diag} \left[ #1 \right]}
+
+\newcommand{\deflatedPrecision}[1]{\mathbf{P}^{\star}_{#1}}
+\newcommand{\startingPrecision}[1]{\mathbf{P}_{#1}}
+\newcommand{\finitePrecision}[1]{\tilde{\startingPrecision{#1}}}
+\newcommand{\bogusPrecision}[1]{\finitePrecision{#1}^{-1}}
+\newcommand{\raisedInfty}{\raisebox{0.1em}{$\infty$}}
+\newcommand{\bfZero}{\mathbf{0}}
+\newcommand{\missingIndicator}[1]{\mathbf{M}_{#1}}
+
+\newcommand{\phylogeny}{\mathscr{F}}
+\newcommand{\phylogenyVariance}{\mathbf{\Upsilon}}
+\newcommand{\phylogenyPrecision}{\phylogenyVariance\inverse}
+\newcommand{\traitPrecision}{\mathbf{P}}
+
+\newcommand{\grandVariance}{\mathbf{\Sigma}}
+\newcommand{\grandVarianceExpression}{\traitPrecision\inverse \kronecker \phylogenyVariance}
+\newcommand{\grandPrecision}{\grandVariance\inverse}
+\newcommand{\grandPrecisionExpression}{\traitPrecision \kronecker \phylogenyPrecision}
+
+\newcommand{\latentData}{\mathbf{Y}}
+\newcommand{\vecLatentData}{\mathbf{Z}}
+\newcommand{\nTaxa}{N}
+\newcommand{\nTraits}{P}
+
+\newcommand{\mvnDensity}[2]{\text{MVN}\hspace{-0.1em}\left(#1, #2\right)}
+\newcommand{\mvn}[3]{\text{MVN}\hspace{-0.1em}\left(#1; #2, #3\right)}
+\newcommand{\gradient}[1]{\frac{\partial}{\partial #1}}
+
+\newcommand{\rate}[1]{\phi_{#1}}
+\newcommand{\allRates}{\boldsymbol{\phi}}
+\newcommand{\rank}{\mbox{rank}}
+\newcommand{\sVar}{\rm Var}
+
+\newcommand{\distas}[1]{\overset{#1}{\sim}}%
+
+\usepackage{empheq}
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+
+\usepackage{etoolbox,environ}
+\newtoggle{showProof}
+\togglefalse{showProof}
+\NewEnviron{pf}
+  {\iftoggle{showProof}{\BODY}{}}
+
+
+\usepackage{scalerel,stackengine}
+\stackMath
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}% 
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
+\colorlet{shadecolor}{gray!15}
+
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\newcommand{\columnSpace}[1]{\mathnormal{C}(#1)}
+\newcommand{\dimm}{\mbox{dim}}
+\newcommand{\Null}[1]{\mathcal{N}(#1)}
+
+\def\treeTraitsRoot{\boldsymbol{\mu}_R}
+\def\diffprec{\boldsymbol{\Lambda}_R}
+\def\diffprecprior{\boldsymbol{\Lambda}_{R_0}}
+\def\diffmean{\boldsymbol{\mu}_0}
+\def\pss{\kappa_0}
+\def\diffprecpriordf{\nu}
+\def\pss{\kappa_0}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+\newtheorem{mydef}{Definition}
+\newtheorem{assumption}{Assumption}
+
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}

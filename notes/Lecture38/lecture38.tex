@@ -1,0 +1,419 @@
+\setcounter{section}{37}
+
+\section{Lecture 38: April 28}
+
+
+\subsection*{Last time}
+\begin{itemize}
+\item Theoretical background of linear model
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item Course evaluation (7/17)
+\item Typo in HW3\_keys
+\item Theoretical background of linear models cont.
+	\begin{itemize}
+		\item Projections
+		\item Geometry of least squares solution
+		\item Multivariate normal distribution
+		\item Independence and Cochran's theorem
+	\end{itemize}
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{http://hua-zhou.github.io/teaching/st552-2013fall/ST552-2013-Fall-LecNotes.pdf}{Course notes} by Dr. Hua Zhou\\
+``A Primer on Linear Models'' by Dr. John F. Monahan
+
+\subsubsection*{Projection}
+\begin{itemize}
+	\item A matrix $\vecc{P} \in \mathbb{R}^{m \times n}$ is a \underline{projection} onto a vector space $\mathcal{V}$ if and only if
+	    \begin{enumerate}
+	    	\item $\vecc{P}$ is idempotent
+	    	\item $\vecc{Px} \in \mathcal{V}$ for any $\vecc{x} \in \mathbb{R}^n$
+	    	\item $\vecc{Pz = z}$ for any $\vecc{z} \in \mathcal{V}$.
+	    \end{enumerate}
+    \item Any idempotent matrix $\vecc{P}$ is a projection onto its own column space $\mathcal{C}(\vecc{P})$.\\
+    {\it Proof:}
+    \begin{pf}
+    Property (1) is free.  Property (2) is trivial since $\vecc{Px} \in \mathcal{C}(\vecc{P})$ for any $\vecc{x}$.
+    For property (3), note $\vecc{PP=P}$ says $\vecc{Pp}_i = \vecc{p}_i$ for each column $\vecc{p}_i$ of $\vecc{P}$.  Therefore, $\vecc{Pz = z}$ for any $\vecc{z} \in \mathcal{C}(\vecc{P})$.
+    \end{pf}
+	\item $\vecc{AA}^-$ is a projection onto the column space $\mathcal{C}(\vecc{A})$.\\
+	{\it Proof:}
+	\begin{pf}
+		\begin{enumerate}
+			\item Idempotent: $\vecc{AA}^- \vecc{AA}^- = \vecc{AA}^-$ by definition of generalized inverse.
+			\item $\vecc{AA}^- \vecc{v} = \vecc{A}(\vecc{A}^-\vecc{v}) \in \mathcal{C}(\vecc{A})$
+			\item Let $\vecc{z} \in \mathcal{C}(\vecc{A})$, then $\vecc{z} = \vecc{Ac}$ for some $\vecc{c}$.  
+			Therefore, $\vecc{AA}^- \vecc{z} = \vecc{AA}^- \vecc{Ac} = \vecc{Ac} = \vecc{z}$
+		\end{enumerate}
+	\end{pf}
+	\item Start with $\vecc{P_X X = X}$, we have $\vecc{X}(\vecc{X}\transpose \vecc{X})^- \vecc{X}\transpose \vecc{X} = \vecc{X}$. Therefore, $(\vecc{X}\transpose \vecc{X})^- \vecc{X}\transpose$ is a generalized inverse of $\vecc{X}$ which is sometimes called the \underline{least-squares inverse}.  And $\vecc{P}_{\vecc{X}}$ is a projection onto $\mathcal{C}(\vecc{X})$.
+	\item The projection matrix 
+	$$
+	\underset{n \times n}{\vecc{P_X}}= \underset{n \times p}{\vecc{X}} \underset{p \times p}{(\vecc{X}\transpose \vecc{X})^{-}}\underset{p \times n}{\vecc{X}\transpose}
+	$$
+	is unique.\\
+	{\it Proof:}
+	\begin{pf}
+		Let $\vecc{G}_1$ and $\vecc{G}_2$ be two generalized inverse of $\vecc{X}\transpose\vecc{X}$.
+		Define $\vecc{P}_{\vecc{X}, 1} = \vecc{X}\vecc{G}_1 \vecc{X}\transpose$ and $\vecc{P}_{\vecc{X}, 2} = \vecc{X}\vecc{G}_2 \vecc{X}\transpose$.
+		$$
+		\vecc{X}\transpose\vecc{X}\vecc{G}_1 \vecc{X}\transpose\vecc{X} = \vecc{X}\transpose\vecc{X} = \vecc{X}\transpose\vecc{X} \vecc{G}_2 \vecc{X}\transpose\vecc{X}
+		$$
+		By the proposition below, we have
+		$$
+		\vecc{X}\vecc{G}_1 \vecc{X}\transpose\vecc{X} = \vecc{X} \vecc{G}_2 \vecc{X}\transpose\vecc{X}
+		$$
+		and taking transpose on both sides, we get $ \vecc{X}\transpose\vecc{X} (\vecc{X}\vecc{G}_1)\transpose = \vecc{X}\transpose\vecc{X} ( \vecc{X} \vecc{G}_2)\transpose$.
+		Applying the proposition below again, we get
+		$$
+		\vecc{X} (\vecc{X}\vecc{G}_1)\transpose = \vecc{X} ( \vecc{X} \vecc{G}_2)\transpose
+		$$
+		which is
+		$$
+		\vecc{X}\vecc{G}_1 \vecc{X}\transpose = \vecc{X}\vecc{G}_2 \vecc{X}\transpose .
+		$$
+		We showed that $\vecc{P}_{\vecc{X}, 1} = \vecc{P}_{\vecc{X}, 2}$ is unique.
+	\end{pf}
+	\item Proposition: Let $\vecc{X, A, B}$ be matrices, then $\vecc{X}\transpose\vecc{XA} = \vecc{X}\transpose\vecc{XB}$ if and only if $\vecc{XA} = \vecc{XB}$.\\
+	{\it Proof:}
+	\begin{pf}
+		\begin{itemize}
+			\item `if' part: $\vecc{XA} = \vecc{XB} \implies \vecc{X}\transpose\vecc{XA} = \vecc{X}\transpose\vecc{XB}$
+			\item `only if' part: if $\vecc{X}\transpose\vecc{XA} = \vecc{X}\transpose\vecc{XB}$, then $\vecc{X}\transpose\vecc{XA} - \vecc{X}\transpose\vecc{XB} = \vecc{0} \implies \vecc{X}\transpose\vecc{X(A - B)} = \vecc{0} \implies \vecc{(A - B)}\transpose \vecc{X}\transpose\vecc{X(A - B)} = \vecc{0} \implies \vecc{(XA - XB)}\transpose \vecc{(XA - XB)} = \vecc{0} \implies \vecc{XA - XB = 0}$
+		\end{itemize}
+	\end{pf}
+	\item $\underset{n \times n}{\vecc{P_X}} \; \underset{n \times p}{\vecc{X}} =  \underset{n \times p}{\vecc{X}}$\\
+	{\it Proof:}
+	\begin{pf}
+		$$
+		\vecc{X}\transpose\vecc{X} (\vecc{X}\transpose\vecc{X})^- \vecc{X}\transpose\vecc{X} = \vecc{X}\transpose\vecc{X} \vecc{I}
+		$$
+		with the above proposition, we have
+		$$
+		\vecc{X} (\vecc{X}\transpose\vecc{X})^- \vecc{X}\transpose\vecc{X} = \vecc{X}
+		$$
+		which is $\vecc{P_X X = X}$.
+	\end{pf}
+	\item Predicted values $\hat{\vecc{Y}} = \vecc{X}\hat{\vecc{b}}_{ls}$ are invariant to choice of solution to the normal equation, where
+	$$
+	\vecc{\hat{b}}_{ls} = (\vecc{X}\transpose \vecc{X})^- \vecc{X}\transpose\vecc{Y}
+	$$
+	is not necessarily unique.\\
+	{\it Proof:}
+	\begin{pf}
+		\begin{enumerate}
+			\item $\hat{\vecc{Y}} = \vecc{X\hat{b}}_{ls} = \vecc{P_X Y}$ and apply the uniqueness of $\vecc{P_X}$
+			\item Given $\hat{\vecc{b}}_1$ and $\hat{\vecc{b}}_2$ are two solutions to the Nomral Equations, then
+			$$
+			\hat{\vecc{b}}_2 = \hat{\vecc{b}}_1 + \left\{ \vecc{I} - (\vecc{X}\transpose \vecc{X})^- \vecc{X}\transpose \vecc{X}\right\} \vecc{z}
+			$$
+			for some vector $\vecc{z}$.
+			Then $\vecc{X\hat{b}}_2 = \vecc{X}\hat{\vecc{b}}_1 + \vecc{X}\left\{ \vecc{I} - (\vecc{X}\transpose \vecc{X})^- \vecc{X}\transpose \vecc{X}\right\} \vecc{z} =  \vecc{X}\hat{\vecc{b}}_1$
+		\end{enumerate}
+		Recall, multicollinearity doesn't affect prediction.
+	\end{pf}
+\end{itemize}
+
+\subsection*{Geometry of least squares}
+\begin{itemize}
+	\item 	$\vecc{P}_{\vecc{X}}^2 = \vecc{P_X}$ and $\hat{\vecc{Y}} = \vecc{P}_{\vecc{X}} \vecc{Y}$ is unique.
+	\item Recall the column space of $\vecc{X}$ is $\mathcal{C}(\vecc{X}) = \left\{ \underset{n \times 1}{\vecc{y}} : \vecc{y} = \vecc{X}\underset{p \times 1}{\vecc{b}} \mbox{ for some } \vecc{b} \right\}$
+	\item The vector in $\mathcal{C}(\vecc{X})$ that is closest in terms of squared norm ($L_2$ norm: $||\vecc{a - b}||_2 = \sqrt{\vecc{(a - b)}\transpose \vecc{(a - b)}}$) to $\vecc{Y}$ is given by $\hat{\vecc{Y}} = \vecc{X}\hat{\vecc{b}}_{ls} = \vecc{P}_{\vecc{X}}\vecc{Y}$.\\
+	{\it Proof:}
+	\begin{pf}
+		$\hat{\vecc{b}}_{ls}$ minimizes $||\vecc{Y-Xb}||^2$ over all $\vecc{b} \in \mathbb{R}^p$.
+	\end{pf}
+	\item $\hat{\vecc{Y}} \in \mathcal{C}(\vecc{X})$
+	\item  $\underset{n \times 1}{\vecc{\hat{e}}} = \vecc{Y - \hat{Y}} = (\vecc{I} - \vecc{P}_{\vecc{X}})\vecc{Y} \in \mathcal{N}(\vecc{X}\transpose)$ 
+	where $\mathcal{N}(\vecc{X}\transpose) = \left\{\underset{n \times 1}{\vecc{v}}: \vecc{X}\transpose \vecc{v} = \vecc{0}\right\}$ is the \underline{null space} of $\vecc{X}\transpose$.\\
+	{\it Proof:}
+	\begin{pf}
+		For any $\vecc{y} \in \mathcal{C}(\vecc{X})$, such that $\vecc{y = Xb}$ for some $\vecc{b}$.
+		$$
+		\begin{aligned}
+			\hat{\vecc{e}}\transpose \vecc{y} &= \vecc{Y}\transpose (\vecc{I} - \vecc{P}_{\vecc{X}}) \vecc{Xb}\\
+			&= \vecc{Y}\transpose (\vecc{X} - \vecc{P}_{\vecc{X}} \vecc{X}) \vecc{b}\\
+			&= 0\\
+		\end{aligned}
+		$$
+		Therefore $\hat{\vecc{e}}$ is orthogonal to every vector in $\mathcal{C}(\vecc{X})$.
+	\end{pf}
+\end{itemize}
+
+\subsubsection*{Normal distribution in scaler case}
+\begin{itemize}
+	\item A random variable $Z$ has a \underline{standard normal distribution}, denoted $Z \sim \mathcal{N}(0, 1)$, if
+	$$
+	F_Z(t) = \Pr(Z \le t) = \int_{-\infty}^t \frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz,
+	$$
+	or equivalently $Z$ has density
+	$$
+	f_Z(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}, \quad -\infty < z < \infty
+	$$
+	or equivalently, $Z$ has moment generating function (mgf)
+	$$
+	m_Z(t) = \mbox{E}(e^{tZ}) = e^{t^2/2}, \quad -\infty < z < \infty
+	$$
+	\item Non-standard normal random variable
+	\begin{itemize}
+		\item Definition 1: A random variable $X$ has \underline{normal distribution} with mean $\mu$ and variance $\sigma^2$, denoted $X \sim \mathcal{N}(\mu, \sigma^2)$, if
+		$$
+		X = \mu + \sigma Z
+		$$
+		where $Z \sim \mathcal{N}(0, 1)$
+		\item Definition 2:  $X \sim \mathcal{N}(\mu, \sigma^2)$ if
+		$$
+		m_X(t) = \mbox{E}(e^{tX}) = e^{t\mu + \sigma^2 t^2 / 2}, \quad -\infty < t < \infty
+		$$
+		\item In both definitions, $\sigma^2 = 0$ is allowed. If $\sigma^2 > 0$, it has a density
+		$$
+		f_X(x) = \frac{1}{\sqrt{2 \pi}\sigma}e^{-(x - \mu)^2 / 2 \sigma^2}, \quad -\infty < x < \infty
+		$$
+	\end{itemize}
+
+\subsubsection*{Multivariate normal distribution}
+\begin{itemize}
+	\item The \underline{standard multivariate normal} is a vector of independent standard normals, denoted $\vecc{Z} \sim \mathcal{N}(\vecc{0}_p, \vecc{I}_p)$.  The joint density is
+	$$
+	f_{\vecc{Z}}(\vecc{z}) = \frac{1}{(2 \pi)^{p / 2}} e^{- \sum_{i = 1}^{p} z_i^2/2}.
+	$$
+	The mgf is 
+	$$
+	m_{\vecc{Z}}(\vecc{t}) = \prod\limits_{i = 1}^p m_{Z_i}(t_1) = \prod\limits_{i = 1}^p e^{t_i^2/2} = e^{\vecc{t}\transpose\vecc{t}/ 2}.
+	$$
+	\item Consider the affine transformation $\vecc{X} = \boldsymbol{\mu} + \vecc{AZ}$ where $\vecc{Z} \sim \mathcal{N}(\vecc{0}_p, \vecc{I}_p)$.  $\vecc{X}$ has mean and variance
+	$$
+	\mbox{E}(\vecc{X}) = \boldsymbol{\mu}, \quad \mbox{Var}(\vecc{X}) = \vecc{AA}\transpose
+	$$
+	and the moment generating function is
+	$$
+	m_{\vecc{X}}(\vecc{t}) = \mbox{E}(e^{\vecc{t}\transpose(\boldsymbol{\mu}  + \vecc{AZ})}) = e^{\vecc{t}\transpose\boldsymbol{\mu}}\mbox{E}(e^{\vecc{t}\transpose\vecc{AZ}}) = e^{\vecc{t}\transpose\boldsymbol{\mu} + \vecc{t}\transpose\vecc{AA}\transpose\vecc{t}/2}.
+	$$
+	\item $\vecc{X}\in \mathbb{R}^p$ has a \underline{multivariate normal distribution} with mean $\boldsymbol{\mu} \in \mathbb{R}^p$ and covariance $\vecc{V} \in \mathbb{R}^{p \times p}, \vecc{V} \succeq_{p.s.d.} \vecc{0}$, denoted $\vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$, if its mgf takes the form
+	$$
+	m_{\vecc{X}}(\vecc{t}) = e^{\vecc{t}\transpose\boldsymbol{\mu} + \vecc{t}\transpose\vecc{V}\transpose\vecc{t}/2}, \quad \vecc{t} \in \mathbb{R}^p
+	$$
+	\item if $\vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$ and $\vecc{V}$ is non-singular, then
+	    \begin{itemize}
+	    	\item $\vecc{V=AA}\transpose$ for some non-singular $\vecc{A}$
+	    	\item $\vecc{A}^{-1} (\vecc{X} - \boldsymbol{\mu}) \sim \mathcal{N}(\vecc{0}_p, \vecc{I}_p)$
+	    	\item The density of $\vecc{X}$ is
+	    	$$
+	    	f_{\vecc{X}}(\vecc{x}) = \frac{1}{(2\pi)^{p / 2} |\vecc{V}|^{1/ 2}}e^{-(\vecc{x} - \boldsymbol{\mu})\transpose\vecc{V}^{-1}(\vecc{x} - \boldsymbol{\mu})/2}.
+	    	$$
+	    \end{itemize}
+    \item (Any affine transform of normal is normal) If $\vecc{X} \in \mathbb{R}^p,  \vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$ and $\vecc{Y = a + BX}$,
+    where $\vecc{a} \in \mathbb{R}^q$ and $\vecc{B} \in \mathbb{R}^{q \times p}$, then $\vecc{Y} \sim \mathcal{N}(\vecc{a + B}\boldsymbol{\mu}, \vecc{BVB}\transpose)$.
+    \item (Marginal of normal is normal) If $\vecc{X} \in \mathbb{R}^p,  \vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$, then any subvector of $\vecc{X}$ is normal too.
+    \item A convenient fact about normal random variables/vectors is that zero correlation/covariance implies independence.\\
+    If $\vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$ and is partitioned as
+    $$
+    \vecc{X} = \left[\begin{array}{c}
+    	\vecc{X}_1\\
+    	\vdots\\
+    	\vecc{X}_m\\
+    \end{array}\right], \quad \boldsymbol{\mu} = \left[\begin{array}{c}
+    \boldsymbol{\mu}_1\\
+    \vdots\\
+    \boldsymbol{\mu}_m\\
+\end{array}\right], \quad \vecc{V} = \left[\begin{array}{ccc}
+\vecc{V}_{11} & \dots & \vecc{V}_{1m}\\
+\vdots & & \vdots\\
+\vecc{V}_{m1} & \dots & \vecc{V}_{mm}\\
+\end{array}\right]
+    $$
+    then $\vecc{X}_1, \dots, \vecc{X}_m$ are jointly independent if and only if $\vecc{V}_{ij} = \vecc{0}$ for all $i \ne j$.\\
+    {\it Proof:}
+    \begin{pf}
+    	If $\vecc{X}_1, \dots, \vecc{X}_m$ are jointly independent, then $\vecc{V}_{ij} = \mbox{Cov}(\vecc{X}_i, \vecc{X}_j) = \mbox{E}(\vecc{X}_i - \boldsymbol{\mu}_i)(\vecc{X}_j - \boldsymbol{\mu}_j)\transpose  = \mbox{E}(\vecc{X}_i - \boldsymbol{\mu}_i)\mbox{E}(\vecc{X}_j - \boldsymbol{\mu}_j)\transpose =\vecc{0}_{p_i}\vecc{0}_{p_j}\transpose = \vecc{0}_{p_i \times p_j}$.\\
+    	Conversely, if $\vecc{V}_{ij} = \vecc{0}$ for all $i \ne j$, then the mgf of $\vecc{X} = (\vecc{X}_1, \dots, \vecc{X}_m)\transpose$ is
+    	$$
+    	\begin{aligned}
+    	m_{\vecc{X}}(\vecc{t}) &= e^{\vecc{t}\transpose\boldsymbol{\mu} + \vecc{t}\transpose\vecc{V}\vecc{t}/2}\\
+    	&= e^{\sum_{i = 1}^{m} \vecc{t_i}\transpose\boldsymbol{\mu_i} + \sum_{i = 1}^{m}\vecc{t_i}\transpose\vecc{V_{ii}}\vecc{t_i}/2}\\
+    	&= m_{\vecc{X}_1}(\vecc{t}_1) \dots m_{\vecc{X}_m}(\vecc{t}_m)\\
+    	\end{aligned}
+    	$$
+    	Therefore $\vecc{X}_1, \dots, \vecc{X}_m$ are jointly independent.
+    \end{pf}
+\end{itemize}
+\end{itemize}
+
+\subsubsection*{Independence and Cochran's theorem}
+\begin{itemize}
+	\item (Independence between two linear forms of a multivariate normal)  Let $\vecc{X}\sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$, $\vecc{Y}_1 = \vecc{a}_1 + \vecc{B}_1 \vecc{X}$ and $\vecc{Y}_2 = \vecc{a}_2 + \vecc{B}_2 \vecc{X}$.  Then $\vecc{Y}_1$ and $\vecc{Y}_2$ are independent if and only if $\vecc{B}_1 \vecc{V}\vecc{B}_2\transpose = 0$.\\
+{\it Proof:}
+\begin{pf}
+	Note $\mbox{Cov}(\vecc{Y}_1, \vecc{Y}_2) = \vecc{B}_1 \mbox{Cov}(\vecc{X})\vecc{B}_2\transpose = \vecc{B}_1 \vecc{V}\vecc{B}_2\transpose$.
+\end{pf}
+    \item Consider the normal linear model $\vecc{y} \sim \mathcal{N}(\vecc{Xb}, \sigma^2 \vecc{I}_n)$
+        \begin{itemize}
+        	\item Using $\vecc{A} = (1/ \sigma^2)(\vecc{I} - \vecc{P}_{\vecc{X}})$, we have
+        	$$
+        	SSE/\sigma^2 = ||\hat{\boldsymbol{\epsilon}}||_2^2/\sigma^2 = \vecc{y}\transpose\vecc{Ay} \sim \chi^2_{n - r},
+        	$$
+        	where $r = \rank(\vecc{X})$.  Note the noncentrality parameter is
+        	$$
+        	\phi = \frac{1}{2}(\vecc{Xb})\transpose(1 / \sigma^2)(\vecc{I} - \vecc{P}_\vecc{X})(\vecc{Xb}) = 0\; \mbox{ for all } \vecc{b}.
+        	$$
+        	\item Using $\vecc{A} = (1 / \sigma^2)\vecc{P}_{\vecc{X}}$, we have
+        	$$
+        	SSR/\sigma^2 = ||\hat{\vecc{y}}||_2^2/\sigma^2 = \vecc{y}\transpose\vecc{Ay} \sim \chi^2_{r}(\phi),
+        	$$
+        	with the noncentrality parameter
+        	$$
+        	\phi = \frac{1}{2}(\vecc{Xb})\transpose(1 / \sigma^2) \vecc{P}_\vecc{X}(\vecc{Xb}) = \frac{ 1}{2 \sigma^2}||\vecc{Xb}||_2^2.
+        	$$
+        	\item The joint distribution of $\hat{\vecc{y}}$ and $\hat{\boldsymbol{\epsilon}}$ is
+        	$$
+        	\left[
+        	\begin{array}{c}
+        		\hat{\vecc{y}}\\
+        		\hat{\boldsymbol{\epsilon}}\\
+        	\end{array} \right] = \left[\begin{array}{c}
+        	\vecc{P}_{\vecc{X}}\\
+        	\vecc{I}_n - \vecc{P}_{\vecc{X}}\\
+        \end{array}\right]\vecc{y} \sim
+    	\mathcal{N}\left(\left[\begin{array}{c}
+    		\vecc{Xb}\\
+    		\vecc{0}_n\\
+    	\end{array}\right], \left[\begin{array}{cc}
+    	\sigma^2 \vecc{P}_{\vecc{X}} & \vecc{0}\\
+    	\vecc{0} & \sigma^2 (\vecc{I} - \vecc{P}_{\vecc{X}})\\
+    \end{array}\right] \right).
+        	$$
+        	So $\hat{\vecc{y}}$ is independent of $\vecc{\boldsymbol{\epsilon}}$.  Thus $||\hat{\vecc{y}}||_2^2/\sigma^2$ is independent of $||\hat{\boldsymbol{\epsilon}}||_2^2/\sigma^2$ and
+        	$$
+        	F = \frac{||\hat{\vecc{y}}||_2^2/\sigma^2/r}{||\hat{\boldsymbol{\epsilon}}||_2^2/\sigma^2 / (n - r)} \sim F_{r, n - r}(\frac{1}{2\sigma^2}||\vecc{Xb||_2^2}).
+        	$$
+        \end{itemize}
+    \item (Independence between linear and quadratic forms of a multivariate normal)
+    Let $\vecc{X}\sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$.  Then $\vecc{A}$ is symmetric with rank $s$.  If $\vecc{BVA=0}$, then 
+    $\vecc{BX}$ and $\vecc{X}\transpose\vecc{AX}$ are independent.\\
+    {\it Proof:}
+    \begin{pf}
+    	By eigen-decomposition, $\vecc{A} = \vecc{Q}_1 \boldsymbol{\Lambda}_1 \vecc{Q}_1\transpose$, where $\vecc{Q}_1\transpose\vecc{Q}_1 = \vecc{I}_s$ and $\boldsymbol{\Lambda}_1 \in \mathbb{R}^{s \times s}$ is non-singular. Consider the joint distribution
+    		$$
+    		\left[
+    		\begin{array}{c}
+    			\vecc{BX}\\
+    			\vecc{Q}_1\transpose\vecc{X}\\    			
+    		\end{array}\right] \sim 
+    		\mathcal{N}\left( \left[\begin{array}{c}
+    			\vecc{B}\boldsymbol{\mu}\\
+    			\vecc{Q}_1\transpose\boldsymbol{\mu}\\    			
+    		\end{array}\right], \left[\begin{array}{cc}
+    			\vecc{BVB}\transpose & \vecc{BVQ}_1\\
+    			\vecc{Q}_1\transpose\vecc{VB}\transpose & \vecc{Q}_1\transpose\vecc{VQ}_1\\
+    		\end{array} \right] \right)    	
+    		$$
+    		By hypothesis
+    		$$
+    		\vecc{BVA} = \vecc{BVQ}_1 \boldsymbol{\Lambda}_1\vecc{Q}_1\transpose = \vecc{0}
+    		$$
+    		Post-multiplying both sides by $\vecc{Q}_1 \boldsymbol{\Lambda}_1^{-1}$ gives $\vecc{BVQ}_1 = \vecc{0}$, which implies $\vecc{BX}$ is independent of both $\vecc{Q}_1 \transpose \vecc{X}$ and $\vecc{X}\transpose\vecc{Q}_1 \boldsymbol{\Lambda}_1 \vecc{Q}_1 \vecc{X} = \vecc{X}\transpose\vecc{AX}$.
+    \end{pf}
+    \item (Independence between two quadratic forms of a multivariate normal)
+    Let $\vecc{X} \sim \mathcal{N}(\boldsymbol{\mu}, \vecc{V})$, $\vecc{A}$ be symmetric with rank $r$, and $\vecc{B}$ be symmetric with rank $s$.
+    If $\vecc{BVA=0}$, then $\vecc{X}\transpose\vecc{AX}$ and $\vecc{X}\transpose\vecc{BX}$ are independent.\\
+    {\it Proof:}
+    \begin{pf}
+    	Again, by eigen-decomposition.
+    	$$
+    	\begin{array}{cc}
+    		\vecc{A} = \vecc{Q}_1 \boldsymbol{\Lambda}_1^{-1} \vecc{Q}_1, & \mbox{ where } \vecc{Q}_1 \in \mathbb{R}^{p \times r}, \boldsymbol{\Lambda}_1 \in \mathbb{R}^{r \times r} nonsingular\\
+    		\vecc{B} = \vecc{Q}_2 \boldsymbol{\Lambda}_2^{-1} \vecc{Q}_2, & \mbox{ where } \vecc{Q}_2 \in \mathbb{R}^{p \times s}, \boldsymbol{\Lambda}_2 \in \mathbb{R}^{s \times s} nonsingular\\
+       	\end{array}
+    	$$
+    	Now consider the joint distribution
+    	$$
+    	\left[\begin{array}{c}
+    		\vecc{Q}_1\transpose\vecc{X}\\
+    		\vecc{Q}_2\transpose\vecc{X}\\
+    	\end{array}\right] \sim \mathcal{N}\left( \left[\begin{array}{c}
+    		\vecc{Q}_1\transpose \boldsymbol{\mu}\\
+			\vecc{Q}_2\transpose \boldsymbol{\mu}\\
+    \end{array}\right] , \left[\begin{array}{cc}
+    	\vecc{Q}_1\transpose\vecc{VQ}_2 & \vecc{Q}_1\transpose\vecc{VQ}_2\\
+    	\vecc{Q}_2\transpose\vecc{VQ}_1 & \vecc{Q}_2\transpose\vecc{VQ}_2\\
+\end{array}\right]\right)
+    	$$
+    	By hypothesis
+    	$$
+    	\vecc{BVA} = \vecc{Q}_2 \boldsymbol{\Lambda}_2\vecc{Q}_2\transpose \vecc{V} \vecc{Q}_1  \boldsymbol{\Lambda}_1\vecc{Q}_1\transpose = \vecc{0}
+    	$$
+    	Pre-multiplying both sides by $\boldsymbol{\Lambda}_2^{-1}\vecc{Q}_2\transpose$ and then post-multiplying both sides by $\vecc{Q}_1\boldsymbol{\Lambda}_1^{-1}$ gives
+    	$$
+    	\vecc{Q}_2 \transpose\vecc{VQ}_1 = \vecc{0}.
+    	$$
+    	Therefore $\vecc{Q}_1\transpose\vecc{X}$ is independent of $\vecc{Q}_2\transpose\vecc{X}$, which implies $\vecc{X}\transpose\vecc{AX} = \vecc{X}\transpose\vecc{Q}_1 \boldsymbol{\Lambda}_1^{-1} \vecc{Q}_1$ is independent of $\vecc{X}\transpose\vecc{BX} = \vecc{X}\transpose\vecc{Q}_2\boldsymbol{\Lambda}_2^{-1} \vecc{Q}_2$.
+    \end{pf}
+    \item (Cochran's theorem)
+    Let $\vecc{y} \sim \mathcal{N}(\boldsymbol{\mu}, \sigma^2 \vecc{I}_n)$ and $\vecc{A}_i$, $i = 1, \dots, k$ be symmetric idempotent matrix with rank $s_i$.  If $\sum_{i = 1}^{k} \vecc{A}_i = \vecc{I}_n$, then $(1/\sigma^2)\vecc{y}\transpose\vecc{A}_i \vecc{y}$ are independent $\chi^2_{s_i}(\phi_i)$, with $\phi_i = \frac{1}{2\sigma^2}\boldsymbol{\mu}\transpose\vecc{A}_i \boldsymbol{\mu}$ and $\sum_{i = 1}^{k} s_i = n$.\\
+    {\it Proof:}
+    \begin{pf}
+    	Since $\vecc{A}_i$ is symmetric and idempotent with rank $s$, $\vecc{A}_i = \vecc{Q}_i\vecc{Q}_i\transpose$ with $\vecc{Q}_i \in \mathbb{R}^{n \times s}$ and $\vecc{Q}_i\transpose\vecc{Q}_i = \vecc{I}_{s_i}$.
+    	Define $\vecc{Q} = \left(\vecc{Q}_1, \dots, \vecc{Q}_k\right) \in \mathbb{R}^{n \times \sum_{i = 1}^{k} s_i}$. Note
+    	$$
+    	\begin{aligned}
+	    	\vecc{Q}\transpose\vecc{Q} &= \vecc{I}_{\sum_{i = 1}^k s_i}\\
+	    	\vecc{QQ}\transpose &= \sum_{i = 1}^{k} \vecc{Q}_i \vecc{Q}_i \transpose = \sum_{i = 1}^{k} \vecc{A}_i = \vecc{I}_n\\
+    	\end{aligned}
+    	$$
+    	Now
+    	$$
+    	\vecc{Q}\transpose \vecc{y} = \left[\begin{array}{c}
+    		\vecc{Q}_1\transpose \vecc{y}\\
+    		\vdots\\
+    		\vecc{Q}_k\transpose \vecc{y}\\
+    	\end{array}\right] \sim
+    	\mathcal{N}\left( \left[\begin{array}{c}
+    		\vecc{Q}_1\transpose \boldsymbol{\mu}\\
+    		\vdots\\
+    		\vecc{Q}_k\transpose \boldsymbol{\mu}\\
+    	\end{array}\right], \sigma^2 \vecc{I}_n \right)
+    	$$
+    	implying that $\vecc{Q}_i\transpose\vecc{y} \sim \mathcal{N}(\vecc{Q}_i\transpose \boldsymbol{\mu}, \sigma^2 \vecc{I}_{s_i} )$ are jointly independent. Therefore $(1/\sigma^2) \vecc{y}\transpose\vecc{A}_i \vecc{y} = (1 / \sigma^2)||\vecc{Q}_i\transpose \vecc{y}||_2^2 \sim \chi_{s_i}^2(\frac{1}{2\sigma^2}\boldsymbol{\mu}\transpose\vecc{A}_i \boldsymbol{\mu})$ are jointly independent.
+    \end{pf}
+	\item Application to the one-way ANOVA: $y_{ij} = \mu + \alpha_i + \epsilon_{ij}$.  We have  the classical ANOVA table
+	\begin{table}[H]
+		\renewcommand{\arraystretch}{1.5}
+		\centering
+		\begin{tabular}{ccccc}
+			\toprule
+			Source & df & Projection & SS & Noncentrality\\
+			\hline
+			Mean & 1 & $\vecc{P}_\vecc{1}$ & $SSM = n \bar{y}^2$ & $\frac{1}{2\sigma^2}n (\mu + \bar{\alpha})^2$\\
+			Group & $a - 1$ & $\vecc{P}_{\vecc{X}} - \vecc{P}_\vecc{1}$ & $SSA = \sum_{i = 1}^{a} n_i \bar{y}_i^2 - n \bar{y}^2$ & $\frac{1}{2\sigma^2} \sum_{i = 1}^a n_i (\alpha_i - \bar{\alpha})^2$ \\
+			Error & $n - a$ & $\vecc{I} - \vecc{P}_\vecc{X}$ & $SSE = \sum_{i = 1}^{a}\sum_{j = 1}^{n_i} (y_{ij} - \bar{y}_i)^2$ & 0\\
+			\hline
+			Total & $n$ & $\vecc{I}$ & $SST = \sum_i \sum_j y_{ij}^2$ & $\frac{1}{\sigma^2} \sum_{i=1}^{a} n_i (\mu + \alpha_i)^2$\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,261 @@
+\setcounter{section}{38}
+
+\section{Lecture 39: May 3}
+
+
+\subsection*{Last time}
+\begin{itemize}
+\item Theoretical background of linear model
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item Course evaluation (12/17)
+\item Bootstrap (JF Chapter 21)
+\item Logistic Regression (JF Chapter 14)
+\end{itemize}
+
+\subsubsection*{Additional reference}
+``Essential Statistical Inference Theory and Methods'' by Dr. Dennis D. Boos and Dr.  L. A. Stefanski.\\
+Dr. Hua Zhou's Computational Statistics \href{http://hua-zhou.github.io/teaching/st758-2014fall/ST758-2014-Fall-LecNotes.pdf}{notes}.
+
+\subsection*{Bootstrap}
+We follow JF Chapter 21 to discuss the version of nonparametric bootstrap here.
+The term {\it bootstrapping}, coined by Efron (1979), refers to using the sample to learn about the sampling distribution of a statistic without reference to external assumptions -- as in ``pulling oneself up by one's bootstraps.''
+
+Bootstrapping offers a number of advantages:
+\begin{itemize}
+	\item The bootstrap is quite general, although there are some cases in which it fails.
+	\item Because it does not require distributional assumptions (such as normally distributed errors), the bootstrap can provide more accurate inferences when the data are not well behaved or when the sample size is small.
+	\item It is possible to apply the bootstrap to statistics with sampling distributions that are difficult to derive, even asymptotically.
+	\item It is relatively simple to apply the bootstrap to complex data collection plans.
+\end{itemize}
+
+\subsubsection*{Bootstrap standard errors}
+For simplicity, we start with an iid sample $Y_1, \dots, Y_n$ with each $Y_i$ having distribution function $F$, and a real parameter $\theta$ is estimated by $\hat{\theta}$.
+When necessary, we think of $\hat{\theta}$ as a function of the sample, $\hat{\theta}(Y_1, \dots, Y_n)$.
+The variance of $\hat{\theta}$ is then
+$$
+\mbox{Var}_F(\hat{\theta}) = \int \left\{\hat{\theta}(y_1, \dots, y_n) - \mbox{E}_F(\hat{\theta})\right\}^2 dF(y_1) \dots dF(y_n),
+$$
+where 
+$$
+\mbox{E}_F(\hat{\theta}) = \int \hat{\theta}(y_1, \dots, y_n) dF(y_1) \dots dF(y_n).
+$$
+The nonparametric bootstrap estimate of $\mbox{Var}(\hat{\theta})$ is just to replace $F$ by the empirical distribution function $F_n(y) = n^{-1}\sum_{i = 1}^n I(Y_i \le y)$:
+$$
+\mbox{Var}_{F_n}(\hat{\theta}) = \int \left\{\hat{\theta}(y_1, \dots, y_n) - \mbox{E}_{F_n}(\hat{\theta})\right\}^2 dF_n(y_1) \dots dF_n(y_n),
+$$
+Please refer to Chapter 11 of Boos and Stefanski for a complete discussion.
+
+
+A practical bootstrapping procedure follows:
+\begin{enumerate}
+	\item Create $r$  number of \underline{bootstrap replications or pseudo-replicates} -- that is, for each bootstrap sample (replicate) $b = 1, \dots, r$, we randomly draw $n$ observations $\{Y_{b_1}^*, Y_{b_2}^*, \dots, Y_{b_n}^*\}$ with replacement from the original sample $\{Y_1, Y_2, \dots, Y_n\}$.
+	\item Obtain an estimate $\hat{\theta}_b^*$ of each bootstrap sample.
+	\item Use the distribution of $\hat{\theta}_b^*$ to estimate properties of the sampling distribution of $\hat{\theta}$.For example,	the sample standard deviation of $\hat{\theta}_b^*$ gives the bootstrap standard error estimates of $\reallywidehat{SE}^*(\hat{\theta})$.
+\end{enumerate}
+
+\subsubsection*{Bootstrap example}
+We use the example in JF 21.1 for illustration.
+Imagine that we sample (fake) ten working, married couples, determining in each case the husband's and wife's income, as recorded in the table (JF table 21.3) below.
+	\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		Observation & husband's Income& Wife's Income & Difference $Y_i$\\
+		\hline
+		1 & 34 & 28 & 6\\
+		2 & 24 & 27 & -3\\
+		3 & 50 & 45 & 5\\
+		4 & 54 & 51 & 3\\
+		5 & 34 & 28 & 6\\
+		6 & 29 & 19 & 10\\
+		7 & 31 & 20 & 11\\
+		8 & 32 & 40 & -8\\
+		9 & 40 & 33 & 7\\
+		10 & 34 & 25 & 9\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+A point estimate of this population mean difference $\mu$ is the sample mean,
+$$
+\bar{Y} = \frac{\sum Y_i}{n} = 4.6
+$$
+Elementary statistical theory tells us that the standard deviation of the sampling distribution of sample means is $\mbox{SD}(\bar{Y}) = \sigma/\sqrt{n}$, where $\sigma$ is the population standard deviation of $Y$.  Because we do not know $\sigma$ in most real applications, the usual estimator of $\sigma$ is the sample standard deviation
+$$
+\hat{S}=\sqrt{\frac{\sum(Y_i - \bar{Y})^2}{n - 1}}
+$$
+and we obtain the $95\%$ confidence interval by
+$$
+\bar{Y} \pm t_{n - 1, 0.025} \frac{\hat{S}}{\sqrt{n}}
+$$
+In the present case, $\hat{S} = 5.948$, $\reallywidehat{SE}(\bar{Y}) = 5.948/\sqrt{10} = 1.881$, and $t_{9, 0.025} = 2.262$.
+The $95\%$ confidence interval for the population mean $\mu$ is therefore
+$$
+4.6 \pm 2.262 \times 1.881 = 4.6 \pm 4.255
+$$
+or equivalently,
+$$
+0.345 < \mu < 8.855
+$$
+
+To illustrate the bootstrap procedure, 
+\begin{enumerate}
+	\item We can draw $r = 2000$ bootstrap samples (using a computer), each of size $n = 10$, from the original data given in table 21.3.
+	\item We then calculate the mean $\bar{Y}_b^*$, with $b= 1, \dots, r$ for each bootstrap sample.
+	\item The bootstrap estimate of the standard error is then given by $\reallywidehat{SE}^*(\bar{Y}^*) = \sqrt{\frac{\sum_{b= 1}^{r} \left(\bar{Y}_b^* - \bar{\bar{Y}}^*\right)^2}{r - 1}}$
+\end{enumerate}
+From the $2000$ replicates that Dr. Fox drew, he obtained $\bar{\bar{Y}}^* = 4.693$ and $\reallywidehat{SE}(\bar{Y}^*) = 1.750$.  Both are quite close to the theoretical values (read JF 21.1 for a discussion over $\sqrt{n /{n - 1}}$ for the differences in calculating the standard errors, which is often negligible, especially when $n$ is large).
+
+Now, we can get a bootstrap estimate for the $100(1 - \alpha)\%$ confidence interval by
+% substituting $\reallywidehat{SE}^*(\bar{Y}^*)$ in the formula $\bar{Y} \pm t_{n - 1, \alpha / 2} \reallywidehat{SE}(\bar{Y})$.  In this case,
+%Alternatively, we can also 
+using the $\alpha /2$ and $(1 -  \alpha /2)$ quantiles of the bootstrap sampling distribution of $\hat{\theta}_b^*$ which means
+\begin{enumerate}
+	\item We order $\hat{\theta}_b^*$ such that $\hat{\theta}_{(1)}^* \le \hat{\theta}_{(2)}^* \le \dots \le \hat{\theta}_{(r)}^*$.
+	\item Find the two quantiles $\hat{\theta}^*_{(lower)} = \hat{\theta}_{(\alpha / 2 \times r)}^*$ and $\hat{\theta}^*_{(upper)} = \hat{\theta}_{((1 - \alpha / 2) \times r)}^*$
+	\item Construct the confidence interval by $(\hat{\theta}^*_{(lower)}, \hat{\theta}^*_{(upper)})$.
+\end{enumerate}
+In this case,
+$$
+\begin{aligned}
+	\mbox{lower} &= 2000 (0.05 / 2) = 50\\
+	\mbox{upper} &= 2000 (1 - 0.05 / 2) = 1950\\
+	\bar{Y}_{(50)}^* &= 0.7\\
+	\bar{Y}_{(1950)}^* &= 7.8\\
+	0.7 &< \mu < 7.8 \\
+\end{aligned}
+$$
+
+\subsubsection*{Bias-corrected bootstrap intervals}
+We introduce the bias-corrected version of the above bootstrap intervals through two ``correction factors'' $Z$ and $A$ defined below:.
+
+\begin{enumerate}
+	\item Calculate 
+	$$
+	Z \equiv \Phi^{-1}\left[\frac{\sum_{b = 1}^r I(\hat{\theta}_b^* < \hat{\theta})}{r}\right]
+	$$
+	where $\Phi^{-1}(\cdot)$ is the inverse of the standard-normal distribution and $\sum_{b = 1}^r I(\hat{\theta}_b^* < \hat{\theta})/{r}$ is the proportion of bootstrap replicates below the estimate $\hat{\theta}$.  If the bootstrap sampling distribution is symmetric and if $\hat{\theta}$ is unbiased, then this proportion will be close to $0.5$, and the ``correction factor'' $Z$ will be close to $0$.
+	\item Let $\hat{\theta}_{(-i)}$ represent the value of $\hat{\theta}$ produced when $i$th observation is deleted from the sample (known as the \underline{jackknife values} of $\hat{\theta}$).
+	There are $n$ of these quantities.
+	Let $\bar{\theta} = \sum \hat{\theta}_{(-i)} / n$.  Then calculate
+	$$
+	A \equiv \frac{\sum_{i = 1}^{n}(\bar{\theta} - \hat{\theta}_{(-i)})^3}{ 6 \left[\sum_{i = 1}^{n}(\bar{\theta} - \hat{\theta}_{(-i)})^2\right]^{3/2}}
+	$$
+	With the correction factors $Z$ and $A$, compute 
+	$$
+	\begin{aligned}
+ 		A_1 &\equiv \Phi\left[Z + \frac{Z - z_{\alpha / 2}}{1 - A(Z - z_{\alpha / 2})}\right]\\
+ 		A_2 &\equiv \Phi\left[Z + \frac{Z + z_{\alpha / 2}}{1 - A(Z + z_{\alpha / 2})}\right]\\
+	\end{aligned}
+	$$
+	And the corrected interval is
+	$$
+	\hat{\theta}_{(lower)}^* < \theta < \hat{\theta}_{(upper)}^*
+	$$
+	where $\mbox{lower}^* = r A_1$ and $\mbox{upper}^* = r A_2$ (rounding or interpolating as required).
+\end{enumerate}
+
+When the correction factors $Z$ and $A$ are both $0$, $A_1 = \Phi(-z_{\alpha/2}) = \alpha / 2$ and $A_2 = \Phi(z_{\alpha/2}) = 1 - \alpha / 2$.
+
+For the $2000$ bootstrap samples that Dr. Fox drew, there are $926$ bootstrapped means below $\bar{Y} = 4.6$, and so $Z = \Phi^{-1}(926/2000) = -0.09288$.
+The $\bar{Y}_{(-i)}$ are $4.444, 5.444, \dots, 4.111$. And $A = -0.05630$.  Using the correction factors $Z$ and $A$,
+$$
+\begin{aligned}
+ 		A_1 &= \Phi\left[-0.09288 + \frac{-0.09288 - 1.96}{1 - [-0.05630(-0.09288 - 1.96)]}\right]\\
+ 		&= \Phi(-2.414) = 0.007889\\
+ 		A_2 &= \Phi\left[-0.09288 + \frac{-0.09288 + 1.96}{1 - [-0.05630(-0.09288 + 1.96)]}\right]\\
+ 		&= \Phi(1.597) = 0.9449\\
+\end{aligned}
+$$
+Multiplying by $r$, we have $2000 \times 0.007889 \approx 16$ and $2000 \times 0.9449 \approx 1890$, from which
+$$
+\begin{aligned}
+\bar{Y}_{(16)}^* &< \mu < \bar{Y}_{(1890)}^*\\
+-0.4 &< \mu < 7.3\\
+\end{aligned}
+$$
+
+\subsection*{Logistic regression}
+So far, we only considered cases where the response variable is continuous.
+Logistic regression belongs in the family of Generalized Linear Model that can be used for analyzing binary responses.
+
+\paragraph{Motivation}
+Let $p$ be the probability of a specific outcome.
+We are interested in how this probability is affected by the explanatory variables.
+A naive approach could be:
+$$
+p = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \epsilon
+$$
+\paragraph{Problem}
+$p$ must be between $0$ and $1$.
+
+\paragraph{Solution}
+Model log odds of $p$ (i.e.~ logit of $p$) which are defined as
+$$
+\begin{aligned}
+	\mbox{odds} &= \frac{p}{1 - p} \in [0, \infty)\\
+	\mbox{logit} &= \log(\frac{p}{1 - p}) \in (-\infty, \infty)\\
+\end{aligned}
+$$
+This forms the logistic regression
+$$
+\mbox{logit}(p) = \log(\frac{p}{1 - p}) = \beta_0 + \beta_1 x_1 + \beta_2 x_2
+$$
+Note that 
+\begin{enumerate}
+	\item Increase in log odds $\iff$ increase in $p$.\\
+	Decrease in log odds $\iff$ decrease in $p$.
+	\item No $\epsilon$ in logistic regression because we observe a binary outcome $y_i$, not $p$ itself.	
+\end{enumerate}
+
+The density
+$$
+\begin{aligned}
+f(y_i | p_i) &= p_i^{y_i} (1 - p_i)^{1 - y_i}\\
+&= e^{y_i \log(p_i) + ( 1 - y_i)\log(1 - p_i)}\\
+&= e^{y_i \log(\frac{p_i}{1 - p_i}) + \log(1 - p_i)}\\
+\end{aligned}
+$$
+where 
+$$
+\begin{aligned}
+\mbox{E}(y_i) &= p_i = \frac{e^{\vecc{x}_i\transpose\boldsymbol{\beta}}}{1 + e^{\vecc{x}_i\transpose\boldsymbol{\beta}}} \quad (\mbox{mean function, inverse link function})\\
+\vecc{x}_i\transpose \boldsymbol{\beta} &= \log(\frac{p_i}{1 - p_i}) \quad (\mbox{logit link function})\\
+\end{aligned}
+$$
+We obtain parameter estimates by maximum likelihood.  Read page 131 - page 133 of Dr. Hua Zhou's Computational Statistics notes  (\href{http://hua-zhou.github.io/teaching/st758-2014fall/ST758-2014-Fall-LecNotes.pdf}{link}) for algorithms to find these MLE (maximum likelihood estimates).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

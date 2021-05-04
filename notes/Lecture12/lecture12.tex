@@ -1,0 +1,243 @@
+\setcounter{section}{11}
+
+
+\section{Lecture 12: Feb 15}
+
+
+\subsection*{Last time}
+\begin{itemize}
+  \item R practice with questions
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+ \item Probability review
+ \item HW2 posted
+ \item HW1 review on Wednesday
+\end{itemize}
+
+\subsubsection*{Reference: }
+\begin{itemize}
+  \item Statistical Inference, 2nd Edition, by George Casella \& Roger L. Berger
+  \item  \href{http://cs229.stanford.edu/section/cs229-prob.pdf}{Review of Probability Theory} by Arian Maleki and Tom Do
+\end{itemize}
+
+\subsection*{Probability theory review}
+A few basic elements to define a probability on a set:
+\begin{itemize}
+  \item {\bf Sample space $S$} is the set that contains all possible outcomes of a particular experiment.
+  \item An {\bf event} is any collection of possible outcomes of an experiment, that is , any subset of $S$ (including $S$ itself).
+  \item Event operations
+    \begin{enumerate}
+      \item  Union: The union of $A$ and $B$, written $A \cup B$, is the set of elements that belong to either $A$ or $B$ or both:
+      $$
+      A \cup B = \{x: x \in A \mbox{ or } x \in B\}
+      $$
+      \item Intersection:  The intersection of $A$ and $B$, written $A \cap B$, is the set of elements that belong to both $A$ and $B$:
+      $$
+      A \cap B = \{ x: x \in A \mbox{ and } x \in B \}
+      $$
+      \item Complementation:  The complement of $A$, written as $A^c$, is the set of all elements that are not in A:
+      $$
+      A^c = \{x: x \notin A \}.
+      $$
+    \end{enumerate}
+  \item {\bf Sigma algebra (or Borel field)}: A collection of subsets of $S$ is called a sigma algebra (or Borel field), denoted by $\mathcal{B}$, if it satisfies the following three properties:
+    \begin{enumerate}
+      \item $\emptyset \in \mathcal{B}$ (the empty set is an element of $\mathcal{B}$)
+      \item If $A \in \mathcal{B}$, then $A^c \in \mathcal{B}$ ($\mathcal{B}$ is closed under complementation).
+      \item If $A_1, A_2, \dots \in \mathcal{B}$, then $\cup_{i = 1}^\infty A_i \in \mathcal{B}$ ($\mathcal{B}$ is closed under countable unions).
+    \end{enumerate}
+  
+  \item {\bf Axioms of probability: } Given a sample space $S$ and an associated sigma algebra $\mathcal{B}$, a {\it probability function} is a function $\Pr()$ with domain $\mathcal{B}$ that satisfies
+    \begin{enumerate}
+      \item $\Pr(A) \ge 0$ for all $A \in \mathcal{B}$
+      \item $\Pr(S) = 1$.
+      \item If $A_1, A_2, \dots \in \mathcal{B}$ are pairwise disjoint, then $\Pr(\cup_{i = 1}^\infty A_i) = \sum_{i = 1}^\infty \Pr(A_i)$.
+    \end{enumerate} 
+\end{itemize}
+
+\subsubsection*{Properties:}
+If $\Pr()$ is a {\it probability function} and $A$ and $B$ are any sets in $\mathcal{B}$, then
+\begin{itemize}
+  \item $\Pr(\emptyset) = 0$, where $\emptyset$ is the empty set\\
+  {\it Proof: }
+  \begin{pf}
+  $1 = \Pr(S) = \Pr(S \cup \emptyset)$
+  \end{pf}
+  \item $\Pr(A) \le 1$\\
+  {\it Proof: }
+  \begin{pf}
+   see below and remember $\Pr(A^c) \ge 0$
+  \end{pf}
+  \item $\Pr(A^c) = 1 - \Pr(A)$\\
+  {\it Proof: }
+  \begin{pf}
+  $1 = \Pr(S) = \Pr(A \cup A^c) = \Pr(A ) + \Pr(A^c)$
+  \end{pf}  
+  \item $\Pr(B \cap A^c) = \Pr(B) - \Pr(A \cap B)$\\
+  {\it Proof: }
+  \begin{pf}
+  $B = \{B \cap A\} \cup \{ B \cap A^c\}$
+  \end{pf}
+  \item $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$\\
+  {\it Proof: }
+  \begin{pf}
+  $A \cup B = A \cup \{ B \cap A^c \}$ and use the above property.
+  \end{pf}  
+  \item $Pr(A \cup B) = \Pr(A) + \Pr(B \cap A^c) = \Pr(A) + \Pr(B) - \Pr(A \cap B)$
+  \item If $A \subset B$, then $\Pr(A) \le \Pr(B)$.\\
+  {\it Proof:}
+  \begin{pf}
+  If $A \subset B$, then $A \cap B = A$ and use $\Pr(B \cap A^c) = \Pr(B) - \Pr(A \cap B)$.
+  \end{pf}
+\end{itemize}
+
+\subsubsection*{Conditional probability}
+{\it Definition: } If $A$ and $B$ are events in $S$, and $\Pr(B) > 0$, then the \underline{conditional probability of $A$ given $B$}, written $\Pr(A | B)$, is
+$$
+\Pr(A | B) = \frac{\Pr(A \cap B)}{\Pr(B)}
+$$
+Note that what happens in the conditional probability calculation is that $B$ becomes the sample space: $\Pr(B|B) = 1$, in other words, 
+$\Pr(A|B)$ is the probability measure of the event $A$ after observing the occurrence of event $B$.
+
+{\it Definition: }Two events $A$ and $B$ are \underline{statistically independent} if $\Pr(A \cap B) = \Pr(A) \Pr(B)$.\\
+When $A$ and $B$ are independent events, then $\Pr(A|B) = \Pr(A)$ and the following pairs are also independent
+\begin{itemize}
+  \item $A$ and $B^c$\\
+  {\it proof: }
+  \begin{pf}
+  $$
+  \begin{aligned}
+  \Pr(A\cap B^c) &= \Pr(A) - \Pr(A \cap B)\\
+  &= \Pr(A) - \Pr(A)\Pr(B)\\
+  &= \Pr(A)(1 - \Pr(B))\\
+  &= \Pr(A)\Pr(B^c)\\
+  \end{aligned}
+  $$
+  \end{pf}
+  \item $A^c$ and $B$
+  \item $A^c$ and $B^c$
+\end{itemize}
+
+\subsection*{Random variables}
+{\it Definition: } A \underline{random variable} is a function from a sample space $S$ into the real numbers.
+
+\begin{center}
+\begin{tabular}{  c c}
+\hline
+Experiment & Random variable\\
+\hline
+Toss two dice & $X = \mbox{sum of the numbers}$\\
+Toss a coin $25$ times & $X = \mbox{number of heads in 25 tosses}$\\
+Apply different amounts of\\ fertilizer to corn plants & $X = yield/acre$\\
+\hline
+\end{tabular}
+\end{center}
+
+Suppose we have a sample space
+$$
+S = \{ s_1, \dots, s_n\}
+$$
+with a probability function $\Pr$ and we define a random variable $X$ with range $\mathcal{X} = \{x_1, \dots, x_m\}$.
+We can define a probability function $\Pr_X$ on $\mathcal{X}$ in the following way.
+We will observe $X=x_i$ if and only if the outcome of the random experiment is an $s_j \in S$ such that $X(s_j) = x_i$.
+Thus,
+$$
+{\Pr}_X(X = x_i) = \Pr(\{ s_j \in S: X(s_j) = x_j \}).
+$$
+We will simply write $\Pr(X = x_i)$ rather than ${\Pr}_X(X=x_i)$.\\
+{\it A note on notation:} Randon variables are often denoted with uppercase letters and the realized values of the variables (or its range) are denoted by corresponding lowercase letters.
+
+\subsection*{Distribution functions}
+{\it Definition: } The \underline{cumulative distribution function} or \underline{\it cdf} of a random variable (r.v.) $X$, denoted by $F_X(x)$ is defined by
+$$
+F_X(x) = \Pr(X \le x), \mbox{ for all } x.
+$$
+
+The function $F(x)$ is a cdf if and only if the following three conditions hold:
+\begin{enumerate}
+  \item $\lim_{x \to \infty} F(x) = 1$.
+  \item $F(x)$ is a nondecreasing function of $x$.
+  \item $F(x)$ is right-continuous; that is, for every number $x_0$, $\lim_{x \downarrow x_0} = F(x_0)$.
+\end{enumerate}
+
+{\it Definition: } A random variable $X$ is \underline{continuous} if $F(x)$ is a continuous function of $x$.  A random variable $X$ is \underline{discrete} if $F(x)$ is a step function of $x$.
+
+The following two statements are equivalent:
+\begin{enumerate}
+  \item The random variables $X$ and $Y$ are \underline{identically distributed}.
+  \item $F_X(x) = F_Y(x)$ for every $x$.
+\end{enumerate}
+
+\subsubsection*{Density and mass functions}
+{\it Definition: } The \underline{probability mass function (pmf)} of a discrete random variable $X$ is given by
+$$
+f_X(x) = \Pr(X = x) \mbox{ for all }x.
+$$
+
+{\small \it Example (Geometric probabilities)} For the geometric distribution, we have the pmf
+$$
+f_X(x) = \Pr(X = x) = \left\{ \begin{tabular}{cc}
+$p{(1 - p)^{x-1}}$ & \mbox{for } x = 1, 2, \dots \\
+%p(1 - p)^{x - 1} & \mbox{for } x = 1, 2, \dots\\
+0 & \mbox{otherwise.}\\
+\end{tabular}
+\right.
+$$
+
+{\it Definition: } The \underline{probability density function} or \underline{\it pdf}, $f_X(x)$, of a continuous random variable $X$ is the function that satisfies
+$$
+F_X(x) = \int_{-\infty}^x f_X(t)dt \quad \mbox{ for all }x.
+$$
+{\it A note on notation: } The expression ``X has a distribution given by $F_X(x)$'' is abbreviated symbolically by ``$X \sim F_X(x)$'', where we read the symbol ``$\sim$'' as `` is distributed as''.
+
+{\small \it Example (Logistic distribution)} For the logistic distribution, we have
+$$
+F_X(x) = \frac{1}{1 + e^{-x}}
+$$
+and, hence,
+$$
+f_X(x) = \frac{d}{dx}F_X(x) = \frac{e^{-x}}{(1 + e^{-x})^2}.
+$$
+
+A function $f_X(x)$ is a pdf (or pmf) of a random variable $X$ if and only if
+\begin{enumerate}
+  \item $f_X(x) \ge 0 \mbox{ for all } x$
+  \item $\sum_x f_X(x) = 1\ (pmf) \quad or \quad \int_{-\infty}^{\infty} f_X(x) dx = 1\ (pdf).$
+\end{enumerate}
+
+
+\subsection*{Expectations}
+The expected value, or expectation, of a random variable is merely its average value, where we speak of ``average'' value as one that is weighted according to the probability distribution.
+
+{\it Definition: } The \underline{expected value} or \underline{mean} of a random variable $g(X)$, denoted by $\Expected{g(X)}$, is
+$$
+\Expected{g(X)} = \left\{ \begin{tabular}{ll}
+$\int_{-\infty}^{\infty} g(x) f_X(x)dx$ &  if $X$ is continuous\\
+$\sum_{x \in \mathcal{X}} g(x) f_X(x) = \sum_{x \in \mathcal{X}} g(x) \Pr(X = x)$ & if $X$ is discrete,\\
+\end{tabular}
+\right.
+$$
+
+\subsubsection*{Exponential mean}
+Suppose $X \sim Exp(\lambda)$ distribution, that is, it has pdf given by
+$$
+f_X(x) = \frac{1}{\lambda}e^{-x/\lambda}, \quad 0\le x < \infty, \quad \lambda > 0
+$$
+
+Then $\Expected{X}$ is:\\
+\begin{pf}
+$$
+\begin{aligned}
+\Expected{X} 
+&= \int_0^\infty \frac{1}{\lambda} x e^{-x/\lambda}dx\\
+&= \left. -xe^{-x/\lambda} \right |_0^\infty + \int_0^\infty e^{-x/\lambda} dx\\
+&= \int_0^{\infty} e^{-x/\lambda} dx = \lambda\\
+\end{aligned}
+$$
+\end{pf}
+
+
+

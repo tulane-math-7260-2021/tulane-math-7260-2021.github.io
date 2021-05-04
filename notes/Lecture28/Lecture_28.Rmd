@@ -1,0 +1,50 @@
+---
+title: "Lecture 28: ANCOVA"
+author: "Dr. Xiang Ji @ Tulane University"
+date: "April 5, 2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4  
+subtitle: MATH-6040/7260 Linear Models
+csl: ../apa.csl
+---
+
+```{R}
+library(tidyverse)
+vitamin.supplement <- matrix(
+  c(1, 48, 350, 2, 65, 400, 3, 79, 510, 4, 59, 530, 
+		1, 67, 440, 2, 49, 450, 3, 52, 410, 4, 50, 520, 
+		1, 78, 440, 2, 37, 370, 3, 63, 470, 4, 59, 520, 
+		1, 69, 510, 2, 75, 530, 3, 65, 470, 4, 42, 510, 
+		1, 53, 470, 2, 63, 420, 3, 67, 480, 4, 34, 430), 20, 3, byrow = TRUE)
+colnames(vitamin.supplement) <- c("Diet", "y", "z")
+write.csv(vitamin.supplement, "./vitamin_supplement.csv", row.names = FALSE)
+
+
+vitamin.supplement.df <- as_tibble(vitamin.supplement) %>%
+  mutate(Diet = as.factor(Diet))
+
+# one-way ANOVA model
+res.anova <- aov(y ~ Diet, data = vitamin.supplement.df)
+summary(res.anova)
+
+# ANCOVA model
+res.ancova <- aov(y ~ Diet + z, data = vitamin.supplement.df)
+summary(res.ancova)
+
+# Dummy-variable regression model
+lmod <- lm(y ~ Diet + z, data = vitamin.supplement.df)
+summary(lmod)
+
+# Simple linear regression model
+lmod.red <- lm(y ~ z, data = vitamin.supplement.df)
+
+# Hypothesis test
+anova(lmod, lmod.red)
+
+# Same hypothesis test
+res.red <- aov(y ~ z, data = vitamin.supplement.df)
+anova(res.ancova, res.red)
+```
+

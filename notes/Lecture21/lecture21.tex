@@ -1,0 +1,320 @@
+\setcounter{section}{20}
+
+\section{Lecture 21: March 15}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item Diagnosing nonlinearity (JF chapter 12)
+	\item Data transformation (JF chapter 4)
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+	\item Collinearity (JF chapter 13, RD 8.3.2)
+	\item Principal component analysis (JF 13.1.1, RD 8.3.4)
+%	\item Biased estimation:
+%	  \begin{itemize}
+%	  	\item Ridge Regression
+%	  	\item Lasso Regression
+%	  \end{itemize}
+\end{itemize}
+
+\subsubsection*{Additional reference}
+``A First Course in Linear Model Theory'' by Nalini Ravishanker and Kipak K. Dey.
+
+\subsection*{Collinearity}
+
+In linear model
+$$
+\begin{aligned}
+	\mathbf{Y} &= \vecc{X} \mathbf{\beta} + \mathbf{\epsilon}\\
+	\epsilon &\sim \mathcal{N}(0, \sigma^2 \mathbf{I}_n)\\
+\end{aligned}
+$$
+
+\underline{Collinearity (or multicollinearity)} exists when there is ``near-dependency'' between the columns of the design matrix $\vecc{X}$.
+	\begin{itemize}
+	\item Two or more columns.
+	\item In other words, high correlation between explanatory variables.
+	\item the data/model pair is  ill-conditioned when $\vecc{X} \transpose \vecc{X}$ is nearly singular.
+\end{itemize}
+
+Perfect collinearity leads to rank-deficiency in $\vecc{X}$ such that $\vecc{X} \transpose \vecc{X}$ is singular.
+In the case of perfect collinearity, two or more columns are linear-dependent.
+
+\subsubsection*{An example of perfect collinearity}
+\begin{equation*}
+	Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \beta_4 X_{i4}  + \beta_5 X_{i5} + \epsilon_i
+\end{equation*}
+
+Consider the case, where
+\begin{itemize}
+	\item $Y_i$ represents the amount of sales.
+	\item $X_{i1}, X_{i2}, ..., X_{i4}$ are categorical that represent the quarter in which the sample is collected: $X_{ij} = \mathbf{1}(\mbox{sample } i \mbox{ collected in quarter } j)$.
+	\item $X_{i5}$ represents expense spent in advertising.
+\end{itemize}
+
+The \underline{dummy variable trap} $X_{i4} = 1 - X_{i1} - X_{i2} - X_{i3}$.  Recall that we need $m-1$ dummy variables for $m$ categories.
+
+\subsubsection*{An example of high correlation between predictors}
+
+\begin{equation*}
+	Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \epsilon_i
+\end{equation*}
+
+Consider the case, where
+\begin{itemize}
+	\item $Y_i$ represents the salary of individual $i$.
+	\item $X_{i1}$ represents the age of individual $i$.
+	\item $X_{i2}$ represents the experience of individual $i$.
+\end{itemize}
+
+{How to interpret $\beta_1$?}
+
+We expect high correlation between age and experience.
+
+
+\subsubsection*{Problems caused by multicollinearity}
+
+\begin{enumerate}
+	\item large standard errors of the regression coefficients
+	\begin{itemize}
+		\item small associated t-statistics
+		\item conclusion that truly useful explanatory variables are insignificant in explaining the regression
+	\end{itemize}
+	\item the sign of regression coefficients may be the opposite of what a mechanistic understanding of the problem would suggest
+	\item deleting a column of the predictor matrix will cause large changes in the coefficient estimates for other variables
+\end{enumerate}
+
+However, multicollinearity does {\bf not} greatly affect the {\bf predicted values}.
+
+\subsubsection*{Signs and detections of multicollinearity}
+\newcommand{\xstatistics}[1]{{\it #1}-statistics}
+Some signs for multicollinearity:
+\begin{enumerate}
+	\item Simple correlation between a pair of predictors exceeds $0.9$ or $R^2$.
+	\item High value of the multiple correlation coefficient with some high partial correlations between the explanatory variables.
+	\item Large \xstatistics{F} with some small \xstatistics{t} for individual regression coefficients
+\end{enumerate}
+
+
+Some approaches for detecting multicollinearity:
+\begin{enumerate}
+	\item Pairwise correlations among the explanatory variables
+	\item Variance inflation factor
+	\item Condition number
+\end{enumerate}
+
+
+\subsubsection*{Variance inflation factor}
+
+For a multiple linear regression with $k$ explanatory variables.
+We can regress $X_j$ on the $(k-1)$ other explanatory variables and denote $R_j$ as the coefficient of determination.
+
+Then the \underline{variance inflation factor} (VIF) is defined as
+\begin{equation*}
+	\mbox{VIF}_j = \frac{1}{1 - R_j^2}
+\end{equation*}
+
+\begin{itemize}
+	\item $\mbox{VIF}_j \in [1, +\infty)$
+	\item A suggested threshold is $10$
+	\item May use the averaged $\overline{\mbox{VIF}}=\sum\limits_{j=1}^k{\mbox{VIF}_j}\bigg/ k$.
+\end{itemize}
+
+\subsubsection*{Condition index and condition number}
+We first scale the design matrix $\vecc{X}$ into column-equilibrated predictor matrix $\vecc{X}_E$
+such that $\{X_E\}_{ij} = X_{ij} / \sqrt{\vecc{X}_j\transpose \vecc{X}_j}$.
+
+Let $\vecc{X}_E=\mathbf{U}\mathbf{D}\mathbf{V}\transpose$ be the singular-value decomposition (SVD) of
+the $n \times p$ matrix $\vecc{X}_E$
+where $\mathbf{U}\transpose \mathbf{U} = \mathbf{V}\transpose \mathbf{V} = \mathbf{I}_p$
+and $\mathbf{D} = diag(d_1, d_2, ..., d_p)$ is a diagonal matrix with $d_j \ge 0$.
+
+\vspace{1.5em}
+The $j^{th}$ \underline{condition index} is defined as 
+\begin{equation*}
+	\eta(\vecc{X}_E) = d_{\max} / d_j, \mbox{      } j=1, 2, ..., p
+\end{equation*}
+
+\vspace{0.5em}
+The \underline{condition number} is defined as
+\begin{equation*}
+	C = d_{\max} / d_{\min}
+\end{equation*}
+$C \ge 1$, $d_{\max}=\max\limits_{1 \le j \le p}d_j$ and $d_{\min}=\min\limits_{1 \le j \le p}d_j$
+
+Some properties of the condition number
+\begin{itemize}
+	\item Large condition number indicates evidence of multicollinearity
+	\item Typical cutoff values, 10, 15 to 30.
+\end{itemize}
+
+Some problems with the condition number
+\begin{itemize}
+	\item practitioners have different opinions of whether $\vecc{X}$ should be centered around their means for SVD. 
+	\begin{itemize}
+		\item centering may remove nonessential ill conditioning, e.g. $Cor(X, X^2)$
+		\item centering may mask the role of the constant term in any underlying near-dependencies
+	\end{itemize}
+	\item the degree of multicollinearity with dummy variables may be influenced by the choice of reference category
+	\item condition number is affected by the scale of the $\vecc{X}$ measurements
+	\begin{itemize}
+		\item By scaling down any column of $\vecc{X}$, the condition number can be made arbitrarily large
+		\item Known as {\it artificial ill-conditioning}
+		\item The condition number of the scaled matrix $\vecc{X}_E$ is also referred to as the {\it scaled condition number}
+	\end{itemize}
+\end{itemize}
+
+Recall that $\vecc{X}_E=\mathbf{U}\mathbf{D}\mathbf{V}\transpose$ is the singular-value decomposition (SVD) of $\vecc{X}_E$,
+where $\mathbf{U}\transpose \mathbf{U} = \mathbf{V}\transpose \mathbf{V} = \mathbf{I}_p$
+and $\mathbf{D} = diag(d_1, d_2, ..., d_p)$ is a diagonal matrix with $d_j \ge 0$.
+
+\vspace{2em}
+Then
+\vspace{1em}
+\begin{equation*}
+	\begin{aligned}
+		\vecc{X}_E\transpose \vecc{X}_E &= \mathbf{V}\mathbf{D}\mathbf{U}\transpose\mathbf{U}\mathbf{D}\mathbf{V}
+		\transpose \\
+		&= \mathbf{V}\mathbf{D}^2 \mathbf{V}\transpose\\
+	\end{aligned}
+\end{equation*}
+\vspace{1em}
+
+is the spectral decomposition of the Gramian matrix $\vecc{X}_E\transpose \vecc{X}_E$ with $\{d_j^2\}$ being the eigenvalues and $\mathbf{V}$ being the corresponding eigen vector matrix.
+This relationship links the condition numbers to the eigen values of the Gramian matrix.
+
+\subsubsection*{Variance decomposition method}
+
+The variance-covariance matrix of the coefficient
+\begin{equation*}
+	\begin{aligned}
+		Cov(\hat{\beta}) 
+		&= \sigma^2 (\vecc{X}_E\transpose \vecc{X}_E)^{-1} \\
+		&= \sigma^2 \mathbf{V}\mathbf{D}^{-2} \mathbf{V}\transpose\\
+	\end{aligned}
+\end{equation*}
+
+Its $j^{th}$ diagonal element is the estimated variance of the $j^{th}$ coefficient, $\hat{\beta}_j$.
+Then
+\begin{equation*}
+	Var(\hat{\beta}_j) 
+	= \sigma^2 \sum\limits_{h=1}^p{\frac{v_{jh}^2}{d_h^2}}
+\end{equation*}
+
+
+\begin{itemize}
+	\item Let $q_{jh} = \frac{v_{jh}^2}{d_h^2}$ and $q_j = \sum\limits_{h=1}^p {q_{jh}}$.
+	\item The variance decomposition proportion is $\pi_{jh} = q_{jh}/q_j$.
+	\item $\pi_{jh}$ denotes the proportion of the variance of the $j^{th}$ regression coefficient associated with the $h^{th}$ component of its decomposition.
+	\item The variance decomposition proportion matrix is $\mathbf{\Pi} = \{\pi_{jh}\}$.
+\end{itemize}
+
+In practice, it is suggested to combine condition index and proportions of variance for multicollinearity diagnostic.
+\begin{table*}
+	\centering
+	\begin{tabular}{lcccc}
+		\toprule
+		Condition & \multicolumn{4}{c}{Proportions of variance}\\
+		Index & $Var(\hat{\beta}_1)$ & $Var(\hat{\beta}_2)$ & ... & $Var(\hat{\beta}_3)$\\ 
+		\hline
+		$\eta_1$ & $\pi_{11}$ & $\pi_{12}$ & ... & $\pi_{1p}$\\
+		$\eta_2$ & $\pi_{21}$ & $\pi_{22}$ & ... & $\pi_{2p}$\\
+		\vdots & \vdots & \vdots & & \vdots\\
+		$\eta_p$ & $\pi_{p1}$ & $\pi_{p2}$ & ... & $\pi_{pp}$\\
+		\bottomrule
+	\end{tabular}
+	\caption{
+		Table of condition index and proportions of variance}
+\end{table*}
+Identify multicollinearity if
+\begin{itemize}
+	\item Two or more elements in the $j^{th}$ row of matrix $\mathbf{\Pi}$ are relatively large
+	\item And its associated condition index $\eta_j$ is large too
+\end{itemize}
+
+\subsection*{Principal Components}
+
+The method of principal components, introduced by Karl Pearson (1901) and Harold Hotelling (1933), provides a useful representation of the correlational structure of a set of variables.
+Some advantages of the principal component analysis include
+\begin{itemize}
+	\item more unified
+	\item linear transformation of the original predictors into a new set of orthogonal predictors
+	\item the new orthogonal predictors are called principal components
+\end{itemize}
+
+Principal components regression is an approach that inspects the sample data $(\vecc{Y}, \vecc{X})$ for directions of variability and uses this information to reduce the dimensionality of the estimation problem.
+The procedure is based on the observation that every linear regression model can be restated in terms of a set of orthogonal predictor variables, which are constructed as linear combinations of the original variables.
+The new orthogonal variables are called the \underline{principal components} of the original variables.
+
+Let $\vecc{X} \transpose \vecc{X} = \vecc{Q} \vecc{\Delta} \vecc{Q}\transpose $ denote the spectral decomposition of $\vecc{X} \transpose \vecc{X}$, where $\vecc{\Delta} = diag\{\lambda_1, \dots, \lambda_p\}$ is a diagonal matrix consisting of the (real) eigenvalues of $\vecc{X} \transpose \vecc{X}$,
+with $\lambda_1 \ge \dots \ge \lambda_p$ and $\vecc{Q} = (\vecc{q_1}, \dots, \vecc{q_p})$ denotes the matrix whose columns are the orthogonal eigenvectors of $\vecc{X} \transpose \vecc{X}$ corresponding to the ordered eigenvalues.
+Consider the transformation
+$$
+\vecc{Y} = \vecc{X}\vecc{Q}\vecc{Q}\transpose \vecc{\beta} + \vecc{\epsilon} = \vecc{Z}\vecc{\theta} + \vecc{\epsilon},
+$$
+where $\vecc{Z} = \vecc{XQ}$, and $\vecc{\theta} = \vecc{Q}\transpose \vecc{\beta}$.\\
+The elements of $\vecc{\theta}$ are known as the \underline{regression parameters of the principal components}.
+The matrix $\vecc{Z} = \{\vecc{z_1}, \dots, \vecc{z_p}\}$ is called the matrix of principal components of $\vecc{X} \transpose \vecc{X}$.
+$\vecc{z}_j = \vecc{X}\vecc{q}_j$ is the $j$th principal component of $\vecc{X} \transpose \vecc{X}$ and $\vecc{z}_j\transpose \vecc{z}_j = \lambda_j$, the $j$th largest eigenvalue of $\vecc{X} \transpose \vecc{X}$.
+
+Principal components regression consists of deleting one or more of the variables $\vecc{z}_j$ (which correspond to small values of $\lambda_j$), and using OLS estimation on the resulting reduced regression model.
+
+\subsubsection*{Derivation under standardized predictors, JF 13.1.1}
+Consider the vectors of standardized predictors, $\vecc{x}^*_1,\vecc{x}^*_2, \dots, \vecc{x}^*_p$ (obtained by subtracting the mean and divided by standard deviation of the original predictor vectors).
+Because the principal components are linear combinations of the original predictors, we write the first principal component as
+$$
+\begin{aligned}
+\vecc{w}_1 &= A_{11} \vecc{x}^*_1 + A_{21} \vecc{x}^*_2 + \cdots + A_{p1} \vecc{x}^*_p\\
+&= \vecc{X}^* \vecc{a}_1\\
+\end{aligned}
+$$
+The variance of the first component becomes
+$$
+\begin{aligned}
+S_{w_1}^2 &= \frac{1}{n - 1} \vecc{w}_1\transpose \vecc{w}_1 \\
+&= \frac{1}{n - 1} \vecc{a}_1 \transpose {\vecc{X}^*}\transpose \vecc{X}^* \vecc{a}_1\\
+&= \vecc{a}_1\transpose \vecc{R}_{XX}\vecc{a}_1\\
+\end{aligned}
+$$
+where $\vecc{R}_{XX} = \frac{1}{n - 1}  {\vecc{X}^*}\transpose \vecc{X}^*$.
+We want to maximize $S_{w_1}^2$ under the normalizing constraint $\vecc{a}_1\transpose \vecc{a}_1 = 1$ (otherwise $S_{w_1}^2$ can be arbitrarily large by inflating $\vecc{a}_1$).
+Consider
+$$
+F_1 \equiv \vecc{a}\transpose \vecc{R}_{XX} \vecc{a}_1 - L_1(\vecc{a}_1\transpose \vecc{a}_1 - 1)
+$$
+where $L_1$ is a Lagrange multiplier.  By differentiating this equation with respect to $\vecc{a}_1$ and $L_1$,
+$$
+\begin{aligned}
+	\frac{\partial F_1}{\partial \vecc{a}_1} &= 2 \vecc{R}_{XX}\vecc{a}_1 - 2L_1 \vecc{a}_1\\
+	\frac{\partial F_1}{\partial L_1} &= -(\vecc{a}_1 \transpose \vecc{a}_1 - 1)\\	
+\end{aligned}
+$$
+Setting the partial derivatives to 0 produces
+$$
+\begin{aligned}
+	(\vecc{R}_{XX} - L_1 \vecc{I}_p) \vecc{a}_1 &= \vecc{0}\\
+	\vecc{a}_1 \transpose \vecc{a}_1 &= 1\\	
+\end{aligned}
+$$
+From the first equation, we see that $L_1$ is an eigenvalue of $\vecc{R}_{XX}$ such that $\vecc{R}_{XX} \vecc{a}_1 = L_1 \vecc{a}_1$ such that
+$$
+S_{w_1}^2 = \vecc{a}_1\transpose \vecc{R}_{XX}\vecc{a}_1 = L_1\vecc{a}_1\transpose \vecc{a}_1 = L_1
+$$
+To maximize $S_{w_1}^2$, we only need to pick the largest eigenvalue of $\vecc{R}_{XX}$.
+
+
+
+
+
+
+
+
+
+
+
+
+

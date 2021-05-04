@@ -1,0 +1,213 @@
+\setcounter{section}{24}
+
+\section{Lecture 25: March 29}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item Lab session
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+	\item Announcement: alternative grading path didn't pass (5:5 from last poll + a fail on the first poll)
+	\item Analysis of Variance (JF chapter 8)
+	  \begin{itemize}
+	  	\item one-way anova
+	  	\item two-way anova
+%	  	\item higher-way anova
+%	  	\item analysis of covariance (ANCOVA)
+%	  	\item linear contrasts
+	  \end{itemize}
+\end{itemize}
+
+\subsection*{Additional reference}
+\href{https://www4.stat.ncsu.edu/~osborne/st512r/handouts/allpackets.pdf}{Course notes} by Dr. Jason Osborne.
+
+\subsection*{Analysis of Variance}
+
+The term \underline{analysis of variance} is used to describe the partition of the response-variable sum of squares into ``explained'' and ``unexplained'' components, noting that this decomposition applies generally to linear models.
+For historical reasons, analysis of variance (abbreviated ANOVA) also refers to procedures for fitting and testing linear models in which the explanatory variables are categorical.
+
+\subsection*{One-way ANOVA}
+Suppose that there are {\it no} quantitative explanatory variables, but only a single factor (categorical data).  For example, for a three-category classification, we have the model
+\begin{equation}
+Y_i = \alpha + \gamma_1 D_{i1} + \gamma_2 D_{i2} + \epsilon_i
+\label{eq:8.1}
+\end{equation}
+employing the following coding for the dummy regressors:
+
+\begin{table}[H]
+	\label{tab:8.1.1}
+	\centering
+	\begin{tabular}{lcc}
+		\toprule
+		Group & $D_1$ & $D_2$\\
+		\hline
+		1 & 1 & 0 \\
+		2 & 0 & 1 \\
+		3 & 0 & 0 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+The expectation of the response variable in each group (i.e.~in each category or level of the factor) is the population group mean, denoted by $\mu_j$ for the $j$th group.  Equation~\ref{eq:8.1} produces the following relationship between group means and model parameters:
+$$
+\begin{aligned}
+	\mbox{Group 1: } \textit{E}(Y_i | D_{i1} = 1, D_{i2} = 0) &= \alpha + \gamma_1 \times 1 + \gamma_2 \times 0 = \alpha + \gamma_1\\ 
+	\mbox{Group 2: } \textit{E}(Y_i | D_{i1} = 0, D_{i2} = 1) &= \alpha + \gamma_1 \times 0 + \gamma_2 \times 1 = \alpha + \gamma_2\\ 
+	\mbox{Group 3: } \textit{E}(Y_i | D_{i1} = 0, D_{i2} = 0) &= \alpha + \gamma_1 \times 0 + \gamma_2 \times 0 = \alpha\\ 		
+\end{aligned}
+$$
+There are three parameters ($\alpha$, $\gamma_1$ and $\gamma_2$) and three group means, so we can solve uniquely for the parameters in terms of the group means:
+$$
+\begin{aligned}
+	\hat{\alpha} &= \mu_3\\
+	\hat{\gamma}_1 &= \mu_1 - \mu_3\\
+	\hat{\gamma}_2 &= \mu_2 - \mu_3\\
+\end{aligned}
+$$
+Not surprisingly, $\alpha$ represents the mean of the baseline category (Group 3) and that $\gamma_1$ and $\gamma_2$ captures differences between the other group means and the mean of the baseline category.
+
+\subsubsection*{notations}
+Because observations are partitioned according to groups, it is convenient to let $Y_{jk}$ denote the $k$th observation within the $j$th of $m$ groups.
+The number of observations in the $j$th group is $n_j$, and the total number of observations is $n = \sum_{j = 1}^{m} n_j$.
+Let $\mu_j\equiv \mathit{E}(Y_{jk})$ be the population mean in group $j$.
+
+The one-way ANOVA model is
+$$
+Y_{jk} = \mu + \alpha_j + \epsilon_{jk}
+$$
+where $\mu$ represents the general level of response variable in the population; $\alpha_j$ represents the effect on the response variable of membership in the $j$th group;
+$\epsilon_{jk}$ is an error variable that follows the usual linear-model assumptions: $\epsilon_{jk} \distas{iid} \mathcal{N}(0, \sigma^2)$.
+
+By taking expectations, we have
+$$
+	\mu_j = \mu + \alpha_j
+$$
+The parameters of the model are, therefore, underdetermined, for there are $m+1$ parameters (including $\mu$) but only $m$ population group means (recall the dummy variable trap introduced in collinearity).
+To produce easily interpretable parameters and that estimates and generalizes usefully to more complex models, we impose the \underline{sum-to-zero constraint}
+$$
+\sum\limits_{j=1}^m \alpha_j = 0
+$$
+With the sum-to-zero constraint, we solve for the parameters
+$$
+\begin{aligned}
+	\hat{\mu} &= \frac{\sum \mu_j}{m} \\
+	\hat{\alpha}_j &= \mu_j - \mu\\
+\end{aligned}
+$$
+
+The fitted $Y$ values are the group means for the one-way ANOVA model:
+$$
+\hat{Y}_{jk} = \hat{\mu} + \hat{\alpha}_j
+$$
+and the regression and residual sums of squares therefore take particularly simple forms in one-way ANOVA:
+$$
+\begin{aligned}
+	RegSS &= \sum\limits_{j=1}^m \sum\limits_{k=1}^{n_j} (\hat{Y}_{jk} - \bar{Y})^2 = \sum\limits_{j=1}^m n_j(\bar{Y_j} - \bar{Y})^2\\
+	RSS &= \sum\limits_{j=1}^m \sum\limits_{k=1}^{n_j} ({Y}_{jk} - \hat{Y}_{jk} )^2 =  \sum\limits_{j=1}^m \sum\limits_{k=1}^{n_j} ({Y}_{jk} - \bar{Y}_j)^2\\
+\end{aligned}
+$$
+and can be presented in an ANOVA table.
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\caption{General one-way ANOVA table}
+	\label{tab:one_way_anova_table}
+	\centering
+	\begin{tabular}{lccccc}
+		\toprule
+		Source & Sum of Squares & df & Mean Square & $F$ & $H_0$\\
+		\hline
+		Groups & $\sum  n_j(\bar{Y_j} - \bar{Y})^2$ & $m - 1$ & $\frac{RegSS}{m - 1}$ & $\frac{RegMS}{RMS}$ & $\alpha_1 = \dots = \alpha_m = 0$\\
+		Residuals & $\sum\sum(Y_{jk} - \bar{Y}_j)^2$ & $n - m$ & $\frac{RSS}{n - m}$ & & \\
+		\hline
+		Total & $\sum\sum(Y_{jk} - \bar{Y})^2$ & $n - 1$ & & &\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+Sometimes, the column of Source can also be denoted with Treatments (for Groups) and Error (for Residuals).
+And a \underline{balanced one-way ANOVA} model has the same number of observations in one group (or treatment), in other words, $n_1 = \dots = n_m = \frac{n}{m}$.
+
+\subsubsection*{one-way ANOVA example}
+The following data come from study investigating binding fraction for several antibiotics using $n = 20$ bovine serum samples:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c|c|c}
+		\toprule
+		Antibiotic & Binding Percentage & Sample mean \\
+		\hline
+		Penicillin G & 29.6 24.3 28.5 32.0 & 28.6\\
+		Tetracyclin & 27.3 32.6 30.8 34.8 & 31.4\\
+		Streptomycin & 5.8 6.2 11.0 8.3 & 7.8\\
+		Erythromycin & 21.6 17.4 18.3 19 & 19.1\\
+		Chloramphenicol & 29.2 32.8 25.0 24.2&27.8\\
+		\bottomrule
+		\end{tabular}
+\end{table}
+
+Question:  Are the population means for these 5 treatments plausibly equal?\\
+	{\it Answer:}\\
+\begin{pf}
+	One model parameterizes antibiotic effects as differences from mean
+	$$
+	Y_{jk} = \mu + \alpha_j + \epsilon_{jk}
+	$$
+	for $j = 1, \dots, 5$ and $k = 1, \dots, 4$, where $\epsilon_{jk} \distas{iid} \mathcal{N}(0, \sigma^2)$ errors.
+	\begin{center}
+		Unknown parameters
+		\begin{enumerate}
+			\item $\mu$ - overall population mean (average of 5 treatment population means)
+			\item $\alpha_j$ - difference between (population) mean for treatment $j$ and $\mu$
+			\item $\sigma^2$ - (population) variance of binding fraction for a given antibiotic
+		\end{enumerate}
+	\end{center}
+	
+	To test $H_0: \alpha_1 = \alpha_2 = \dots = \alpha_5 = 0$, we just carry out one-way ANOVA:
+	\begin{table}[H]
+		\renewcommand{\arraystretch}{1.5}
+		\centering
+		\begin{tabular}{lcccc}
+			\toprule
+			Source & Sum of Squares & df & Mean Square & $F$\\
+			\hline
+			Groups & 1481 & $4$ & $370$ & $41$ \\
+			Residuals & $136$ & $15$ & $9$ & \\
+			\hline
+			Total & $1617$ & $19$ & &\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	Compared to $F(0.05, 4, 15) = 3.06$, we have $F = 41 > 3.06$.\\
+	Conclusion: we reject the null hypothesis of all population means for 5 treatment being equal at 0.05 significance level.
+\end{pf}
+
+What do we obtain standard errors of parameter estimates? (HW)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

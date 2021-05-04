@@ -1,0 +1,306 @@
+\setcounter{section}{30}
+
+\section{Lecture 31: April 12}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item One last poll on alternative grading path
+	\item Sampling distribution of linear contrasts
+	\item Multiple comparisons
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+	\item {\bf Last} poll on alternative grading path result: {\it passed} with $4 + 4$ yes, $4 + 1$ no ($0$ by emails...?)
+	\item Sample size computations for one-way ANOVA	
+	\item Lack of fit test	
+	\item One-way random effect model (JF Chapter 23 + Dr. Osborne's notes)
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{https://www4.stat.ncsu.edu/~osborne/st512r/handouts/allpackets.pdf}{Course notes} by Dr. Jason Osborne.
+
+\subsection*{Sample size computations for one-way ANOVA}
+
+Now consider the null hypothesis in a balanced experiment using one-way ANOVA to compare $t$ treatment means and $\alpha=0.05$:
+$$
+H_0: \mu_1 = \mu_2 = \dots = \mu_t = \mu
+$$
+versus the alternative
+$$
+H_a: \mu_i \ne \mu_j \mbox{ for some } i\ne j
+$$
+Suppose that we intend to use a balanced design.  How big does our sample size $n_1 = n_2 = \dots = n_t = n$ need to be?
+
+The answer depends on lots of things, namely, $\sigma^2$ and how many treatment groups $t$ and how much of a difference among the means we hope to be able to detect, and with how big a probability.
+
+Given $\alpha$, $\mu_1, \dots, \mu_t$ and $\sigma^2$, we can choose $n$ to ensure a power of at least $\beta$ (i.e.~type II error rate) using the \underline{noncentral F distribution}.
+
+Recall that the critical region for the statistic $F = MS[Trt]/MS[E]$ is everything bigger than $F(\alpha, t- 1, N - t) = F^*$.
+
+The power of the $F$-test conducted using $\alpha = 0.05$ to reject $H_0$ under this alternative is given by
+\begin{equation}
+1 - \beta = \Pr(MS[Trt]/MS[E]>F^*; H_1 \mbox{ is true}).
+\label{eq:power}
+\end{equation}
+
+Let $\tau_i = \mu_i - \mu$ for each treatment $i$ so that
+$$
+H_0: \tau_1 = \tau_2 = \dots = \tau_t = 0
+$$
+When some $H_1$ is true and the sample size $n$ is used in each group, it can be shown that the $F$ ratio has the noncentral $F$ distribution with noncentrality parameter
+$$
+\gamma = \sum\limits_{j = 1}^t n_j \left(\frac{\tau_j}{\sigma}\right)^2 = n\sum\limits_{j = 1}^t \left(\frac{\tau_j}{\sigma}\right)^2
+$$
+This is the parameterization for the $F$ distribution used in both SAS and R.
+
+One way to obtain an adequate sample size is trial and error.
+Software packages can be used to get probabilities of the form~\ref{eq:power} for various values of $n$.
+
+\subsubsection*{Example}
+Suppose we want to test equal mean binding fractions among antibiotics against the alternative
+$$
+H_1:\mu_P = \mu + 3, \mu_T = \mu + 3, \mu_S = \mu - 6, \mu_E = \mu, \mu_C = \mu
+$$
+so that 
+$$
+\tau_1 = \tau_2 = 3, \tau_3 = -6, \tau_4 = \tau_5 = 0.
+$$
+Assume $\sigma = 3$ (is it arbitrary? any idea of how to guess?) and we need to use $\alpha = 0.05$.
+The noncentrality parameter is given by
+$$
+\gamma = n[(\frac{3}{3})^2 + (\frac{3}{3})^2 + (\frac{-6}{3})^2]
+$$
+The $\alpha = 0.05$ critical value for $H_0$ is given by
+$$
+F^* = F(5 - 1, 5n - 5, 0.05).
+$$
+We need the area to the right of $F^*$ for the noncentral $F$ distribution with degrees of freedom $4$ and $5(n - 1)$ and noncentrality parameter $\gamma = 6n$ to be greater or equal to the desired power level of $1 - \beta = 0.8$.
+
+We will revisit this example in the lab session on Friday.
+
+\subsection*{Lack-of-fit test}
+
+Hiking example: completely randomized experiment involving alpine meadows in the White Mountains of New Hampshire.
+$N = 20$ lanes of dimension $0.5m \times 1.5m$ randomized to $5$ trampling treatments:
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{c|c|cccc}
+		\toprule
+		$i$: trt group & $x$: Number of passes & \multicolumn{4}{c}{$y_{ij}$: Height (cm)}\\
+		\hline
+		1 & 0 & 20.7 & 15.9 & 17.8 & 17.6\\
+		2 & 25 & 12.9 & 13.4 & 12.7 & 9.0\\
+		3 & 75 & 11.8 & 12.6 & 11.4 & 12.1\\
+		4 & 200 & 7.6 & 9.5 & 9.9 & 9.0\\
+		5 & 500 & 7.8 & 9.0 & 8.5 & 6.7\\								
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Two models for mean plant height:
+$$
+\begin{aligned}
+	\mbox{SLR model: }& \mu(x) = \beta_0 + \beta_1 x\\
+	\mbox{one-factor ANOVA model: }& \mu_{ij} = \mu + \alpha_i\\
+\end{aligned}
+$$
+When the $t$ treatments have an interval scale, the SLR model, and all polynomials of degree $p\le t-2$ (why?), are nested in one-factor ANOVA model with $t$ treatment means.
+
+{\it Answer: }\\
+\begin{pf}
+	For t levels, there are $t - 1$ degrees of freedom.  A polynomial model of degree $p$ has $p + 1$ number of parameters (in other words, takes $p+1$ degrees of freedom).
+\end{pf}
+
+\subsubsection*{F-ratio for lack-of-fit test}
+To test for lack-of-fit of a polynomial (reduced) model of degree $p$, use extra sum-of-squares $F$-ratio on $t - 1 - p$ and $N - t$ df:
+$$
+F = \frac{SS[\mbox{lack of fit}]/(t - 1 - p)}{MS[\mbox{pure error}]}
+$$
+where
+$$
+MS[\mbox{pure error}] = MS[E]_{full}
+$$
+and
+$$
+\begin{aligned}
+	SS[\mbox{lack-of-fit}] &= SS[Trt] - SS[Reg]_{poly}\\
+	&= SS[E]_{poly} - SS[E]_{full}\\
+\end{aligned}
+$$
+What is the $SS[\mbox{lack of fit}]$ for the meadows data?
+\begin{pf}
+	In a simple linear ($p=1$) model for the meadows data,
+$$
+SS[\mbox{lack-of-fit}] = 243.163 - 141.295 = 101.867 \quad \mbox{ on } t- 1 - p = 3 \mbox{ df}
+$$
+and the sum of squares for the full model is $SS[E]_{full} = 30.93$ that leads to
+$$
+F = \frac{101.867/3}{30.93/15} \approx \frac{34}{2.1} = 16.5
+$$
+(highly significant since $F(0.01, 3, 15) = 5.42$.)
+$\Rightarrow$ model misspecified: SLR model suffers from lack of fit.
+\end{pf}
+
+Next step: either go with the one-factor ANOVA model or specify some other model, such as quadratic.
+
+
+\subsection*{One-way random effects model}
+
+Let's first consider an example.
+\begin{itemize}
+	\item Genetics study w/ beef animals.  Measure birthweight $Y$ (lbs).
+	\item $t = 5$ sires, each mated to a separate group of $n = 8$ dams.
+	\item $N=40$, completely randomized.
+\end{itemize}
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{cc|cccccccc|c|c}
+		\toprule
+		Sire \# & Level & \multicolumn{8}{c}{Sample Birthweights} & $\bar{y}_{i+}$ & $s_i$\\
+		\hline
+		177 & 1 & 61 & 100 &56 & 113 & 99 & 103 & 75 & 62 & 83.6 & 22.6\\
+		200 & 2 & 75 & 102 &95 & 103 & 98 & 115 & 98 & 94 & 97.5 & 11.2\\
+		201 & 3 & 58 & 60 &60 & 57 & 57 & 59 & 54 & 100 & 63.1 & 15.0\\
+		202 & 4 & 57 & 56 &67 & 59 & 58 & 121 & 101 & 101 & 77.5 & 25.9\\
+		203 & 5 & 59 & 46 &120 & 115 & 115 & 93 & 105 & 75 & 91.0 & 28.0\\								
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Question: Statistical model for these data?\\
+Answer: One-way fixed effects model?
+$$
+Y_{ij} = \mu + \tau_i + \epsilon_{ij}
+$$
+where $\tau_i$ denotes the difference between the mean birthweight of population of offspring from sire $i$ and $\mu$, mean of whole population.
+
+\underline{The one-way random effects model}
+$$
+Y_{ij} = \underbrace{\mu}_{\mbox{fixed}} + \underbrace{T_i}_{\mbox{random}} + \underbrace{\epsilon_{ij}}_{\mbox{random}}  \quad \mbox{ for } i = 1, 2, \dots, t \mbox{ and }  j = 1, \dots, n
+$$
+with
+\begin{itemize}
+	\item $T_1, T_2, \dots, T_t \distas{iid} \mathcal{N}(0, \sigma_T^2)$
+	\item $\epsilon_{11}, \dots, \epsilon_{tn} \distas{iid} \mathcal{N}(0, \sigma^2)$
+	\item $T_1, T_2, \dots, T_t$ independent of $\epsilon_{11},, \dots, \epsilon_{tn}$
+\end{itemize}
+
+Features
+\begin{itemize}
+	\item $T_1, T_2, \dots$ denote \underline{random effects}, drawn from some population of interest.  That is $T_1, T_2, \dots$ is a \underline{random sample}.
+	\item $\sigma_T^2$ and $\sigma^2$ are called \underline{variance components}
+	\item conceptually different from one-way fixed effects model
+\end{itemize}
+
+For beef animal genetic study, with $t = 5$ and $n = 8$, the random effects $T_1, T_2, \dots, T_5$ reflect sire-to-sire variability.
+
+No particular interest in $\tau_1, \tau_2, \dots, \tau_5$ from the fixed effects model:
+$$
+Y_{ij} = \underbrace{\mu}_{\mbox{fixed}} + \underbrace{\tau_i}_{\mbox{fixed}} + \underbrace{\epsilon_{ij}}_{\mbox{random}}  \quad \mbox{ for } i = 1, 2, \dots, t \mbox{ and }  j = 1, \dots, n
+$$
+with
+\begin{itemize}
+	\item $\tau_1, \tau_2, \dots, \tau_t$ unknown model parameters
+	\item $\epsilon_{11}, \dots, \epsilon_{tn} \distas{iid} \mathcal{N}(0, \sigma^2)$
+\end{itemize}
+
+\subsubsection*{Exercise}
+Using the random effects model, specify
+$$
+\textit{E}(Y_{ij}) \mbox{ and } \textit{Var}(Y_{ij})
+$$
+Recall:
+\begin{itemize}
+	\item Two {\it components} to variability in data: $\sigma^2$, $\sigma_T^2$
+	\item $T_1, T_2, \dots, T_5$ a random sample of sire effects
+	\item Sire effects is a population in its own right.
+	\item Model parameters: $\sigma^2$, $\sigma_T^2$, $\mu$.
+\end{itemize}
+
+{\it Answer:}\\
+\begin{pf}
+$$
+\textit{E}(Y_{ij}) = \textit{E}(\mu) + \textit{E}(T_i) + \textit{E}(\epsilon_{ij})  = \mu
+$$
+$$
+\textit{Var}(Y_{ij}) = \textit{Var}(\mu + T_i + \epsilon_{ij}) = \textit{Var}(T_i) + \textit{Var}(\epsilon_{ij}) = \sigma_T^2 + \sigma^2
+$$
+\end{pf}
+
+Sums of squares and mean squares are the same as in one-way fixed effects ANOVA:
+$$
+\begin{aligned}
+	SS[T] &= \sum\sum(\bar{y}_{i+} - \bar{y}_{++})^2\\
+	SS[E] &= \sum\sum({y}_{ij} - \bar{y}_{i+})^2\\
+	SS[Tot] &= \sum\sum({y}_{ij} - \bar{y}_{++})^2\\
+\end{aligned}
+$$
+
+\subsubsection*{ANOVA table}
+The ANOVA table is almost the same, it just has a different expected mean squares column:
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{ccccc}
+		\toprule
+		Source & SS & df & MS & Expected MS \\
+		\hline
+		Treatment & $SS[T]$ & $t - 1$ & $MS[T]$ & $\sigma^2 + n\sigma^2_T$\\
+		Error & $SS[E]$ & $N - t$ & $MS[E]$ & $\sigma^2$\\
+		Total & $SS[Tot]$ & $N - 1$ &  &\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsubsection*{Estimating parameters of one-way random effects model}
+\begin{enumerate}
+	\item {\bf Method of moment (M.o.M.) estimation}: Equate EMS with observed MS and solve. Problem: M.o.M estimation can give $\hat{\sigma}^2 < 0$ (estimates of variances $<0$)
+	\item {\bf Maximum likelihood (ML) / Restricted maximum likelihood (REML)}: Numerical procedures that avoid negative variance estimates.
+	    \begin{itemize}
+	    	\item ML:  full maximum-likelihood estimation maximizes the likelihood with respect to all of the parameters of the model simultaneously (i.e., both the fixed-effects parameters and the variance components).
+	    	\item REML: restricted (or residual) maximum-likelihood estimation integrates the fixed effects out of the likelihood and estimates the variance components; given the resulting estimates of the variance components, estimates of the fixed effects are recovered.
+	    	REML estimates are the same as M.o.M. estimates with balanced data.
+	    \end{itemize}
+\end{enumerate}
+
+
+For one-way random-effects model:
+$$
+\begin{aligned}
+	\hat{\mu} &= \bar{y}_{++}\\
+	\hat{\sigma}^2 &= MS[E]\\
+	\hat{\sigma}^2_T &= \frac{MS[T] - MS[E]}{n}
+\end{aligned}
+$$
+For sires data, $\bar{y}_{++} = 82.6$ and 
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{ccccc}
+		\toprule
+		Source & SS & df & MS & Expected MS \\
+		\hline
+		Sire & $5591$ & $4$ & $1398$ & $\sigma^2 + 8\sigma^2_T$\\
+		Error & $16233$ & $35$ & $464$ & $\sigma^2$\\
+		Total & $21824$ & $39$ &  &\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Obtain the parameter estimates.
+{\it Answers:}\\
+\begin{pf}
+	$$
+	\begin{aligned}
+		\hat{\mu} &= 82.6\\
+		\hat{\sigma}^2 &= 464\\
+		\hat{\sigma}_T^2 &= \frac{1398-464}{8}\\
+		&= 117\\
+	\end{aligned}
+	$$
+\end{pf}

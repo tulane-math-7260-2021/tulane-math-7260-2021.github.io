@@ -1,0 +1,96 @@
+\documentclass[12pt]{article} % use larger type; default would be 10pt
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper} % or letterpaper (US) or a5paper or....
+\geometry{margin=1in} % for example, change the margins to 2 inches all round
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{amsbsy}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{cite}
+\usepackage{float}
+\usepackage[toc,page]{appendix}
+\newcommand{\vecc}[1]{\mathbf{#1}}
+%\toggletrue{showProof}
+\begin{document}
+
+\title{Time-dependent rate model}
+
+\maketitle
+
+\subsection*{The clock model in the partial vectors for one branch}
+The partial differential equation
+$$
+\frac{d \vecc{P}(t)}{dt} = \vecc{P}(t) \vecc{Q} \mu(t)
+$$
+has the solution involving matrix exponential for one branch of time $(t_1, t_2)$:
+$$
+\log \vecc{P}(t_2) - \log \vecc{P}(t_1) = \int\limits_{t_1}^{t_2} \vecc{Q}\mu(t)dt
+$$
+\begin{enumerate}
+	\item For constant $\mu(t) = r$.
+	$$
+	\vecc{P}(t_2) = \vecc{P}(t_1) e^{\vecc{Q}r(t_2 - t_1)}
+	$$
+	that translates to
+	$$
+	r(t_1, t_2) = r
+	$$
+	\item For a linear (i.e.~time dependent) function, $\mu(t) = \beta t$
+	$$
+	\begin{aligned}
+		\vecc{P}(t_2) &= \vecc{P}(t_1) e^{\frac{1}{2} \vecc{Q}\beta(t_2^2 - t_1^2)}\\
+		&= \vecc{P}(t_1) e^{ \vecc{Q}(t_2 - t_1) \beta \frac{t_1 + t_2}{2}}\\
+	\end{aligned}
+	$$
+	which suggests a mid-point for node heights with
+	$$
+	r(t_1, t_2) = \beta \frac{t_1 + t_2}{2}
+	$$
+	\item For a linear function with a upper threshold,
+	$$
+	\mu(t) = \left\{ \begin{array}{cc}
+		\beta t & t \ge T\\
+		\beta T & t < T\\
+	\end{array} \right.
+   $$
+   has 
+   $$
+   \vecc{P}(t_2) = \left\{ \begin{array}{cc}
+   	\vecc{P}(t_1)e^{\vecc{Q}\beta T (t_2 - t_1)} & t_1 < t_2 < T\\
+   	\vecc{P}(t_1)e^{\vecc{Q}\beta T (T - t_1) + \vecc{Q}(t_2 - T)\beta \frac{t_2 + T}{2}} & t_1 < T < t_2\\
+   	\vecc{P}(t_1)e^{\vecc{Q} (t_2 - t_1) \beta \frac{t_1 + t_2}{2}} & T < t_1 < t_2 \\
+   \end{array} \right.
+   $$
+   that translates into
+   $$
+   \vecc{r}(t_1, t_2) = \left\{ \begin{array}{cc}
+   	\beta T & t_1 < t_2 < T\\
+   	\beta \frac{\frac{1}{2}(t_2^2 - T^2) + T(T - t_1)}{t_2 - t_1} & t_1 < T < t_2\\
+   	\beta \frac{t_1 + t_2}{2} & T < t_1 < t_2 \\
+   	\end{array} \right.
+   $$
+\end{enumerate}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

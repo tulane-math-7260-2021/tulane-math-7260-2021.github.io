@@ -1,0 +1,42 @@
+---
+title: "Lecture 18"
+author: "Dr. Xiang Ji @ Tulane University"
+date: "March 1, 2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4  
+subtitle: Math 6040/7260 Linear Models
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls()) # clean-up workspace
+library(tidyverse)
+library(carData)
+```
+
+Let's lay the pdf of $t_2$ over standard normal.
+
+```{r}
+x.values <- 1:2501 * 0.002 - 2.5
+normal.pdf <- dnorm(x.values)
+t.pdf <- dt(x.values, df = 2)
+chisq.pdf <- dchisq(x.values, df = 2)
+
+pdf.data <- tibble(x = x.values, normal = normal.pdf, t = t.pdf, chisq = chisq.pdf)
+
+ggplot(data = pdf.data) +
+  geom_point(mapping = aes(x = x, y = normal), color = "blue") +
+  geom_point(mapping = aes(x = x, y = chisq), color = "red") + 
+  labs(title = "Standard normal pdf (blue) vs Chi square with df = 2 pdf (red)")
+  
+
+ggplot(data = pdf.data) +
+  geom_point(mapping = aes(x = x, y = normal), color = "blue") +
+  geom_point(mapping = aes(x = x, y = t), color = "red") + 
+  labs(title = "Standard normal pdf (blue) vs t-distribution with df = 2 pdf (red)")
+
+
+```
+

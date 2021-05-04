@@ -1,0 +1,215 @@
+\setcounter{section}{34}
+
+\section{Lecture 35: April 21}
+
+
+\subsection*{Last time}
+\begin{itemize}
+\item nested design
+\item Two-factor designs
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item HW3 deadline extended to Friday 04/23 midnight.
+\item Theoretical background of linear models
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{http://hua-zhou.github.io/teaching/st552-2013fall/ST552-2013-Fall-LecNotes.pdf}{Course notes} by Dr. Hua Zhou\\
+``A Primer on Linear Models'' by Dr. John F. Monahan
+
+\subsection*{Linear Models in the matrix form}
+Recall the matrix form of the linear model
+$$
+\underset{n \times 1}{\vecc{Y}} = \underset{n \times p}{\vecc{X}} \;  \underset{p \times 1}{\vecc{\beta}} + \underset{n \times 1}{\vecc{\epsilon}}
+$$
+
+\paragraph{Simple linear regression model}
+$$
+\left[ \begin{array}{c} y_1\\ y_2 \\ \vdots \\ y_n\\ \end{array} \right] =
+\left[ \begin{array}{cc} 1   &x_1\\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_n\\ \end{array} \right] \left[ \begin{array}{c} \beta_0\\ \beta_1 \\ \end{array} \right] +
+\left[ \begin{array}{c} \epsilon_1\\ \epsilon_2 \\ \vdots \\ \epsilon_n\\ \end{array} \right]
+$$
+
+\paragraph{Multiple linear regression model}
+$$
+\left[ \begin{array}{c} y_1\\ y_2 \\ \vdots \\ y_n\\ \end{array} \right] =
+\left[ \begin{array}{cccc} 1   &x_{11} & \dots & x_{1,p - 1}\\ 1 & x_{21} & \dots & x_{2, p-1} \\ \vdots & \vdots & & \vdots \\ 1 & x_{n1} & \dots & x_{n, p-1}\\ \end{array} \right] \left[ \begin{array}{c} \beta_0\\ \beta_1 \\ \vdots\\ \beta_{p - 1} \end{array} \right] +
+\left[ \begin{array}{c} \epsilon_1\\ \epsilon_2 \\ \vdots \\ \epsilon_n\\ \end{array} \right]
+$$
+
+\paragraph{One-way ANOVA model}
+$$
+\left[ \begin{array}{c} y_{11}\\ \vdots \\ y_{1, n_1}\\  y_{21} \\ \vdots \\ y_{2, n_2} \\ \vdots \\ y_{a,1} \\ \vdots \\ y_{a, n_a}\\ \end{array} \right] =
+\left[ \begin{array}{ccccc} \vecc{1}_{n_1}   & \vecc{1}_{n_1} &  & & \\ \vecc{1}_{n_2} &  & \vecc{1}_{n_2} & & \\ \vdots &  & & \ddots & \\ \vecc{1}_{n_a} & &  &  & \vecc{1}_{n_a}\\ \end{array} \right] \left[ \begin{array}{c} \mu\\ \alpha_1 \\ \alpha_2\\ \vdots \\ \alpha_a \end{array} \right] +
+\left[ \begin{array}{c} \epsilon_{11}\\ \vdots \\ \epsilon_{1, n_1}\\  \epsilon_{21} \\ \vdots \\ \epsilon_{2, n_2} \\ \vdots \\ \epsilon_{a,1} \\ \vdots \\ \epsilon_{a, n_a}\\ \end{array} \right]
+$$
+
+\paragraph{Two-way ANOVA model without interaction}
+
+Model $y_{ijk} = \mu + \alpha_i + \beta_j + \epsilon_{ijk}$, $i = 1, \dots, a$ ($a$ levels in factor 1), $j = 1, \dots, b$ (b levels in factor 2), and $k = 1, \dots, n_{ij}$ ($n_{ij}$ observations in the $(i,j)$-th cell).
+In total we have $n = \sum_{i,j} n_{ij}$ observations and $p = a + b+ 1$ parameters.
+For simplicity, we consider the case without replicates, i.e., $n_{ij}= 1$ and only write out $\vecc{X\beta}$.
+Note adding more replicates to each cell does {\it not} change the rank of $\vecc{X}$.
+$$
+\mbox{E}(\vecc{y}) = \vecc{X\beta} = \left[ \begin{array}{cccccc} \vecc{1}_b   & \vecc{1}_b &  & & & \vecc{I}_b \\ \vecc{1}_b &  & \vecc{1}_b & & & \vecc{I}_b \\ \vdots &  & & \ddots & & \vdots \\ \vecc{1}_b & &  &  & \vecc{1}_b & \vecc{I}_b\\ \end{array} \right] \left[ \begin{array}{c} \mu\\ \alpha_1 \\ \alpha_2\\ \vdots \\ \alpha_a \\ \beta_1 \\ \vdots\\ \beta_b \end{array} \right] 
+$$
+
+\paragraph{Two-way ANOVA with interaction}
+
+Model $y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_{ij} + \epsilon_{ijk}$, $i = 1, \dots, a$ ($a$ levels in factor 1), $j = 1, \dots, b$ (b levels in factor 2), and $k = 1, \dots, n_{ij}$ ($n_{ij}$ observations in the $(i,j)$-th cell).
+In total we have $n = \sum_{i,j} n_{ij}$ observations and $p = 1 + a + b+ ab$ parameters.
+For simplicity, we consider the case without replicates, i.e., $n_{ij}= 1$ and only write out $\vecc{X\beta}$.
+Note adding more replicates to each cell does {\it not} change the rank of $\vecc{X}$.
+$$
+\mbox{E}(\vecc{y}) = \vecc{X\beta} = \left[ \begin{array}{cccccccccc} \vecc{1}_b   & \vecc{1}_b &  & & & \vecc{I}_b  & \vecc{I}_b & & &\\ \vecc{1}_b &  & \vecc{1}_b & & & \vecc{I}_b & & \vecc{I}_b & &\\ \vdots &  & & \ddots & & \vdots & & & \ddots & \\ \vecc{1}_b & &  &  & \vecc{1}_b & \vecc{I}_b & & & &\vecc{I}_b\\ \end{array} \right] \left[ \begin{array}{c} \mu\\ \alpha_1 \\ \alpha_2\\ \vdots \\ \alpha_a \\ \beta_1 \\ \vdots\\ \beta_b \\ \gamma_{11}\\ \vdots \\ \vdots\\ \gamma_{ab} \end{array} \right] 
+$$
+
+For all the above models, we have 5the most general assumption over the error term, i.e.~$\vecc{\epsilon}\sim \mathcal{N}(0, \sigma^2\vecc{I})$.
+
+\paragraph{Mixed effects models}
+For mixed effects models, we generally have
+$$
+\vecc{y} = \vecc{X}\vecc{b} + \vecc{Z}\vecc{u} + \vecc{e}
+$$
+\begin{itemize}
+	\item $\vecc{X} \in \mathbb{R}^{n \times p}$ is a design matrix for fixed-effects $\vecc{b} \in \mathbb{R}^p$
+	\item $\vecc{Z} \in \mathbb{R}^{n \times q}$ is a design matrix for random-effects $\vecc{u} \in \mathbb{R}^q$
+	\item The most general assumption is $\vecc{e} \sim \mathcal{N}(\vecc{0}_n, \vecc{R})$, $\vecc{u} \sim \mathcal{N}(\vecc{0}_q, \vecc{G})$, and $\vecc{e}$ is independent of $\vecc{u}$.
+\end{itemize}
+In many applications, $\vecc{e} \sim \mathcal{N}(\vecc{0}_n, \sigma^2 \vecc{I}_n)$ and
+$$
+\vecc{Zu} = \left( \vecc{Z}_1, \dots, \vecc{Z}_m \right) \left( \begin{array}{c}
+	\vecc{u}_1\\
+	\vdots\\
+	\vecc{u}_m\\
+\end{array}\right) = \vecc{Z}_1 \vecc{u}_1 + \dots + \vecc{Z}_m \vecc{u}_m,
+$$
+where $\vecc{u}_i \sim \mathcal{N}(\vecc{0}_{q_i}, \sigma^2_i \vecc{I}_{q_i})$, $\sum_{i = 1}^m q_i = q$.
+$\vecc{e}$ and $\vecc{u}_i$, $i = 1, \dots, m$, are jointly independent.
+Then the covariance of responses $\vecc{y}$
+$$
+\vecc{V}(\sigma^2, \sigma_1^2, \dots, \sigma_m^2) = \sigma^2 \vecc{I} + \sum\limits_{i = 1}^m \sigma_i^2 \vecc{Z}_i \vecc{Z}_i\transpose
+$$
+
+
+\subsection*{Linear equations and generalized inverse}
+For the linear model
+$$
+\underset{n \times 1}{\vecc{Y}} = \underset{n \times p}{\vecc{X}} \;  \underset{p \times 1}{\vecc{b}} + \underset{n \times 1}{\vecc{e}},
+$$
+we obtain the least square estimator by minimize the objective function $Q(\vecc{b}) = \sum\limits_{i = 1}^n e_i^2 = (\vecc{Y-Xb})\transpose(\vecc{Y-Xb})$.
+By taking derivative with respect to $\vecc{b}$ and setting it to zero, we get
+$$
+\left( \frac{\partial Q}{\partial \vecc{b}} \right) \transpose = \left(
+\frac{\partial Q}{\partial b_1},
+\frac{\partial Q}{\partial b_2},
+\dots,
+\frac{\partial Q}{\partial b_p}
+\right) \transpose = \left[ \frac{\partial \left( \vecc{Y}\transpose \vecc{Y} - 2 \vecc{Y}\transpose\vecc{Xb} + \vecc{b}\transpose\vecc{X}\transpose \vecc{Xb} \right)}{\partial \vecc{b}} \right]\transpose = -2 \vecc{X}\transpose \vecc{Y} + 2\vecc{X}\transpose\vecc{Xb}
+$$
+where we used the fact that for constant vector $\vecc{a} \in \mathbb{R}^{p \times 1}$, constant matrix $\vecc{A} \in \mathbb{R}^{p \times p}$ and $\vecc{x} \in \mathbb{R}^{p \times 1}$, we have the two derivatives:
+\begin{enumerate}
+	\item $\frac{\partial \vecc{a}\transpose\vecc{x}}{\partial \vecc{x}} = \vecc{a}\transpose$
+	\item $\frac{\partial \vecc{x}\transpose \vecc{Ax}}{\partial \vecc{x}} = \vecc{x}\transpose(\vecc{A} + \vecc{A}\transpose)$
+\end{enumerate}
+By setting $\left( \frac{\partial Q}{\partial \vecc{b}} \right) \transpose = \vecc{0}_{p \times 1}$, we get the \underline{Normal equations}
+$$
+\vecc{X}\transpose\vecc{Xb} = \vecc{X}\transpose\vecc{Y}
+$$
+
+\subsubsection*{Consistency}
+Assume $\vecc{A} \in \mathbb{R}^{m \times n}$\\
+{\it Definition:} The linear system $\vecc{Ax} = c$ is \underline{consistent} if there exists an $\vecc{x}^*$ such that $\vecc{Ax}^* = \vecc{c}$.
+\begin{itemize}
+	\item If $\vecc{A}$ is square and $\vecc{A}^{-1}$ exists, then $\vecc{x} = \vecc{A}^{-1}\vecc{c}$.
+	\item Proposition (g1): If $\vecc{Ax = c}$ is consistent, and if $\vecc{G}$ is any matrix such that $\underset{m \times n}{\vecc{A}} \;\underset{n \times m}{\vecc{G}}\;\underset{m \times n}{\vecc{A}} = \underset{m \times n}{\vecc{A}}$, then $\vecc{x}^\psi = \vecc{Gc}$ is a solution to $\vecc{Ax = c}$.\\
+	{\it Proof:}
+	\begin{pf}
+		Let $\vecc{x}^*$ satisfy $\vecc{A}\vecc{x}^* = \vecc{c}$.
+		Now consider $\vecc{A}\vecc{x}^\psi = \vecc{AGc} = \vecc{AGA}\vecc{x}^* = \vecc{A}\vecc{x}^* = \vecc{c}$
+	\end{pf}
+	\item A matrix $\vecc{G}$ satisfying $\vecc{AGA = A}$ is a \underline{generalized inverse} of $\vecc{A}$ with notation $\vecc{A}^-$.
+	\item If $\vecc{A}$ is square and $\vecc{A}^{-1}$ exists, then $\vecc{A}^- = \vecc{A}^{-1}$ is unique.
+\end{itemize}
+
+\subsubsection*{The set of all solutions to $\vecc{Ax=c}$}
+Suppose that $\vecc{Ax=c}$ is consistent. Then $\vecc{x}^*$ is a solution to $\vecc{Ax=c}$ if and only if
+$\vecc{x}^* = \vecc{A}^- \vecc{c}+ (\vecc{I} - \vecc{A}^- \vecc{A})\vecc{z}$ for some $\vecc{z}$ and $\vecc{A}^-$.\\
+{\it Proof:}
+\begin{pf}
+	\begin{enumerate}
+		\item ``If part'':	By proposition (g1) $\vecc{x}^+ = \vecc{A}^- \vecc{c}$ is a solution.
+		So if $\vecc{x}^* = \vecc{A}^-\vecc{c} + (\vecc{I} - \vecc{A}^-\vecc{A})\vecc{z}$, then
+		$\vecc{A}\vecc{x}^* = \vecc{A}\vecc{x}^+ + (\vecc{A} - \vecc{AA}^-\vecc{A})\vecc{z} = \vecc{c}$.
+		\item ``Only if part:'' If $\vecc{Ax}^* = \vecc{c}$, then $\vecc{x}^* = \vecc{A}^-\vecc{c} + \vecc{x}^* -\vecc{A}^-\vecc{c} = \vecc{A}^-\vecc{c} + \vecc{x}^* -\vecc{A}^-\vecc{Ax}^* =  \vecc{A}^-\vecc{c} + (\vecc{I} - \vecc{A}^-\vecc{A})\vecc{x}^*$
+	\end{enumerate}
+\end{pf}
+
+
+\subsubsection*{Moore-Penrose inverse}
+Assume $\vecc{A} \in \mathbb{R}^{m \times n}$
+\begin{itemize}
+	\item The \underline{Moore-Penrose inverse} of $\vecc{A}$ is a matrix $\vecc{A}^+ \in \mathbb{R}^{n \times m}$ with the following properties
+	\begin{enumerate}
+		\item $\vecc{AA^+A = A}$ (Generalized inverse, $g_1$ inverse, or inner pseudo-inverse)
+		\item $\vecc{A^+ A A^+ = A^+}$. (outer pseudo-inverse.  Any $g_1$ inverse that satisfies this condition is called a $g_2$ inverse, or reflexive generalized inverse)
+		\item $\vecc{A^+ A}$ is symmetric
+		\item $\vecc{A A^+}$ is symmetric
+	\end{enumerate}
+	\item $\vecc{A^+}$ exists and is unique for any matrix $\vecc{A}$.
+	\item In practice, the Moore-Penrose inverse $\vecc{A}^+$ is easily computed from the singular value decomposition of $\vecc{A}$.
+	\item $(\vecc{A^-})\transpose$ is a generalized inverse of $\vecc{A}\transpose$
+\end{itemize}
+
+\subsubsection*{General form of the least squares solution}
+Now we have derived the general form of the least squares solution with generalized inverse.
+$$
+\vecc{\hat{b}} = (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \vecc{y} + [\vecc{I}_p -  (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose\vecc{X}]\vecc{q}
+$$
+where $\vecc{q}\in \mathbb{R}^p$ is arbitrary.
+
+
+\subsection*{Positive (semi)definite matrix}
+Assume $\vecc{A} \in \mathbb{R}^{n \times n}$ is symmetric (i.e.~$\vecc{A} = \vecc{A}\transpose$)
+\begin{itemize}
+	\item A real symmetric matrix $\vecc{A} \in \mathbb{R}^{n \times n}$ is \underline{positive semi-definite} (or \underline{nonnegative definite}, or \underline{p.s.d.}) if $\vecc{x}\transpose\vecc{A}\vecc{x} \ge 0$ for all $\vecc{x}$.
+	Notation $\vecc{A}\succeq_{p.s.d.} \vecc{0}$
+	\item E.g., the Gramian matrix $\vecc{X}\transpose \vecc{X}$ is p.s.d.
+	\item We write  $\vecc{A}\succeq_{p.s.d.} \vecc{B}$ means  $\vecc{A - B}\succeq_{p.s.d.} \vecc{0}$
+	\item \underline{Cholesky decomposition}.  Each positive semidefinite matrix $\vecc{A} \in \mathbb{R}^{n \times n}$ can be factorized as $\vecc{A} = \vecc{LL}\transpose$ for some lower triangular matrix $\vecc{L} \in \mathbb{R}^{n \times n}$ with nonnegative diagonal entries.
+	\item $\vecc{A} \in \mathbb{R}^{n \times n}$ is positive semidefinite if and only if $\vecc{A}$ is a covariance matrix of a random vector.\\
+	{\it Proof: }\\
+	\begin{pf}
+		\begin{enumerate}
+			\item 	``If part'': Let $\vecc{A} = \mbox{Cov}(\vecc{x})$ for some random vector $\vecc{x}$. Then for any constant $\vecc{c}$ of same length as $\vecc{x}$, $\vecc{c}\transpose \vecc{Ac} = \vecc{c}\transpose \mbox{Cov}(\vecc{x}) \vecc{c} = \mbox{Var}(\vecc{c}\transpose\vecc{x}) \ge 0$.
+			\item ``Only if part'': Let $\vecc{A} = \vecc{LL}\transpose$ be the Cholesky decomposition and $\vecc{x}$ a vector of iid standard normal.  Then $\vecc{Lx}$ has covariance matrix $\vecc{L}\mbox{Cov}(\vecc{x})\vecc{L}\transpose  = \vecc{L}\vecc{I}_n \vecc{L}\transpose = \vecc{A}$.
+		\end{enumerate}
+	\end{pf}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

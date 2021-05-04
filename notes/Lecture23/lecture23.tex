@@ -1,0 +1,237 @@
+\setcounter{section}{22}
+
+\section{Lecture 23: March 24}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item Midterm exam review
+\item Biased estimation (JF 13.2.3, CG's notes)
+\begin{itemize}
+	\item Ridge regression
+\end{itemize}
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+	\item Midterm evaluation suggestions
+	\item Poll on alternative grade path
+	\item Lasso regression (CG's notes)
+	\item Model selection (JF 22)
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{https://math.bu.edu/people/cgineste/classes/ma575/p/w14_1.pdf}{Lecture notes} by Cedric Ginestet
+
+\subsection*{Midterm evaluation suggestions}
+\begin{enumerate}
+	\item What has been most helpful for your learning in this class so far?
+	    \begin{itemize}
+	    	\item lecture notes
+	    	\item lab session
+	    \end{itemize}
+    \item What has caused you the most difficulty in terms of learning in this class so far?
+        \begin{itemize}
+        	\item Prior knowledge 
+        	\item R
+        	\item More explanation in writing besides talking
+        	\item prewritten slides
+        	\item disconnection between lecture notes and homework (XJ: not really sure)
+        \end{itemize}        	
+   \item What suggestion(s) do you have that would enhance your learning experience in this class?
+       \begin{itemize}
+       	\item more examples
+       	\item more R practice
+       	\item partially filled slides and questions
+       	\item more comments on homework grading (XJ: probably redundant with in-class reviews)
+       \end{itemize}
+   \item  Please share any additional comments about the content, format or instructor that you have about the course. Your comments are appreciated!
+       \begin{itemize}
+       	\item appreciate TA and instructor's effort
+       	\item It's cool that we get to see student presentations throughout the semester instead of all at once during finals week like other classes.
+       	\item I know that the class is meant to move at a fast pace, but I feel I am struggling to stay on top of everything.
+       \end{itemize}
+\end{enumerate}
+
+\subsection*{Alternative grade path proposal}
+The alternative grade path would be an addition to the original grading scheme.
+Let $S_{original} = w_{homework} s_{homework} + w_{mid-term} s_{mid-term} + w_{final} s_{final} + w_{presentation} s_{presentation} $ represent the final grade from the original grading scheme.
+Then the proposed alternative grading scheme has $S_{alternative} = w_{homework} s_{homework} + (w_{mid-term} + w_{final}) s_{final} + w_{presentation} s_{presentation} $.
+And the total score will be $S_{total} = \max\{S_{original}, S_{alternative} \}$.
+
+
+\subsection*{Lasso regression}
+We have seen that ridge regression essentially re-scales the OLS estimates.
+The lasso, by contrast, tries to produce a {\it sparse} solution, in the sense that several of the slope parameters will be set to zero.
+
+\subsubsection*{Constrained optimization}
+Different from the $L_2$ penalty for ridge regression, the Lasso regression employs $L_1$-penalty.
+$$
+\begin{aligned}
+	&\hat{\beta}^{lasso} = \argmin\limits_{\beta \in \mathbb{R}^p} \sum\limits_{i = 1}^n(y_i - \vecc{x}_i\transpose \beta)^2\\
+	&\mbox{subject to } ||\beta||_1 = \sum\limits_{j = 1}^p |\beta_j| \le t \\
+\end{aligned}
+$$
+for $t \ge 0$; which can again be re-formulated using the Lagrangian for the $L_1$-penalty,
+$$
+\hat{\beta}^{lasso} =\argmin\limits_{\beta \in \mathbb{R}^p} \{  \sum\limits_{i = 1}^n(y_i - \vecc{x}_i\transpose \beta)^2 + \lambda \sum\limits_{j = 1}^p |\beta_j|\}
+$$
+where $\lambda > 0$ and, as before, there exists a one-to-one correspondence between $t$ and $\lambda$.
+
+\subsubsection*{Parameter estimation}
+Contrary to ridge regression, the Lasso does not have a closed-form solution.
+The $L_1$-penalty makes the solution non-linear in $y_i$'s.
+The above constrained minimization is a \underline{quadratic programming} problem, for which many solvers exist.
+
+\subsection*{Choice of Hyperparameters}
+\subsubsection*{Regularization parameter}
+
+The choice of $\lambda$ in both ridge and lasso regressions is more of an art than a science.
+This parameter can be constructed as a complexity parameter, since as $\lambda$ increases, less and less effective parameters are likely to be included in both ridge and lasso regressions.
+Therefore, one can adopt a model selection perspective and compare different choices of $\lambda$ using cross-validation or an information criterion.
+That is, the value of $\lambda$ should be chosen adaptively, in order to minimize an estimate of the expected prediction error (as in cross-validation), for instance,
+which is well approximated by AIC.
+We will discuss model selection in more detail later.
+
+\subsubsection*{Bayesian perspective}
+The penalty terms in ridge and lasso regression can also be justified, using a Bayesian framework, whereby these terms arise as aresult of the specification of a particular prior distribution on the vector of slope parameters.
+
+\begin{enumerate}
+	\item The use of an $L_2$-penalty in multiple regression is analogous to the choice of a Normal prior on the $\beta_j$'s, in Bayesian statistics.
+	$$
+	\begin{aligned}
+		y_i  &\distas{iid} \mathcal{N}(\beta_0 + \vecc{x}_i\transpose\beta, \sigma^2), \quad  i = 1, \dots, n\\
+		\beta_j  &\distas{iid} \mathcal{N}(0, \tau^2), \quad j = 1, \dots, p\\
+	\end{aligned}
+	$$
+	\item Similarly, the use of an $L_1$-penalty in multiple regression is analogous to the choice of a Laplace prior on the $\beta_j$'s, such that
+	$$
+	\begin{aligned}
+	\beta_j  &\distas{iid} Laplace(0, \tau^2), \quad j = 1, \dots, p\\
+	\end{aligned}	
+	$$
+\end{enumerate}
+In both cases, the value of the hyperparameter, $\tau^2$, will be inversely proportional to the choice of the particular value for $\lambda$.
+For ridge regression, $\lambda$ is exactly equal to the shrinkage parameter of the hierarchical model, $\lambda = {\sigma^2}/{\tau^2}$.
+
+\newpage
+\subsection*{Model selection}
+
+Model selection is conceptually simplest when our goal is {\it prediction} -- that is, the development of a regression model that will predict new data as accurately as possible.  
+However, prediction is not often the only desirable characteristic in a statistical model that model interpretation, data summary and explanations are also desired.
+We discuss several criteria for selecting among $m$ competing statistical models $\mathcal{M} = \{M_1, M_2, \dots, M_m\}$ for $n$ observations of a response variable $Y$ and associated predictors $X$s.
+
+\subsubsection*{Adjsted-$R^2$}
+
+The \underline{squared multiple correlation ``corrected'' (or ``adjusted'')} for degrees of freedom is intuitively reasonable criterion for comparing linear-regression models with different numbers of parameters.
+Suppose model $M_j$ is one of the models under consideration.
+If $M_j$ has $s_j$ regression coefficients (including the regression constant) and is fit to a data set with $n$ observations,
+then the adjusted-$R^2$ for the model is
+$$
+\begin{aligned}
+	R^2_{adj, j} &= 1 - \frac{n - 1}{n - s_j} \times \frac{RSS_j}{TSS}\\
+\end{aligned}
+$$
+
+Models with relatively large numbers of parameters are penalized for their lack of parsimony.
+The model with the highest adjusted-$R^2$ value is selected as the best model.
+Beyond this intuitive rationale, however, there is no deep justification for using $R_{adj}^2$ as a model selection criterion.
+
+\subsubsection*{Cross-validation and generalized cross-validation}
+The key idea in cross-validation (more accurately, \underline{leave-one-out cross-validation}) is to omit the $i$th observation to obtain an estimate of $E(Y|x_i)$ based on the other observations as $\hat{Y}_{-i}^{(j)}$ for model $M_j$.  Omitting the $i$th observation makes the fitted value $\hat{Y}_{-i}^{(j)}$ independent of the observed value $Y_i$.  The \underline{cross-validation criterion} for model $M_j$ is
+$$
+CV_j \equiv \frac{\sum_{i = 1}^n \left[ \hat{Y}_{-i}^{(j)} - Y_i\right]^2}{n}
+$$
+We prefer the model with the smallest value of $CV_j$.
+
+In linear least-squares regression, there are efficient procedures for computing the leava-one-out fitted values $\hat{Y}_{-i}^{(j)}$ that do not require literally refitting the model (recall the discussions of standardized residuals).
+However, in other applications, leave-one-out cross-validation can be computationally expensive (that requires literally refitting the model $n$ times).
+
+An alternative is to divide the data into a relatively small number of subsets of roughly equal size and to fit the model omitting one subset at a time, obtaining fitted values for all observations in the omitted subset.
+This method is termed as \underline{$K$-fold cross-validation} where $K$ is the number of subsets.
+The cross-validation criterion is defined the same way as before.
+
+An alternative criterion is to approximate $CV$ by the \underline{generalized cross-validation criterion}
+$$
+GCV_j \equiv \frac{n \times RSS_j}{df_{res_j}^2}
+$$
+which however is less popular given the increasing computational power we have in the modern era.
+
+\subsubsection*{AIC and BIC}
+
+The \underline{Akaike information criterion (AIC)} and the \underline{Bayesian information criterion (BIC)} are also popular model selection criteria.
+Both are members of a more general family of {\it penalized} model-fit statistics (in the form of ``*IC''), applicable to regression models fit by maximum likelihood, that take the form
+$$
+*IC_j = -2 \log_e L(\hat{\vecc{\theta}}_j) + c s_j
+$$
+where $L(\hat{\theta}_j)$ is the maximized likelihood under model $M_j$; $\hat{\vecc{\theta}}_j$ is the vector of parameters of the model (including, for example, regression coefficients and an error variance); $s_j$ is the number of parameters in $\hat{\vecc{\theta}}_j$; and $c$ is a constant that differs from one model selection criterion to another.
+The first term, $-2 \log_e L(\hat{\vecc{\theta}}_j)$, is the \underline{residual deviance} under the model; for a linear model with normal errors, it is simply the residual sum of squares.
+
+The model with the smallest *IC is the one that receives most support from the data (the selected model).
+The AIC and BIC are defined as follows:
+$$
+\begin{aligned}
+	AIC_j &\equiv  -2 \log_e L(\hat{\vecc{\theta}}_j) + 2 s_j\\
+	BIC_j &\equiv  -2 \log_e L(\hat{\vecc{\theta}}_j) + s_j \log_e(n)\\	
+\end{aligned}
+$$
+The lack-of-parsimony penalty for the BIC grows with the sample size, while that for the AIC does not.
+When $n \ge 8$ the penalty for the BIC is larger than that for the AIC resulting in BIC tends to nominate models with fewer parameters.
+Both AIC and BIC are based on deeper statistical considerations, please refer to JF 22.1 sections {\bf A closer look at the AIC} and {\bf A closer look at the BIC} for more details.
+
+\subsubsection*{Sequential procedures}
+Besides the ranking systems above, there is another class loosely defined as sequential procedures for model selection.
+\begin{enumerate}
+	\item Forward selection
+	\item Backwards elimination
+	\item Stepwise selection
+\end{enumerate}
+
+\paragraph{Forward selection}:
+\begin{enumerate}
+	\item Choose a threshold significance level for adding predictors, ``SLENTRY'' (SL stands for significance level).  For example, $SLENTRY = 0.10$.
+	\item Initialize with $y = \beta_0 + \epsilon$.
+	\item Form a set of candidate models that differ from the working model by addition of one new predictor
+	\item Do any of the added predictors have $p-value \le SLENTRY$?
+	    \begin{itemize}
+	    	\item Yes: add predictor with smallest $p$-value to working model + repeat steps $3$ to $4$.
+	    	\item No: stop.  Final model = working model.
+	    \end{itemize}
+\end{enumerate}
+
+\paragraph{Backwards elimination}
+\begin{enumerate}
+	\item Choose threshold level for removing predictors.  For example, $SLSTAY=0.05$.
+	\item Initialize with most general model (biggest possible): $y = \beta_0 + \beta_1 x_1 + \dots + \epsilon$.
+	\item Form a set of candidate models that differ from working model by deletion of one term
+	\item Do any $p-value > SLSTAY$ (from fitting the current working model)?
+	    \begin{itemize}
+	    	\item Yes: remove the term with largest $p$-value and repeat steps $3$ and $4$.
+	    	\item No: stop.  Final model = working model.
+	    \end{itemize}
+\end{enumerate}
+
+\paragraph{Stepwise}
+Alternate forwards + backwards steps.
+Initialize with $y = \beta_0 + \epsilon$.
+Stop when consecutive forward + backward steps do not change working model. ($SLENTRY \le SLSTAY$)
+
+\subsubsection*{Some examples}
+
+\begin{itemize}
+	\item \href{https://tulane-math7360.github.io//slides/15-linear_model/linear_model.html#variable-selection}{Model selection by AIC}
+	\item \href{https://tulane-math7360.github.io//slides/16-logistic_regression/logistic_regression.html#model-selection-by-aic}{Model selection by AIC and Lasso}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,268 @@
+\setcounter{section}{31}
+
+\section{Lecture 32: April 14}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item Sample size computations for one-way ANOVA	
+\item Lack of fit test	
+\item One-way random effect model (JF Chapter 23 + Dr. Osborne's notes)
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item hypothesis test and confidence intervals for one-way random-effects model
+\item review of one-way random effects ANOVA model
+\item nested design
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{https://www4.stat.ncsu.edu/~osborne/st512r/handouts/allpackets.pdf}{Course notes} by Dr. Jason Osborne.\\
+\href{https://stat.ethz.ch/~meier/teaching/anova/random-and-mixed-effects-models.html#random-effects-models}{Lecture notes} from Lukas Meier on ANOVA using R
+
+\subsubsection*{Other parameters of interest in random effects models}
+\underline{Coefficient of variation (CV)}:
+$$
+CV(Y_{ij}) = \frac{\sqrt{\textit{Var}(Y_{ij})}}{|\textit{E}(Y_{ij})|} = \frac{\sqrt{\sigma_T^2 + \sigma^2}}{|\mu|}
+$$
+\underline{Intraclass correlation coefficient}:
+$$
+\rho_I = \frac{\textit{Cov}(Y_{ij}, Y_{ik})}{\sqrt{\textit{Var}(Y_{ij}) \textit{Var}(Y_{ik})}}=\frac{\sigma_T^2}{\sigma_T^2 + \sigma^2}
+$$
+\begin{itemize}
+	\item Interpretation: the correlation between two responses receiving the same level of the random factor.
+	\item Bigger values of $\rho_I$ correspond to (bigger/smaller?) random treatment effects.
+\end{itemize}
+
+For sires,
+$$
+\begin{aligned}
+	\reallywidehat{CV} &= \frac{\sqrt{117 +464}}{82.6} = 0.29\\
+	\hat{\rho}_I &= \frac{117}{117+464} = 0.20\\
+\end{aligned}
+$$
+Interpretations:
+\begin{itemize}
+	\item The estimated standard deviation of a birthweight, $24.1$ is $29\%$ of the estimated mean birthweight, $82.6$.
+	\item The estimated correlation between any two calves with the same sire for a male parent, or the estimated {\it intrasire} correlation coefficient, is $0.20$.
+\end{itemize}
+
+\subsubsection*{Testing a variance component - $H_0: \sigma_T^2 = 0$}
+Recall that $\sigma_T^2 = \textit{Var}(T_i)$, the variance among the population of treatment effects.
+$$
+F = \frac{MS[T]}{MS[E]}
+$$
+reject $H_0$ at level $\alpha$ if $F>F(\alpha, t - 1, N - t)$.
+
+For the sires data,
+$$
+F = \frac{1398}{464} = 3.01 > 2.64 = F(0.05, 4, 35)
+$$
+so $H_0$ is rejected at $\alpha = 0.05$. (The $p$-value is $0.0309$)
+
+\subsubsection*{Interval estimation of some model parameters}
+A $95\%$ confidence interval for $\mu$ derived by considering $SE(\bar{Y}_{++})$:
+$$
+\begin{aligned}
+	\bar{Y}_{++} &= \frac{1}{N}\sum\limits_{i = 1}^t \sum\limits_{j = 1}^n Y_{ij}\\
+	&= \frac{1}{N}\sum\limits_{i = 1}^t \sum\limits_{j = 1}^n (\mu + T_i + \epsilon_{ij})\\
+	&= \mu + \bar{T}_{+} + \bar{\epsilon}_{++}\\
+\end{aligned}
+$$
+where $\bar{T}_+ = (T_1 + \dots + T_t)/t$ and $\bar{\epsilon}_{++} = (\sum\sum\epsilon_{ij})/N$, so that
+$$
+\begin{aligned}
+	\textit{Var}(\bar{Y}_{++}) &= \textit{Var}(\bar{T} + \bar{E}_{++})\\
+	&= \frac{\sigma_T^2}{t} + \frac{\sigma^2}{nt}\\
+	&= \frac{1}{nt} (n \sigma_T^2 + \sigma^2)\\
+	&= \frac{1}{nt} \textit{E}(MS[T]).\\
+\end{aligned}
+$$
+
+If the data are normally distributed, then
+$$
+\frac{\bar{Y}_{++} - \mu}{\sqrt{\frac{MS[T]}{nt}}} \sim t_{t-1}
+$$
+and a $95\%$ confidence interval for $\mu$ is given by
+$$
+\bar{Y}_{++} \pm t(0.025, t - 1) \sqrt{\frac{MS[T]}{nt}}
+$$
+
+For the sires data: $\bar{y}_{++} = 82.6$, $MS[T] = 1398$, $nt = 40$.  Critical value $t(0.025, 4) = 2.78$ yields the interval
+$$
+82.6 \pm 2.78(5.91) or (66.1, 99.0).
+$$
+
+{\bf Confidence interval for $\rho_I$:}\\
+A $95\%$ confidence interval for $\rho_I$ can be obtained from the expression
+$$
+\frac{F_{{obs}} - F_{\alpha/2}}{F_{{obs}} + (n - 1) F_{\alpha/2}} < \rho_I < \frac{F_{{obs}} - F_{1- \alpha/2}}{F_{{obs}} + (n - 1) F_{1 - \alpha/2}}
+$$
+where $F_{\alpha/2} = F(\alpha / 2, t - 1, N - t)$ and $F_{{obs}}$ is the observed $F$-ratio for treatment effect from the ANOVA table.
+
+For the sires data, $F_{obs} = 3.01$ and $F_{0.025} = 3.179$, $F_{0.975} = 0.119$.
+The formula gives $(-0.01, -0.75)$.
+
+These formulas arrived at via some distributional results:
+\begin{itemize}
+	\item $(t - 1)\frac{MS[T]}{\sigma^2 + n \sigma_T^2} \sim \chi_{t - 1}^2$
+	\item $(N - t)\frac{MS[E]}{\sigma^2 } \sim \chi_{N - t}^2$
+	\item $MS[T]$ and $MS[E]$ are independent
+	\item Ratio of independent $\chi^2$ random variables divided by $df$ has an $F$ distribution
+	\item $\left(\frac{MS[T]}{\sigma^2 + n\sigma_T^2}\right) / \left(\frac{MS[E]}{\sigma^2}\right) \sim F_{t-1, N-t}$ \\
+	(which explains the $F$ test for $H_0: \sigma^2_T = 0$)
+	\item Rearranging the probability statement below
+	$$
+	1 - \alpha = \Pr \left(F(1 - \frac{\alpha}{2}, t - 1, N - t) < \frac{\frac{MS[T]}{\sigma^2 + n\sigma^2_T}}{\frac{MS[E]}{\sigma^2}} < F( \frac{\alpha}{2}, t - 1, N - t)\right)
+	$$
+\end{itemize}
+
+
+{\bf Confidence interval for variance components:}
+
+The estimated residual variance component for the sire data was
+$\hat{\sigma}^2 = MS[E] = 464 \; lbs^2$.
+
+A $95\%$ confidence interval for this variance component is given by
+$$
+\left( \frac{(40-5)464}{53.2} < \sigma^2 < \frac{(40 - 5)464}{20.6} \right)
+$$
+or $(305.2, 789.5) \; lbs^2$
+
+This can be derived using the distributional result
+$$
+(N - t)\frac{MS[E]}{\sigma^2} \sim \chi_{N - t}^2
+$$
+setting up the probability statement
+$$
+1 - \alpha = \Pr\left(\chi^2(1 - \frac{\alpha}{2}, N - t) < (N - t)\frac{MS[E]}{\sigma^2} < \chi^2(\frac{\alpha}{2}, N - t)\right)
+$$
+Rearranging to get $\sigma^2$ in the middle yields the $100(1 - \alpha)\%$ confidence interval for $\sigma^2$:
+$$
+\left(\frac{(N - t)MS[E]}{\chi_{\alpha / 2}^2}, \frac{(N - t)MS[E]}{\chi_{1 - \alpha / 2}^2} \right).
+$$
+
+Question: what are the mean and variance of $\chi_{35}^2$ distribution?
+{\it Answer: }\\
+\begin{pf}
+	$\textit{E}(\chi_{k}^2) = k$ and 	$\textit{Var}(\chi_{k}^2) = 2k$.
+\end{pf}
+\\
+\\
+\\
+{\bf Confidence interval for $\sigma_T^2$:}
+
+The estimated variance component for the random sire effect was $\hat{\sigma}_T^2 = 117$.
+
+Q: How can we get a $95\%$ confidence interval for $\sigma_T^2$?\\
+A:  In a similar fashion, but the confidence level based on Satterthwaite's approximation to the degrees of freedom of the linear combination of $MS$ terms:
+$$
+\left( \frac{\reallywidehat{df} \hat{\sigma}_T^2}{\chi_{\alpha/2, \reallywidehat{df}}^2} , \frac{\reallywidehat{df} \hat{\sigma}_T^2}{\chi_{1 - \alpha/2, \reallywidehat{df}}^2} \right)
+$$
+where
+$$
+\reallywidehat{df} = \frac{(n \hat{\sigma}_T^2)^2}{\frac{MS[T]^2}{t - 1} + \frac{MS[E]^2}{N - t}}
+$$
+
+For the sire data,
+$$
+\reallywidehat{df} = \frac{(8 \times 117)^2}{\frac{1398^2}{4} + \frac{464^2}{35}} = 1.76
+$$
+and
+$$
+\chi_{0.975, 1.79}^2 = 0.029, \; \chi_{0.025, 1.76}^2 = 6.87
+$$
+yielding the $95\%$ confidence interval
+$$
+\left(\frac{1.76(117)}{6.87}, \frac{1.76(117)}{0.29} \right)
+$$
+or
+$$
+(30, 7051)
+$$
+\newpage
+\subsubsection*{Review of one-way random effects ANOVA}
+
+\underline{The one-way random effects model}
+$$
+Y_{ij} = \underbrace{\mu}_{\mbox{fixed}} + \underbrace{T_i}_{\mbox{random}} + \underbrace{\epsilon_{ij}}_{\mbox{random}}  \quad \mbox{ for } i = 1, 2, \dots, t \mbox{ and }  j = 1, \dots, n
+$$
+with
+\begin{itemize}
+	\item $T_1, T_2, \dots, T_t \distas{iid} \mathcal{N}(0, \sigma_T^2)$
+	\item $\epsilon_{11}, \dots, \epsilon_{tn} \distas{iid} \mathcal{N}(0, \sigma^2)$
+	\item $T_1, T_2, \dots, T_t$ independent of $\epsilon_{11},, \dots, \epsilon_{tn}$
+\end{itemize}
+
+Remarks:
+\begin{itemize}
+	\item $T_1, T_2, \dots$ randomly drawn from population of treatment effects.
+	\item Only three parameters: $\mu$, $\sigma^2$, and $\sigma_T^2$
+	\item Several functions of these parameters of interest
+	    \begin{itemize}
+	    	\item Coefficient of variation: $CV(Y) = \frac{\sqrt{\sigma^2 + \sigma^2_T}}{\mu}$
+	    	\item Intraclass correlation coefficient: $\rho_I = Corr(Y_{ij}, Y_{ik}) = \frac{\sigma_T^2}{\sigma^2 + \sigma_T^2}$
+	    \end{itemize}
+    \item Two observations from same treatment group are {\bf not} independent
+\end{itemize}
+
+Exercise: match up the formulas for confidence intervals below with their targets, $\rho_I$, $\sigma^2$, $\sigma_T^2$, $\mu$:
+$$
+\begin{aligned}
+	\bar{Y}_{++} &\pm t(0.025, t - 1) \sqrt{\frac{MS[T]}{nt}}\\
+(\frac{F_{{obs}} - F_{\alpha/2}}{F_{{obs}} + (n - 1) F_{\alpha/2}} &,  \frac{F_{{obs}} - F_{1- \alpha/2}}{F_{{obs}} + (n - 1) F_{1 - \alpha/2}} )\\
+(\frac{(N - t)MS[E]}{\chi_{\alpha / 2}^2} &, \frac{(N - t)MS[E]}{\chi_{1 - \alpha / 2}^2} )\\
+(\frac{\reallywidehat{df} \hat{\sigma}_T^2}{\chi_{\alpha/2, \reallywidehat{df}}^2} &, \frac{\reallywidehat{df} \hat{\sigma}_T^2}{\chi_{1 - \alpha/2, \reallywidehat{df}}^2})\\
+\end{aligned}
+$$
+
+\newpage
+\subsection*{Modelling factorial effects: fixed, or random?}
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{lcc}
+		\toprule
+		& Random & Fixed\\
+		\hline
+		Levels & & \\
+		- selected from conceptually $\infty$ population of collection of levels & X &\\
+		- finite number of possible levels & & X\\
+		\hline
+		Another experiment & & \\
+		- would use same levels & & X\\
+		- would involve new levels sampled from same population & X &\\
+		\hline
+		Goal & & \\
+		- estimate variance components & X & \\
+		- estimate longrun means & &X\\
+		\hline
+		Inference & & \\
+		- for these levels used in this experiment & & X \\
+		- for the population of levels & X &\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsection*{Nested design}
+Factor $B$ is \underline{nested} in factor $A$ if there is a new set of levels of factor $B$ for every different level of factor $A$.
+
+To illustrate the concept of nested design, we consider the ``Pastes'' data set in ``lme4'' package in R.
+The strength of a chemical paste product was measured for a total of $60$ samples coming from $10$ randomly selected delivery batches each containing $3$ randomly selected casks.
+Hence, two samples were taken from each cask.
+We want to check what part of the variability of strength is due to batch and cask.
+
+Let $Y_{ijk}$ be the strength of the $k$th sample of cask $j$ in batch $i$.
+We can use the model
+$$
+Y_{ijk} = \mu + A_i + B_{j(i)} + \epsilon_{ijk}
+$$
+where $A_i$ is the random effect of batch and $B_{j(i)}$ is the random effect of cask {\bf within} batch.
+Note the special notation $B_{j(i)}$ emphasizes that cask is nested in batch.
+
+
+
+

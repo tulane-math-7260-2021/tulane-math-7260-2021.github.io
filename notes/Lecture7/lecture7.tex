@@ -1,0 +1,152 @@
+\setcounter{section}{6}
+
+
+\section{Lecture 7: Feb 3}
+
+
+\subsection*{Last time}
+\begin{itemize}
+  \item Statistical model of SLR
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+  \item Properties of the LS estimators
+  \item Inference of SLR model
+\end{itemize}
+
+
+
+\subsection*{Properties of the Least-Squares estimator}
+
+Under the strong assumptions of the simple regression model, the sample least squares coefficients $\hat{\beta}_{ls}$ have several desirable properties as estimators of the population regression coefficients $\beta_0$ and $\beta_1$:
+\begin{itemize}
+  \item The least-squares intercept and slope are {\it linear estimators}, in the sense that they are linear functions of the observations $y_i$.
+  \\
+  {\it Proof:\\} 
+  \begin{pf}
+  method (a) $\hat{\beta} = (\vecc{X}\transpose\vecc{X})^{-1} \vecc{X}\transpose\vecc{Y}$\\
+  method (b) $\hat{\beta}_1 =\frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sum(x_i - \bar{x})^2} =\frac{\sum(x_i - \bar{x})y_i}{\sum(x_i - \bar{x})^2} - \frac{\sum(x_i - \bar{x})\bar{y}}{\sum(x_i - \bar{x})^2} = \sum\frac{(x_i - \bar{x})}{\sum(x_i - \bar{x})^2}y_i = \sum k_i y_i$ where $k_i = \frac{(x_i - \bar{x})}{\sum(x_i - \bar{x})^2}$\\
+  and $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$
+  \end{pf}
+  \item The sample least-squares coefficients are {\it unbiased estimators} of the population regression coefficients:
+  $$
+  \begin{aligned}
+  \Expected{\hat{\beta_0}} &= \beta_0\\
+  \Expected{\hat{\beta_1}} &= \beta_1\\  
+  \end{aligned}
+  $$
+  {\it Proof:} \\
+  \begin{pf}
+  method (a) $\Expected{\vecc{\hat{\beta}}} = \Expected{(\vecc{X}\transpose\vecc{X})^{-1} \vecc{X}\transpose\vecc{Y}} = \Expected{(\vecc{X}\transpose\vecc{X})^{-1} \vecc{X}\transpose\vecc{X\beta}} = \vecc{\beta}$.  (note: $\Expected{Y} = \Expected{\vecc{X\beta} + \vecc{\epsilon}} = \Expected{\vecc{X\beta}} + \Expected{\vecc{\epsilon}} = \vecc{X\beta}$)\\
+  method (b) recall that $\hat{\beta}_1 =\sum k_i y_i$ where $k_i = \frac{(x_i - \bar{x})}{\sum(x_i - \bar{x})^2}$.  First, we want to show
+  \begin{enumerate}
+    \item $\sum k_i = 0$
+    \item $\sum k_i x_i = 1$
+  \end{enumerate}
+  They are actually quite easy:  $\sum k_i = \sum_i \frac{(x_i - \bar{x})}{\sum_j (x_j - \bar{x})^2} = \frac{(\sum_i x_i) - n\bar{x}}{\sum_j(x_j - \bar{x})^2} = 0$, and 
+  $\sum k_i x_i = \sum_i \frac{(x_i - \bar{x})x_i}{\sum_j(x_j - \bar{x})^2} = \frac{(\sum_i x_i^2) - \bar{x} (\sum_i x_i)}{\sum_j(x_j - \bar{x})^2} = \frac{(\sum_i x_i^2) - n \bar{x}^2}{\sum_j(x_j - \bar{x})^2} = 1$.\\
+  Now $\Expected{\hat{\beta}_1} = \Expected{\sum k_i y_i} = \sum[ k_i \Expected{y_i}] = \sum[k_i (\beta_0 + \beta_1 x_i)] = \beta_0 \sum k_i + \beta_1 \sum(k_i x_i) = \beta_1$,
+ and  $\Expected{\hat{\beta}_0} = \Expected{\bar{y} - \hat{\beta}_1 \bar{x}} = \Expected{\bar{y}} - \bar{x} \Expected{\hat{\beta}_1} = \Expected{\frac{1}{n}\sum y_i} - \bar{x} \beta_1 = \frac{1}{n} [\sum \Expected{y_i}] - \bar{x} \beta_1
+ =  \frac{1}{n} \sum [\beta_0 + x_i \beta_1] - \bar{x} \beta_1 = \beta_0$
+\end{pf}
+  \item Both $\hat{\beta}_0$ and $\hat{\beta}_1$ have simple sampling variances:
+  $$
+  \begin{aligned}
+    \sVar(\hat{\beta}_0) =& \frac{\sigma^2_\epsilon \sum{x_i^2}}{n\sum(x_i - \bar{x})^2}\\
+    \sVar(\hat{\beta}_1) =& \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2}\\    
+  \end{aligned}
+  $$
+  {\it Proof:} \\
+  \begin{pf}
+  $\sVar(\hat{\beta}_1) = \sVar(\sum k_i y_i) = \sum k_i^2 \sVar(y_i) = \sigma_\epsilon^2 \sum k_i^2 = \sigma_\epsilon^2 \frac{\sum_i(x_i - \bar{x})^2}{[\sum_j(x_j - \bar{x})^2]^2} = \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2}$, 
+  and $\sVar(\hat{\beta}_0) = \sVar(\bar{y} - \hat{\beta}_1 \bar{x}) = {\rm Var} (\bar{y}) + (\bar{x})^2 {\rm Var} (\hat{\beta}_1)
+    - 2 \bar{x} {\rm Cov} (\bar{Y}, \hat{\beta}_1).$\\
+    Now, 
+    $$
+    \begin{aligned}
+    {\rm Var} (\bar{y})
+& = {\rm Var} \left(\frac{1}{n} \sum_{i = 1}^n y_i \right)
+  = \frac{1}{n^2} \sum_{i = 1}^n {\rm Var} (y_i)
+  = \frac{\sigma^2}{n},\\
+  \sVar(\hat{\beta}_1) &= \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2},\\
+  \end{aligned}
+    $$
+    and 
+    $$
+\begin{aligned}
+{\rm Cov} (\bar{Y}, \hat{\beta}_1)
+ &= {\rm Cov} \left\{
+     \frac{1}{n} \sum_{i = 1}^n Y_i,
+     \frac{ \sum_{j = 1}^n(x_j - \bar{x})Y_j }{ \sum_{i = 1}^n(x_i - \bar{x})^2 }
+     \right \} \\
+ &= \frac{1}{n} \frac{ 1 }{ \sum_{i = 1}^n(x_i - \bar{x})^2 }
+    {\rm Cov} \left\{ \sum_{i = 1}^n Y_i, \sum_{j = 1}^n(x_j - \bar{x})Y_j \right\} \\
+ &= \frac{ 1 }{ n \sum_{i = 1}^n(x_i - \bar{x})^2 }
+    \sum_{i = 1}^n (x_j - \bar{x}) \sum_{j = 1}^n {\rm Cov}(Y_i, Y_j) \\
+ &= \frac{ 1 }{ n \sum_{i = 1}^n(x_i - \bar{x})^2 }
+    \sum_{i = 1}^n (x_j - \bar{x}) \sigma^2 \\
+ &= 0.
+\end{aligned}    
+    $$
+    Finally, 
+    $$
+\begin{aligned}
+{\rm Var}(\hat{\beta}_0)
+ &= \frac{\sigma^2}{n} + \frac{ \sigma^2 \bar{x}^2}{ \sum_{i = 1}^n(x_i - \bar{x})^2  } \\
+ &= \frac{\sigma^2 }{ n \sum_{i = 1}^n(x_i - \bar{x})^2 }
+    \left\{ \sum_{i = 1}^n(x_i - \bar{x})^2 + n \bar{x}^2 \right\} \\
+ &= \frac{\sigma^2 \sum_{i = 1}^n x_i^2}{ n \sum_{i = 1}^n(x_i - \bar{x})^2 }.
+\end{aligned}    
+    $$
+\end{pf}
+  \\
+  \item  Rewrite the formula for $  \sVar(\hat{\beta}_1) = \frac{\sigma_\epsilon^2}{(n - 1)S_X^2}$, we see that the sampling variance of the slope estimate will be small when
+  \begin{itemize}
+    \item The error variance $\sigma_\epsilon^2$ is small
+    \item The sample size $n$ is large
+    \item The explanatory-variable values are spread out (i.e.~have a large variance, $S_X^2$)
+  \end{itemize}
+  \item (Gauss-Markov theorem) Under the assumptions of linearity, constant variance, and independence, the least-squares estimators are BLUE (Best Linear Unbiased Estimator), that is they have the smallest sampling variance and are unbiased. (show this)\\
+  {\it Proof:}\\
+  \begin{pf}
+  Let $\widetilde{\beta}_1$ be another linear unbiased estimator such that $\widetilde{\beta}_1 = \sum c_i y_i$.  For $\widetilde{\beta}_1$ is still unbiased as above, $\Expected{\widetilde{\beta}_1} = \beta_0 \sum c_i + \beta_1 \sum c_i x_i = \beta_1$ for all $\beta_1$,
+  we have $\sum c_i = 0$ and $\sum c_i x_i = 1$.\\
+  $\Var{\widetilde{\beta}_1} = \sigma_\epsilon^2 \sum c_i^2$\\
+  Let $c_i = k_i + d_i$, then 
+  $$
+  \begin{aligned}
+  \Var{\widetilde{\beta}_1} =& \sigma_\epsilon^2 \sum(k_i + d_i)^2\\
+   =&  \sigma_\epsilon^2 \left[ \sum{k_i}^2 + \sum{d_i}^2 + 2\sum{k_i d_i} \right] \\
+   =& \Var{\hat{\beta}_1} + \sigma_\epsilon^2 \sum d_i^2 + 2 \sigma_\epsilon^2 \sum k_i d_i \\
+  \end{aligned}$$\\
+  Now we show the last term is $0$ to finish the proof.
+  $$
+  \begin{aligned}
+  \sum k_i d_i &= \sum k_i (c_i - k_i) = \sum c_i k_i - \sum k_i^2\\
+  &= \sum_i \left[ c_i \frac{x_i - \bar{x}}{\sum_j (x_j- \bar{x})^2}\right] - \frac{1}{\sum_i (x_i - \bar{x})^2}\\
+  &= 0
+  \end{aligned}
+  $$
+\end{pf}
+  
+  \item Under the full suite of assumptions, the least-squares coefficients $\hat{\beta}_0$ and $\hat{\beta}_1$ are the maximum-likelihood estimators of $\beta_0$ and $\beta_1$. 
+  (show this)\\
+  {\it Proof:}\\
+  \begin{pf}
+  The log likelihood under the full suite of assumptions is $\ell = -\log\left[(2\pi)^{\frac{n}{2}} \sigma^n_\epsilon \right] - \frac{1}{2 \sigma^2_\epsilon}(\vecc{Y} - \vecc{X\beta})\transpose(\vecc{Y} - \vecc{X\beta})$.
+  Maximizing the likelihood is equivalent as minimizing $(\vecc{Y} - \vecc{X\beta})\transpose(\vecc{Y} - \vecc{X\beta}) = \vecc{\epsilon}\transpose \vecc{\epsilon}$ which is the SSE.  
+  \end{pf}
+  
+  
+  \item Under the assumption of normality, the least-squares coefficients are themselves normally distributed.  Summing up,
+  $$
+  \begin{aligned}
+    \hat{\beta}_0 \sim& N(\beta_0, \frac{\sigma^2_\epsilon \sum{x_i^2}}{n\sum(x_i - \bar{x})^2}) \\
+    \hat{\beta}_1 \sim & N(\beta_1, \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2})\\
+  \end{aligned}
+  $$
+\end{itemize}
+
+

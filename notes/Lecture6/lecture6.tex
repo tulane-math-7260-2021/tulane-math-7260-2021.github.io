@@ -1,0 +1,142 @@
+\setcounter{section}{5}
+
+
+\section{Lecture 6:Feb 1}
+
+
+\subsection*{Last time}
+\begin{itemize}
+\item SLR in Matrix Form
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item Simple correlation
+\item The statistical model of the SLR (JF chapter 6)
+
+\end{itemize}
+
+\section*{Simple correlation}
+
+Having calculated the least squares line, it is of interest to determine how closely the line fits the scatter of points.
+There are many ways of answering it.  The standard deviation of the residuals, $S_E$, often called the {\it standard error of the regression} or the {\it residue standard error}, provides one sort of answer.
+Because of estimation considerations, the variance of the residuals is defined using {\it degrees of freedom} $n-2$:
+$$
+S^2_\epsilon = \frac{\sum{\hat{\epsilon}_i^2}}{n - 2}.
+$$
+%
+The residual standard error is,
+$$
+S_\epsilon = \sqrt{ \frac{\sum{\hat{\epsilon}_i^2}}{n - 2}}
+$$
+%
+For the Davis's data, the sum of squared residuals is $\sum{\epsilon_i^2} = 418.87$, and thus the standard error of the regression is
+$$
+S_\epsilon=\sqrt{\frac{418.87}{101 - 2}} = 2.0569 \mbox{kg}.
+$$
+On average, using the least-squares regression line to predict measured weight from reported weight results in an error of about $2$ kg.
+%
+%
+\subsection*{\it Sum of squares:}
+\begin{itemize}
+  \item Total sum of squares (TSS) for Y: $\mbox{TSS} = \sum(y_i - \bar{y})^2$
+  \item Residual sum of squares (RSS): $\mbox{RSS} = \sum(y_i - \hat{y}_i)^2$
+  \item regression sum of squares (RegSS): $\mbox{RegSS} = \mbox{TSS} - \mbox{RSS} = \sum(\hat{y}_i - \bar{y})^2$
+  \item $\mbox{RegSS} + \mbox{RSS} = \mbox{TSS}$
+\end{itemize}
+
+\subsection*{Sample correlation coefficient}
+
+{\it Definition: } The \underline{sample correlation coefficient} $r_{xy}$ of the paired data $(x_1, y_1)$, $(x_2, y_2)$, ..., $(x_n, y_n)$ is defined by
+$$
+r_{xy} = \frac{\sum{(x_i - \bar{x})(y_i - \bar{y})}/(n - 1)}{\sqrt{\sum(x_i - \bar{x})^2/(n - 1) \times \sum(y_i - \bar{y})^2/(n - 1)}} = \frac{s_{xy}}{s_x s_y}
+$$
+%
+$s_{xy}$ is called the sample covariance of $x$ and $y$:
+$$
+s_{xy} = \frac{\sum{(x_i - \bar{x})(y_i - \bar{y})}}{n - 1}
+$$
+$s_x = \sqrt{\sum(x_i - \bar{x})^2/(n - 1)}$ and $s_y = \sqrt{\sum(y_i - \bar{y})^2/(n - 1)}$ are, respectively, the sample standard deviations of $X$ and $Y$.
+
+Some properties of $r_{xy}$:
+\begin{itemize}
+  \item $r_{xy}$ is a measure of the linear association between $x$ and $y$ in a dataset.
+  \item correlation coefficients are always between $-1$ and $1$:
+  $$
+  -1 \le r_{xy} \le 1
+  $$
+  \item The closer $r_{xy}$ is to $1$, the stronger the positive linear association between $x$ and $y$
+  \item The closer $r_{xy}$ is to $-1$, the stronger the negative linear association between $x$ and $y$
+  \item The bigger $|r_{xy}|$, the stronger the linear association
+  \item If $|r_{xy}| = 1$, then $x$ and $y$ are said to be perfectly correlated.
+  \item $\hat{\beta}_1 = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sum(x_i - \bar{x})^2} = \frac{s_{xy}}{s_x^2} = r_{xy} \frac{s_y}{s_x}$
+\end{itemize}
+
+
+
+\subsection*{R-square}
+
+The ratio of RegSS to TSS is called the {\it coefficient of determination}, or sometimes, simply ``r-square''.  it represents the proportion of variation observed in the response variable $y$ which can be ``explained'' by its linear association with $x$.
+
+\begin{itemize}
+  \item In simple linear regression, ``r-square'' is in fact equal to $r^2_{xy}$. (But this isn't the case in multiple regression.)
+  \item It is also equal to the squared correlation between $y_i$ and $\hat{y}_i$. (This is the case in multiple regression.)
+\end{itemize}
+
+For Davis's regression of measured on reported weight:
+$$
+\begin{aligned}
+\mbox{TSS} &= 4753.8\\
+\mbox{RSS} &= 418.87\\
+\mbox{RegSS} &=  4334.9\\
+\end{aligned}
+$$
+Thus, 
+$$
+r^2 = \frac{4334.9}{4753.8} = 1 - \frac{418.87}{4753.8} =0.9119
+$$
+
+\section*{The statistical model of Simple Linear Regress}
+
+Standard statistical inference in simple regression is based on a {\it statistical model} that describes the population or process that is sampled:
+$$
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i
+$$
+where the coefficients $\beta_0$ and $\beta_1$ are the {\it population regression parameters}.
+The data are randomly sampled from some population of interest.
+\begin{itemize}
+  \item $y_i$ is the value of the response variable
+  \item $x_i$ is the explanatory variable
+  \item $\epsilon_i$ represents the aggregated omitted causes of $y$ (i.e.,~the causes of $y$ beyond the explanatory variable), other explanatory variables that could have been included in the regression model, measurement error in $y$, and whatever component of $y$ is inherently random.
+\end{itemize}
+
+\subsection*{Key assumptions of SLR}
+The key assumptions of the SLR model concern the behavior of the errors, equivalently, the distribution of $y$ conditional on $x$:
+
+\begin{itemize}
+  \item {\it Linearity}.  The expectation of the error given the value of $x$ is $0$: $\Expected{\epsilon} \equiv \Expected{\epsilon | x_i} = 0$.  And equivalently, the expected value of the response variable is a linear function of the explanatory variable:
+  $\mu_i \equiv \Expected{y_i} \equiv \Expected{y_i | x_i} = \Expected{\beta_0 + \beta_1 x_i + \epsilon_i | x_i} = \beta_0 + \beta_1 x_i$.
+  \item {\it Constant variance}.  The variance of the errors is the same regardless of the value of $x$: $\Var{\epsilon | x_i} = \sigma^2_\epsilon$.  The constant error variance implies constant conditional variance of $y$ on given $x$:
+  $\Var{y|x_i} = \Expected{(y_i - \mu_i)^2} = \Expected{(y_i - \beta_0 - \beta_1 x_i)^2} = \Expected{\epsilon_i^2} = \sigma^2_\epsilon$.  (Question: why the last equal sign?)
+  \item {\it Normality}.  The errors are independent identically distributed with Normal distribution with mean $0$ and variance $\sigma_\epsilon^2$.  Write as $\epsilon_i \distas{iid} N(0, \sigma_\epsilon^2)$.
+  Equivalently, the conditional distribution of the response variable is normal: $y_i \distas{iid} N(\beta_0 + \beta_1 x_i, \sigma_\epsilon^2)$.
+  \item {\it Independence}.  The observations are sampled independently.
+  \item {\it Fixed $X$, or $X$ measured without error and independent of the error}.
+    \begin{itemize}
+      \item For experimental research where $X$ values are under direct control of the researcher (i.e.~$X$'s are fixed).  If the experiment were replicated, then the values of $X$ would remain the same.
+      \item For research where $X$ values are sampled, we assume the explanatory variable is measured without error and the explanatory variable and the error are independent in the population from which the sample is drawn.
+    \end{itemize}
+  \item {\it $X$ is not invariant}. X's can not be all the same.
+\end{itemize}
+
+Figure~\ref{fig:SLRdistribution} shows the assumptions of linearity, constant variance, and normality in SLR model.
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{Lecture6/Figure6-1.png}
+%  \captionsetup{labelformat=empty}
+  \caption{The assumptions of linearity, constant variance, and normality in simple regression.  The graph shows the conditional population distributions $\Pr(Y|x)$ of $Y$ for several values of the explanatory variable $X$, labeled as $x_1, x_2, \dots, x_5$.  The conditional means of $Y$ given $x$ are denoted $\mu_1, \dots, \mu_5$.}
+  \label{fig:SLRdistribution}
+\end{center}
+\end{figure}
+

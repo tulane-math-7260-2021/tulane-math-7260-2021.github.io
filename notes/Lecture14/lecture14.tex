@@ -1,0 +1,129 @@
+\setcounter{section}{13}
+
+
+\section{Lecture 14: Feb 19}
+
+
+\subsection*{Last time}
+\begin{itemize}
+ \item HW1 review 
+ \item Probability review, cont 
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+  \item Probability review
+  \item Lab session
+% \item 2nd-round linear algebra review
+\end{itemize}
+
+\subsubsection*{Reference: }
+\begin{itemize}
+  \item Statistical Inference, 2nd Edition, by George Casella \& Roger L. Berger
+  \item  \href{http://cs229.stanford.edu/section/cs229-prob.pdf}{Review of Probability Theory} by Arian Maleki and Tom Do
+\end{itemize}
+
+\subsubsection*{Chi-square, t-, and F-Distributions}
+Let $Z_1, Z_2, \dots, Z_k \distas{iid} N(0, 1)$, then $X^2 \equiv Z_1^2 + Z_2^2 + \dots + Z_k^2 \sim \chi_k^2$ (with $k$ degrees of freedom).\\
+If $X \sim \chi_k^2$
+$$
+\begin{aligned}
+\Expected{X} &= k\\
+\Var{X} &= 2k.\\
+\end{aligned}
+$$
+
+{\bf Student's $t$ versus $\chi^2$}\\
+
+If $X_1, \dots, X_n \distas{iid} N(\mu, \sigma^2)$, then
+$$
+\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1).
+$$
+
+When $\sigma$ is unknown,
+$$
+\frac{\bar{X} - \mu}{\hat{\sigma} / \sqrt{n}} \sim t_{n - 1}, \quad \mbox{where } \hat{\sigma} = \sqrt{\frac{\sum(X_i - \bar{X})^2}{n - 1}}.
+$$
+Note that
+$$
+\begin{aligned}
+\frac{\bar{X} - \mu}{\hat{\sigma} / \sqrt{n}}
+&= \frac{\bar{X} - \mu}{{\sigma} / \sqrt{n}} \cdot \frac{1}{\frac{\hat{\sigma}}{\sigma}}\\
+&= Z \cdot \frac{1}{\sqrt{\frac{\sum(X_i - \bar{X})^2}{(n - 1)\sigma^2}}}\\
+&= \frac{Z}{\sqrt{\frac{\chi_{n - 1}^2}{n - 1}}}
+\end{aligned}
+$$
+
+{\bf $F$ versus $\chi^2$}\\
+
+$$
+F_{ndf, ddf} \equiv \frac{\chi^2_{ndf}/{ndf}}{\chi^2_{ddf}/{ddf}}
+$$
+
+{\bf $t$ versus $F$}\\
+
+$$
+\begin{aligned}
+t_k &= \frac{Z}{\sqrt{\chi^2_k/k}}\\
+&= \frac{\sqrt{\chi^2_1/1}}{\sqrt{\chi^2_k/k}}\\
+&= \sqrt{F_{1, k}}
+\end{aligned}
+$$
+or, in other words, $t^2_k = F_{1, k}$
+
+\subsection*{Random vectors and matrices}
+The cdf for random vector
+$$
+\vecc{Y} = \left[ \begin{array}{c} Y_1\\ Y_2\\ \vdots\\ Y_n\\ \end{array} \right] \mbox{ is }  F_\vecc{Y}(\vecc{y}) = \Pr(Y_1 \le y_1, Y_2 \le y_2, \dots, Y_n \le y_n)
+$$
+If a joint pdf exists, then $f_\vecc{Y}(\vecc{y}) = f_\vecc{Y}(y_1, \dots, y_n)$ and 
+$$
+ F_\vecc{Y}(\vecc{y}) = \int\limits_{-\infty}^{y_1} \int\limits_{-\infty}^{y_2} \dots \int\limits_{-\infty}^{y_n} f_\vecc{Y}(\vecc{t})d\vecc{t}
+$$
+
+\subsubsection*{Moments}
+$$
+\begin{aligned}
+\Expected{\vecc{Y}} &= \vecc{\mu}_\vecc{Y} = \left[ \begin{array}{c} E(Y_1)\\ E(Y_2)\\ \vdots\\ E(Y_n)\\ \end{array} \right]  = \left[ \begin{array}{c} \mu_1\\ \mu_2\\ \vdots\\ \mu_n\\ \end{array} \right]\\
+\Var{\vecc{Y}} 
+&= \Expected{(\vecc{Y} - \vecc{\mu}_\vecc{Y})(\vecc{Y} - \vecc{\mu}_\vecc{Y})\transpose}\\
+&=\Expected{ \left[ \begin{array}{lll} 
+(Y_1 - \mu_1)^2 & (Y_1 - \mu_1)(Y_2 - \mu_2) & \dots\\ 
+(Y_2 - \mu_2)(Y_1 - \mu_1) & (Y_2 - \mu_2)^2 & \dots\\
+\dots & &\\
+\end{array}\right]}\\
+&= \Expected{\left[(Y_i - \mu_i)(Y_j - \mu_j), i = 1, 2, \dots, n, j = 1, 2, \dots, n \right]}\\
+&= (\sigma_{ij})_{i = 1, 2, \dots, n; j = 1, 2, \dots, n}
+\end{aligned}
+$$
+where $\sigma_{ij} = Cov(Y_i, Y_j)$
+
+\subsubsection*{Linear functions}
+Let $\vecc{X} \in \mathbb{R}^{k \times 1}, \vecc{Y} \in \mathbb{R}^{n \times 1}$ and $\vecc{A}  \in \mathbb{R}^{k \times 1}$, $\vecc{B} \in \mathbb{R}^{k \times n}$ be non-random, then
+$$
+\begin{aligned}
+\mathop \mathbf{X}\limits_{k \times 1} &= \mathop \mathbf{A}\limits_{k \times 1} + \mathop \mathbf{B}\limits_{k \times n} \mathop \mathbf{Y}\limits_{n \times 1}\\
+\Expected{ \mathbf{X}} &=  \mathbf{A} +  \mathbf{B} \Expected{\mathbf{Y}}\\
+\Var{\mathbf{X}} &= \vecc{B}\Var{\vecc{Y}}\vecc{B}\transpose\\
+\end{aligned}
+$$
+
+\subsubsection*{Sums of random vectors}
+$$
+\begin{aligned}
+\mathop \mathbf{X}\limits_{n \times 1} &= \mathop \mathbf{Y}\limits_{n \times 1} +\mathop \mathbf{Z}\limits_{n \times 1}\\
+\Expected{\vecc{X}} &= \Expected{\vecc{Y}} +  \Expected{\vecc{Z}} = \Expected{\vecc{Y} + \vecc{Z}}\\
+\end{aligned}
+$$
+Note that there is no independence assumed above.
+$$
+\begin{aligned}
+\Var{\vecc{X}} = \Var{\vecc{Y} + \vecc{Z}} = \Var{\vecc{Y}} +\Var{\vecc{Z}} + Cov(\vecc{Y}, \vecc{Z}) + Cov(\vecc{Z}, \vecc{Y})
+\end{aligned}
+$$
+If $\vecc{Y}, \vecc{Z}$ are uncorrelated, then $\Var{\vecc{X}} = \Var{\vecc{Y}}+ \Var{\vecc{Z}}$ 
+
+
+
+

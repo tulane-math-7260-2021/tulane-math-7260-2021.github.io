@@ -1,0 +1,145 @@
+\setcounter{section}{7}
+
+
+\section{Lecture 8: Feb 5}
+
+
+\subsection*{Last time}
+\begin{itemize}
+  \item Properties of the LS estimators
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+  \item Inference of SLR model
+  \item Lab 1
+\end{itemize}
+
+
+\subsection*{Statistical inference of the SLR model}
+
+Now we have the distribution of $\hat{\beta}_0$ and $\hat{\beta}_1$
+  $$
+  \begin{aligned}
+    \hat{\beta}_0 \sim& N(\beta_0, \frac{\sigma^2_\epsilon \sum{x_i^2}}{n\sum(x_i - \bar{x})^2}) \\
+    \hat{\beta}_1 \sim & N(\beta_1, \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2}).\\
+  \end{aligned}
+  $$
+%
+However, $\sigma_\epsilon$ is never known in practice.  Instead, an {\it unbiased} estimator of $\sigma_\epsilon^2$ is given by
+$$
+\hat{\sigma_\epsilon}^2 = MS[E] = \frac{SS[E]}{n - 2}.
+$$
+%
+{\it Proof:}\\
+\begin{pf}
+\begin{equation*}
+MS[E] = \frac{ \sum(y_i - \hat{y}_i)^2}{n - 2},
+\end{equation*}
+we want to show $\Expected{ \sum(y_i - \hat{y}_i)^2} = \sigma_\epsilon^2 (n - 2)$.\\
+LHS: $\Expected{ \sum(y_i - \hat{y}_i)^2} = \sum_i \left[ \Expected{y_i - \hat{y}_i}^2 \right]$\\
+and $\mbox{E}[(y_i - \hat{y}_i)^2] = \sVar(y_i - \hat{y}_i) + [\Expected{y_i - \hat{y}_i}]^2= \sVar(y_i - \hat{y}_i) = \sVar(y_i) + \sVar(\hat{y}_i) - 2\mbox{cov}(y_i, \hat{y}_i)$
+$$
+\begin{aligned}
+\sVar(y_i) &= \sigma_\epsilon^2\\
+\sVar(\hat{y}_i) &= \sVar(\bar{y} + \hat{\beta}_1 (x_i - \bar{x}))\\
+&=\sVar(\bar{y}) + (x_i - \bar{x})^2 \sVar(\hat{\beta}_1) + 2(x_i - \bar{x}) \mbox{Cov}(\bar{y}, \hat{\beta}_1)\\
+\mbox{Cov}(\bar{y}, \hat{\beta}_1) &= \mbox{Cov}(\bar{y}, \sum k_i y_i)\\
+ &= \sum_i \mbox{Cov}(\bar{y}, k_i y_i) \\
+&= \sum_i \frac{k_i}{n} \sVar(y_i)\\
+&= \frac{1}{n} \sum k_i\\
+ &= 0\\
+ \therefore \sVar(\hat{y}_i) &= \sVar(\bar{y}) + (x_i - \bar{x})^2 \sVar(\hat{\beta}_1) \\
+ &= \frac{1}{n} \sigma^2_\epsilon + \frac{\sigma^2_\epsilon (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \\
+ &= \sigma^2_\epsilon \left[ \frac{1}{n} + \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \right]
+\end{aligned}
+$$
+Now, we derive the last term $\mbox{cov}(y_i, \hat{y}_i)$:
+$$
+\begin{aligned}
+\mbox{cov}(y_i, \hat{y}_i) &= \mbox{cov}(y_i, \bar{y} + \hat{\beta}_1 (x_i - \bar{x}))\\
+&= \mbox{cov}(y_i, \frac{1}{n}\sum_j {y_j} + (x_i - \bar{x}) \sum_j k_j y_j)\\
+&= \mbox{cov}(y_i, \sum_j \left[ \frac{1}{n} + (x_i - \bar{x}) k_j \right] y_j)\\
+&= \sigma^2_\epsilon \left[ \frac{1}{n} + (x_i - \bar{x}) k_i \right]\\
+&=\sigma^2_\epsilon \left[ \frac{1}{n} + \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2}\right]\\
+\end{aligned}
+$$
+%
+Therefore, we have for $i$th residue
+$$
+\begin{aligned}
+\sVar(y_i - \hat{y}_i) &= \sVar(y_i) + \sVar(\hat{y}_i) - 2\mbox{cov}(y_i, \hat{y}_i)\\
+&= \sigma_\epsilon^2 + \sigma^2_\epsilon \left[ \frac{1}{n} + \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \right] - 2 \sigma^2_\epsilon \left[ \frac{1}{n} +  \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \right] \\
+&= \sigma_\epsilon^2 \left[ 1 - \frac{1}{n} -  \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \right].
+\end{aligned}
+$$
+%
+And finally, sum over $i$ we get
+$$
+\sum_i \sVar(y_i - \hat{y}_i) = \sigma_\epsilon^2 \sum_i  \left[ 1 - \frac{1}{n} -  \frac{ (x_i - \bar{x})^2 }{\sum(x_i - \bar{x})^2} \right] = (n - 2)\sigma_\epsilon^2
+$$
+\end{pf}
+
+\subsection*{Confidence intervals}
+Now we substitute $\hat{\sigma}_\epsilon^2$ into the distribution of $\hat{\beta}_0$ and $\hat{\beta}_1$
+  $$
+  \begin{aligned}
+    \hat{\beta}_1 \sim & N(\beta_1, \frac{\sigma^2_\epsilon}{\sum(x_i - \bar{x})^2})\\
+    \hat{\beta}_0 \sim& N(\beta_0, \frac{\sigma^2_\epsilon \sum{x_i^2}}{n\sum(x_i - \bar{x})^2}) \\    
+  \end{aligned}
+  $$
+  to get the estimated standard errors:
+  $$
+  \begin{aligned}
+  \reallywidehat{SE}(\hat{\beta}_1) &= \sqrt{\frac{MS[E]}{\sum(x_i - \bar{x})^2}}\\
+    \reallywidehat{SE}(\hat{\beta}_0) &= \sqrt{MS[E] \left( \frac{1}{n} + \frac{\bar{x}^2}{\sum(x_i - \bar{x})^2} \right)}\\
+  \end{aligned}
+  $$
+  And the $100(1 - \alpha)\%$ confidence intervals for $\beta_1$ and $\beta_0$ are given by
+  $$
+  \hat{\beta}_1 \pm t(n - 2, \alpha / 2) \sqrt{\frac{MS[E]}{S_{xx}}}
+  $$
+  $$
+  \hat{\beta}_0 \pm t(n - 2, \alpha / 2) \sqrt{MS[E] \left( \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right)}\\
+  $$
+  where $S_{xx} = \sum(x_i - \bar{x})^2$
+
+\subsubsection*{Confidence interval for $\Expected{Y|X=x_0}$}
+
+The conditional mean $\Expected{Y|X=x_0}$ can be estimated by evaluating the regression function $\mu(x_0)$ at the estimates $\hat{\beta}_0$, $\hat{\beta}_1$.
+The conditional variance of the expression isn't too difficult (already shown):
+$$
+\sVar(\hat{\beta}_0 + \hat{\beta}_1 x_0 | X = x_0) = \sigma^2(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}})
+$$
+This leads to a confidence interval of the form
+$$
+\hat{\beta}_0 + \hat{\beta}_1 x_0 \pm t(n - 2, \alpha / 2) \sqrt{MS[E] \left( \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
+$$
+
+\subsubsection*{Prediction interval}
+Often, prediction of the response variable $Y$ for a given value, say $x_0$, of the independent variable of interest.
+In order to make statements about future values of $Y$, we need to take into account
+\begin{itemize}
+  \item the sampling distribution of $\hat{\beta}_0$ and $\hat{\beta}_1$
+  \item the randomness of a future value $Y$.
+\end{itemize}
+
+We have seen the \underline{predicted value} of $Y$ based on the linear regression is given by $\hat{Y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$.
+
+The \underline{95\% prediction interval} has the form
+$$
+\hat{Y}_0 \pm t(n - 2, \alpha / 2) \sqrt{MS[E] \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}.
+$$
+
+
+
+\subsubsection*{Hypothesis test}
+To test the hypothesis \fbox{$H_0: \beta_1 = \beta_{slope_0}$} that the population slope is equal to a specific value $\beta_{slope_0}$ (most commonly, the null hypothesis has $\beta_{slope_0} = 0$),
+we calculate the test statistic ($T$-statistics) with $df = n - 2$
+$$
+t_0 = \frac{\hat{\beta_1} - \beta_{slope_0}}{\reallywidehat{SE}(\hat{\beta}_1)} \sim t_{n-2}
+$$
+
+
+

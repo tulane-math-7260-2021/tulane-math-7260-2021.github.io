@@ -1,0 +1,64 @@
+---
+title: "Lecture 32: One-way random effects ANOVA"
+author: "Dr. Xiang Ji @ Tulane University"
+date: "April 13, 2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4  
+subtitle: MATH-6040/7260 Linear Models
+csl: ../apa.csl
+---
+
+### Reference:
+[Lecture notes](https://stat.ethz.ch/~meier/teaching/anova/random-and-mixed-effects-models.html#random-effects-models) by Lukas Meier on ANOVA using R
+
+```{R}
+library(tidyverse)
+## Create data set ####
+weight <- c(61, 100,  56, 113,  99, 103,  75,  62,  ## sire 1
+            75, 102,  95, 103,  98, 115,  98,  94,  ## sire 2
+            58,  60,  60,  57,  57,  59,  54, 100,  ## sire 3
+            57,  56,  67,  59,  58, 121, 101, 101,  ## sire 4
+            59,  46, 120, 115, 115,  93, 105,  75)  ## sire 5
+sire    <- factor(rep(1:5, each = 8))
+animals <- data.frame(weight, sire)
+str(animals)
+
+## Visualize data ####
+stripchart(weight ~ sire, vertical = TRUE, pch = 1, xlab = "sire", data = animals)
+```
+
+Now we fit the random effects model with the `lmer` function in package `lme4`.
+We want to have a random effect per sire.
+This can be specified with the notation `(1 | sire)` in the model formula.
+This means that the “granularity” of the random effect is specified after the vertical bar “`|.`” 
+All observations sharing the same level of `sire` will get the same random effect  $\alpha_i$.
+The `1` means that we want to have a random intercept per sire.
+In the regression setup, we could also have a random slope for which we would use the notation `(x | sire)` for a continuous predictor `x`.
+However, this is not of relevance here.
+
+```{r}
+library(lme4)
+fit.sire <- lmer(weight ~ (1 | sire), data = animals)
+summary(fit.sire)
+```
+
+ANOVA table.
+
+```{r}
+fit.lm <- lm(weight ~ sire, data = animals)
+anova(fit.lm)
+
+fit.aov <- aov(weight ~ sire, data = animals)
+anova(fit.aov)
+```
+
+
+Confidence intervals
+
+```{r}
+confint(fit.sire, oldNames = FALSE)
+confint(fit.sire, method="Wald", oldNames = FALSE)
+confint(fit.sire, method="boot", oldNames = FALSE)
+```

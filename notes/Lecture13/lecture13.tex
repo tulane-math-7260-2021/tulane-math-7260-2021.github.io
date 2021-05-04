@@ -1,0 +1,204 @@
+\setcounter{section}{12}
+
+
+\section{Lecture 13: Feb 17}
+
+
+\subsection*{Last time}
+\begin{itemize}
+  \item Probability review
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+ \item HW1 review 
+ \item Probability review, cont 
+% \item 2nd-round linear algebra review
+\end{itemize}
+
+\subsubsection*{Reference: }
+\begin{itemize}
+  \item Statistical Inference, 2nd Edition, by George Casella \& Roger L. Berger
+  \item  \href{http://cs229.stanford.edu/section/cs229-prob.pdf}{Review of Probability Theory} by Arian Maleki and Tom Do
+\end{itemize}
+
+
+\subsubsection*{Binomial mean}
+IF $X$ has binomial distribution, i.e.~$X \sim binomial(n, p)$, its pmf is given by
+$$
+\Pr(X=x) = \left( \begin{tabular}{c} n\\x\\ \end{tabular} \right) p^x (1 - p)^{n - x}, \quad x=0, 1, \dots, n,
+$$
+%
+where $n$ is a positive integer, $0 \le p \le 1$, and for every fixed pair $n$ and $p$ the pmf sums to $1$.
+The expected value of a binomial random variable is then given by
+$$
+\Expected{X} = \sum\limits_{x=0}^{n} x \left( \begin{tabular}{c} n\\x\\ \end{tabular} \right) p^x (1 - p)^{n - x}
+$$
+Now, use the identity $x\left( \begin{tabular}{c} n\\x\\ \end{tabular} \right) = n \left( \begin{tabular}{c} n - 1\\ x - 1\\ \end{tabular} \right)$ to derive the Expected value.
+%
+\begin{pf}
+$$
+\begin{aligned}
+\Expected{X} 
+&= \sum\limits_{x=1}^{n} x \left( \begin{tabular}{c} n\\x\\ \end{tabular} \right) p^x (1 - p)^{n - x}\\
+&= \sum\limits_{x=1}^{n} n \left( \begin{tabular}{c} n - 1\\ x - 1\\ \end{tabular} \right) p^x (1 - p)^{n - x}\\
+&= \sum\limits_{y=0}^{n - 1} n \left( \begin{tabular}{c} n - 1\\ y\\ \end{tabular} \right) p^{y + 1} (1 - p)^{n - (y + 1)}\\
+&=np \sum\limits_{y=0}^{n - 1} \left( \begin{tabular}{c} n - 1\\ y\\ \end{tabular} \right) p^{y} (1 - p)^{n - 1 - y}\\
+&= np,
+\end{aligned}
+$$
+since the last summation must be $1$, being the sum over all possible values of a $binomial(n - 1, p)$ pmf.
+\end{pf}
+%
+\subsubsection*{properties:}
+Let $X$ be a random variable and let $a, b$ and $c$ be constants. Then for any functions $g_1(x)$ and $g_2(x)$ whose expectations exist,
+\begin{enumerate}
+  \item $\Expected{a \cdot g_1(X)  + b \cdot g_2(X) + c} = a \Expected{g_1(X)} + b\Expected{g_2(X)} + c$.
+  \item If $g_1(x) \ge 0$ for all $x$, then $\Expected{g_1(X)} \ge 0$.
+  \item If $g_1(x) \ge g_2(x)$ for all x, then $\Expected{g_1(X)} \ge \Expected{g_2(X)}$.
+  \item If $a \le g_1(x) \le b$ for all $x$, then $a \le \Expected{g_1(X)} \le b$.
+\end{enumerate}
+
+\subsection*{Moments}
+The various moments of a distribution are an important class of expectations.
+
+{\it Definition: } For each integer $n$, the $n^{th}$ \underline{moment} of $X$ (or $F_X(x)$), $\mu'_n$, is
+$$
+\mu'_n = \Expected{X^n}.
+$$
+The $n^{th}$ \underline{central moment} of $X$, $\mu_n$, is
+$$
+\mu_n = \Expected{(X-\mu)^n},
+$$
+where $\mu = \mu'_1 = \Expected{X}$.
+
+\subsubsection*{Variance}
+{\it Definition: } The \underline{variance} of a random variable $X$ is its second central moment, $\Var{X} = \Expected{(X - EX)^2}$.
+The positive square root of $\Var{X}$ is the \underline{standard deviation} of $X$.
+
+\subsubsection*{Exponential variance}
+Let $X$ have the exponential($\lambda$) distribution, $X \sim Exp(\lambda)$.  Then the variance of $X$ is\\
+%
+\begin{pf}
+$$
+\begin{aligned}
+\Var{X} &= \Expected{(X - EX)^2} = \Expected{(X - \lambda)^2}\\
+&= \int_0^{\infty} (x - \lambda)^2 \frac{1}{\lambda} e^{-x/ \lambda}dx\\
+&= \int_0^\infty (x^2 - 2x\lambda + \lambda^2) \frac{1}{\lambda}e^{-x / \lambda}dx\\
+&= \lambda^2.
+\end{aligned}
+$$
+\end{pf}
+
+\subsubsection*{properties}
+\begin{enumerate}
+  \item $\Var{aX + b} = a^2\Var{X}$.\\
+  {\it proof: }\\
+  \begin{pf}
+  $$
+  \begin{aligned}
+  \Var{aX + b} 
+  &= \Expected{((aX + b) - \Expected{aX+b})^2}\\
+  &= \Expected{(aX - aEX)^2}\\
+  &= a^2 \Expected{(X - EX)^2}\\
+  &= a^2 \Var{X}\\
+  \end{aligned}
+  $$  
+  \end{pf}
+
+  \item $\Var{X} = \Expected{X^2} - (\Expected{X})^2$.\\
+  {\it proof: }\\
+  \begin{pf}
+ $$
+  \begin{aligned}
+  \Var{X} 
+  &= \Expected{X - EX}^2\\
+  &= \Expected{X^2 - 2X \Expected{X} + (\Expected{X})^2}\\
+  &= \Expected{X^2} - 2\Expected{X} \Expected{X} + (\Expected{X})^2\\
+  &= \Expected{X^2} -  (\Expected{X})^2\\
+  \end{aligned}
+  $$    
+  \end{pf}  
+\end{enumerate}
+
+\subsubsection*{Moment generating function}
+{\it Definition: } Let $X$ be a random variable with cdf $F_X$.  The \underline{moment generating function} or \underline{mgf} of $X$ (or $F_X$), 
+denoted by $M_X(t)$, is
+$$
+M_X(t) = \Expected{e^{tX}},
+$$
+provided that the expectation exists for $t$ in some neighborhood of $0$.  That is, there exists an $h>0$ such that for all $t$ in $-h < t < h$, $\Expected{e^{tX}}$ exists.
+If the expectation does not exist in a neighborhood of $0$, we say that the moment generating function does not exist.
+
+{\it Property: } If $X$ has mgf $M_X(t)$, then
+$$
+\Expected{X^n} = M_X^{(n)}(0),
+$$
+where we define
+$$
+M_X^{(n)}(0) =\left. \frac{d^n}{dt^n}M_X(t) \right|_{t = 0}.
+$$
+
+
+\subsection*{Some common random variables}
+\subsubsection*{Discrete random variables}
+\begin{itemize}
+  \item  $X \sim Bernoulli(p)$ (where $0 \le p \le 1$):
+  $$
+  \Pr(x) = \left\{ \begin{tabular}{ll} $p$ & \mbox{if } $x = 1$\\ $1 - p$ & \mbox{if } $x = 0$\\ \end{tabular} \right.
+  $$
+  \item  $X \sim Binomial(n, p)$ (where $0 \le p \le 1$):
+  $$
+  \Pr(x) = \left( \begin{tabular}{c} $n$\\ $x$\\ \end{tabular} \right) p^x (1 - p)^{n - x}
+  $$ 
+  \item  $X \sim Geometric(p)$ (where $0 \le p \le 1$):
+  $$
+  \Pr(x) = p(1 - p)^{x - 1}
+  $$ 
+  \item  $X \sim Poisson(\lambda)$ (where $\lambda > 0$):
+  $$
+  \Pr(x) = e^{-\lambda} \frac{\lambda^x}{x!}
+  $$ 
+\end{itemize}
+
+\subsubsection*{Continuous random variables}
+\begin{itemize}
+  \item  $X \sim Uniform(a, b)$ (where $a < b$):
+  $$
+  f(x) = \left\{ \begin{tabular}{ll} $\frac{1}{b - a}$ & \mbox{if } $a \le x \le b$\\ $0$ & \mbox{otherwise}\\ \end{tabular} \right.
+  $$ 
+  \item  $X \sim Exponential(\lambda)$ (where $\lambda > 0$):
+  $$
+  f(x) = \left\{ \begin{tabular}{ll} $\lambda e^{-\lambda x}$ & \mbox{if } $x \ge 0$\\ $0$ & \mbox{otherwise}\\ \end{tabular} \right.
+  $$   
+  \item  $X \sim Normal(\mu, \sigma^2)$:
+  $$
+  f(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{- \frac{1}{2\sigma^2}(x - \mu)^2}
+  $$     
+\end{itemize}
+
+The following table provides a summary of some of the properties of these distributions.
+
+\begin{center}
+\begin{tabular}{  l l l l}
+\hline
+Distribution & PDF or PMF & Mean & Variance\\
+\hline
+$Bernoulli(p)$ & $\left\{ \begin{tabular}{ll} $p$ & \mbox{if } $x = 1$\\ $1 - p$ & \mbox{if } $x = 0$\\ \end{tabular} \right.$ &$p$& $p(1 - p)$\\
+$Binomial(n,p)$ & $ \left( \begin{tabular}{c} $n$\\ $x$\\ \end{tabular} \right) p^x (1 - p)^{n - x}$ , for $0 \le k \le n$ & $np$ & $np(1 - p)$\\
+$Geometric(p)$ & $ p(1 - p)^{x - 1}$, for $k = 1, 2, \dots$ & $\frac{1}{p}$ & $\frac{1 - p}{p^2}$\\ 
+$Poisson(\lambda)$ & $e^{-\lambda} \frac{\lambda^x}{x!}$, for $k = 1, 2, \dots$ & $\lambda$ & $\lambda$\\
+$Uniform(a, b)$ & $\frac{1}{b - a} I(a \le x \le b)$ & $\frac{a + b}{2}$ & $\frac{(b - a)^2}{12}$\\ 
+$Gaussian(\mu, \sigma^2)$ & $\frac{1}{\sqrt{2\pi}\sigma}e^{- \frac{1}{2\sigma^2}(x - \mu)^2}$ &$\mu$ & $\sigma^2$\\
+$Exponential(\lambda)$ & $\lambda e^{-\lambda x} I(x \ge 0)$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$\\
+\hline
+\label{table:distributions}
+\end{tabular}
+\end{center}
+
+
+
+
+
+

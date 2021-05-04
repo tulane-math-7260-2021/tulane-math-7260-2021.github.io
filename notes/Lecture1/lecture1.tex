@@ -1,0 +1,60 @@
+\section{Lecture 1:Jan 20}
+
+\subsection*{Today}
+\begin{itemize}
+\item Introduction
+\item Course logistics
+\item Read JF chapter 1, JM Appendix A
+\end{itemize}
+
+\subsection*{What is this course about?}
+The term “linear models” describes a wide class of methods for the statistical analysis of multivariate data.
+The underlying theory is grounded in linear algebra and multivariate statistics, but applications range from biological research to public policy.
+The objective of this course is to provide a solid introduction to both the theory and practice of linear models, combining mathematical concepts with realistic examples.
+
+\subsection*{A hierarchy of linear models}
+
+\begin{itemize}
+\item The linear mean model:
+$$
+\mathop \mathbf{y} \limits_{n \times 1} = \mathop \mathbf{X}\limits_{n \times p} \mathop \beta \limits_{p \times 1}+  \mathop \epsilon \limits_{n \times 1}
+$$
+where $\Expected{\epsilon} = \vecc{0}$.  Only assumption is that errors have mean $0$.
+
+\item Gauss-Markov model:
+$$
+\mathbf{y} = \mathbf{X}\beta + \vecEpsilon
+$$
+where $\Expected{\vecc{\epsilon}} = \vecc{0}$ and $\Var{\vecc{\epsilon}} = \sigma^2 \vecc{I}$.  Uncorrelated errors with constant variance.
+
+\item Aitken model or general linear model:
+$$
+\mathbf{y} = \mathbf{X}\beta + \vecEpsilon
+$$
+where $\Expected{\vecc{\epsilon}} = \vecc{0}$ and $\Var{\vecc{\epsilon}} = \sigma^2 \vecc{V}$.  $\vecc{V}$ is fixed and known.
+
+\item Variance components models: $\vecc{y} \sim N(\vecc{X}\beta, \sigma^2_1\vecc{V}_1 + \sigma^2_2\vecc{V}_2 + \dots + \sigma^2_r\vecc{V}_r)$ with $\vecc{V}_1, \vecc{V}_2, \dots, \vecc{V}_r$ known.
+
+\item General mixed linear Model:
+$$
+\mathbf{y} = \mathbf{X}\beta + \vecEpsilon
+$$
+where $\Expected{\vecc{\epsilon}} = \vecc{0}$ and $\Var{\vecc{\epsilon}} = \boldsymbol{\Sigma}(\theta)$.
+
+\item Generalized linear models (GLMs).  Logistic regression, probit regression, log-linear model (Poisson regression), ... Note the difference from the general linear model.  GLMs are generalization of the {\it concept} of linear models.  They are covered in Math 7360 - Data Analysis class (\href{https://tulane-math7360.github.io/lectures/}{https://tulane-math7360.github.io/lectures/}).
+
+\end{itemize}
+
+\subsection*{Syllabus}
+
+Check course website frequently for updates and announcements.
+
+\href{https://tulane-math-7260-2021.github.io/}{https://tulane-math-7260-2021.github.io/}
+
+\subsection*{HW submission}
+
+Through Github with demo on Friday class.
+
+
+
+

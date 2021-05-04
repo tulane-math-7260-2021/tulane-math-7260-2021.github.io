@@ -1,0 +1,262 @@
+\setcounter{section}{28}
+
+\section{Lecture 29: April 7}
+
+
+\subsection*{Last time}
+\begin{itemize}
+	\item ANCOVA
+	\item Linear contrasts of means
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+	\item One last poll on alternative grading path
+	\begin{itemize}
+		\item Consider the votes on the three polls (including today's), if we model them as binomial distributed random variables with probability for `yes' as $p_1$, $p_2$ and $p_3$
+		\item What is the likelihood function?
+		\item How do we test the null hypothesis of $H_0: p_1 = p_2 = p_3$?
+		\item What do you expect?  Why?
+	\end{itemize}
+	\item Final exam will be posted on April 30th (per requested by Grace), Due May 11th 11:59pm
+	\item Sampling distribution of linear contrasts
+	\item Multiple comparisons
+	\item Sample size computations for one-way ANOVA	
+	\item Lack of fit test	
+%	\item One-way random effect model (JF Chapter 23 + Dr. Osborne's notes)
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{https://www4.stat.ncsu.edu/~osborne/st512r/handouts/allpackets.pdf}{Course notes} by Dr. Jason Osborne.
+
+\subsection*{Sampling distribution of linear contrast estimates}
+For a linear contrast
+$$
+\theta = c_1 \mu_1 + \dots + c_t \mu_t
+$$
+The {\it best} estimator for a contrast of interest can be obtained by substituting treatment group sample means $\bar{y}_{i+}$ for treatment population means $\mu_i$ in the contrast $\theta$:
+$$
+\hat{\theta} = c_1 \bar{Y}_{1+} + c_2 \bar{Y}_{2+} + \dots + c_t \bar{Y}_{t+}
+$$
+
+\subsubsection*{Example}
+Recall the binding fraction data that investigate binding fraction for several antibiotics using $n = 20$ bovine serum samples:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c|c|c}
+		\toprule
+		Antibiotic & Binding Percentage & Sample mean \\
+		\hline
+		Penicillin G & 29.6 24.3 28.5 32.0 & 28.6\\
+		Tetracyclin & 27.3 32.6 30.8 34.8 & 31.4\\
+		Streptomycin & 5.8 6.2 11.0 8.3 & 7.8\\
+		Erythromycin & 21.6 17.4 18.3 19 & 19.1\\
+		Chloramphenicol & 29.2 32.8 25.0 24.2&27.8\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Consider the pairwise contrast comparing penicillin (population) mean to Tetracyclin mean:
+$$
+\theta = \mu_1 - \mu_2 = (1) \mu_1 + (-1) \mu_2 + (0) \mu_3 + (0) \mu_4 + (0) \mu_5
+$$
+Obtain a point estimator of $\theta$.\\
+{\it Answers:}\\
+\begin{pf}
+	$$
+	\begin{aligned}
+		\hat{\theta} &= \hat{\mu}_1 - \hat{\mu}_2 = \bar{Y}_{1+} - \bar{Y}_{2+}\\
+		&= 28.6 - 31.4 = -2.8\\
+	\end{aligned}
+	$$
+\end{pf}
+
+Question: How good is this estimate?  In other words, how much uncertainty associated with the estimate?
+
+We want to characterize the sampling distribution of $\hat{\theta}$.
+According to our model setup, $Y_{ij}$ follow normal distributions.
+$\hat{\theta}$ is a linear function of $Y_{ij}$, so that $\hat{\theta}$ follows a normal distribution.
+We want to derive the mean and variance (the two sufficient statistics) to characterize the normal distribution that $\hat{\theta}$ follows:
+$$
+\hat{\theta} \sim \mathcal{N}(\theta, Var(\hat{\theta}))
+$$
+
+{\it Derive expressions for the mean and the variance:}\\
+\begin{pf}
+	For the mean, we have
+	$$
+	\begin{aligned}
+E(\hat{\theta}) &= E(\hat{\mu}_1) - E(\hat{\mu}_2) = E(\bar{Y}_{1+}) - E(\bar{Y}_{2+})\\
+&= \mu_1 - \mu_2 = \theta \\
+	\end{aligned}
+	$$
+	The variance follows
+	$$
+	\begin{aligned}
+		Var(\hat{\theta}) &= Var(\sum\limits_j c_j \bar{Y}_{j+})\\
+		&= \sum\limits_j Var(c_j \bar{Y}_{j+})\\
+		&= \sum\limits_j c_j^2 Var(\bar{Y}_{j+})\\
+		&= \sum\limits_j  \frac{c_j^2}{n_j} \sigma^2
+	\end{aligned}
+	$$
+\end{pf}
+
+Therefore, the standard error:
+$$
+SE(\hat{\theta}) = \sqrt{Var(\hat{\theta})} = \sqrt{\sigma^2 \sum\limits_{j = 1}^t \frac{c_j^2}{n_j}}
+$$
+which is estimated by
+$$
+\reallywidehat{SE}(\hat{\theta}) = \sqrt{MS[E] \sum\limits_{j = 1}^t \frac{c_j^2}{n_j}}
+$$
+
+To test $H_0: \theta =\theta_0$ (often $0$) versus $H_1: \theta \ne \theta_0$, use $t$-test:
+$$
+t = \frac{\hat{\theta} - \theta_0}{\reallywidehat{SE}(\hat{\theta})} \distas{H_0} t_{N-t}
+$$
+At level $\alpha$, the critical value for this test is $t(N - t, \alpha/2)$
+and $100(1 - \alpha)\%$ confidence interval for a contrast $\theta = \sum c_j \mu_j$ is given by
+$$
+\sum c_j \bar{Y}_{j+} \pm t(N - t, \alpha /2)\sqrt{MS[E] \sum \frac{c_j^2}{n_j}}
+$$
+
+
+\subsection*{Multiple Comparisons}
+Let's first review type I and type II errors.
+\begin{table}[H]
+	\renewcommand{\arraystretch}{1.5}
+	\centering
+	\begin{tabular}{c|c|c}
+		\toprule
+		& $H_0$ is True & $H_0$ is False\\
+		\hline
+		Don't reject $H_0$ & Probability $1 - \alpha$ & Probability $\beta$\\
+		Reject $H_0$ & Probability $\alpha$ & Probability $1 - \beta$\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+\begin{itemize}
+	\item Type I error: rejection of a true null hypothesis (false positive).
+	\item Type II error: failure to reject a false null hypothesis (false negative).
+	\item Type I error rate or significance level ($\alpha$): the probability of rejecting the null hypothesis given the null hypothesis is true.
+	\item Type II error rate ($\beta$): the probability of failure to reject the null hypothesis given the null hypothesis is false.  $1 - \beta$ gives the power of a test.
+\end{itemize}
+
+Now, let's consider all simple (pairwise) contrasts for the binding fraction data with $t=5$ antibiotic treatments of the form $\theta = \mu_i - \mu_j$.
+\begin{itemize}
+	\item We have $\left( \begin{array}{c}
+		5\\ 2\\
+	\end{array} \right) = 10$ tests for significance each at level $\alpha = 0.05$
+	\item what is the probability of committing at least one type I error?
+	    \begin{pf}
+	    	$$
+	    	1 - (1 - \alpha)^{10}
+	    	$$
+	    \end{pf}
+\end{itemize}
+
+We need to consider the \underline{familywise error rate} (fwe) when testing $k$ contrasts:
+$$
+fwe = \Pr(\mbox{at least one type I error})
+$$
+Methods for simultaneous inference for multiple contrasts include
+\begin{itemize}
+	\item Bonferroni
+	\item Scheff\'e
+	\item Tukey
+\end{itemize}
+
+When the number of comparisons is in the hundreds or thousands (e.g.~genome-wide association studies), and FWE control is hopeless, more manageable type I error rate is the \underline{False Discovery Rate (FDR)}:
+$$
+FDR = \textit{E}(\frac{\mbox{Falsely rejected null hypotheses}}{\mbox{Number of rejected null hypotheses}})
+$$
+
+\subsubsection*{Bonferroni correction}
+Suppose interest lies in exactly $k$ contrasts.
+The Bonferroni adjustment to $\alpha$ controls $fwe$ is
+$$
+\alpha_{bonferroni} = \frac{\alpha}{k}
+$$
+and simultaneous $95\%$ confidence intervals for the $k$ contrasts are given by
+$$
+\begin{aligned}
+	a_1 \bar{Y}_{1+} + \dots + a_t \bar{Y}_{t+} &\pm t(\frac{\alpha_{bonferroni}}{2}, \nu) \sqrt{MS[E]\sum \frac{a_j^2}{n_j}}\\
+	b_1 \bar{Y}_{1+} + \dots + b_t \bar{Y}_{t+} &\pm t(\frac{\alpha_{bonferroni}}{2}, \nu) \sqrt{MS[E]\sum \frac{b_j^2}{n_j}}\\	
+	&\dots\\
+	k_1 \bar{Y}_{1+} + \dots + k_t \bar{Y}_{t+} &\pm t(\frac{\alpha_{bonferroni}}{2}, \nu) \sqrt{MS[E]\sum \frac{k_j^2}{n_j}}\\
+\end{aligned}
+$$
+where $\nu$ denotes $df$ for error.
+
+{\it Example: } for the binding fraction example, consider only pairwise comparisons with Penicillin:
+$$
+\theta_1 = \mu_1 - \mu_2, \theta_2 = \mu_1 - \mu_3, \theta_3 = \mu_1  - \mu_4, \theta_4 = \mu_1 - \mu_5
+$$
+We have $k=4, \alpha_{bonferroni} = 0.05/k = 0.0125$ and $t(\frac{\alpha_{bonferroni}}{2}, 15) = 2.84$.
+Substitution leads to
+$$
+\begin{aligned}
+&t(\frac{\alpha_{bonferroni}}{2}, 15)\sqrt{MS[E]\left( \frac{1^2}{4} + \frac{(-1)^2}{4} + \frac{0^2}{4} + \dots + \frac{0^2}{4}\right)}\\
+=& 2.84 \sqrt{(9.05)\frac{2}{4}} = 6.0\\
+\end{aligned}
+$$
+so that {\bf simultaneous} $95\%$ confidence intervals for $\theta_1$, $\theta_2$, $\theta_3$ and $\theta_4$ take the form
+$$
+\bar{y}_{1+} - \bar{y}_{i+} \pm 6.0
+$$
+
+\subsubsection*{Scheff\'e}
+Another method to construct {\bf simultaneous} $95\%$ confidence intervals for {\bf ALL} contrasts, use
+$$
+\sum\limits_{j = 1}^t c_j \bar{y}_{j+} \pm \sqrt{(t - 1)(F^*)MS[E]\sum\limits_{j = 1}^t \frac{c_j^2}{n_j}}
+$$
+where $F^* = F(\alpha, t - 1, N - t)$.  For a pairwise comparisons of means, $\mu_j$ and $\mu_k$, this yields
+$$
+\bar{y}_{j+} - \bar{y}_{k+} \pm \sqrt{(t - 1)(F^*)MS[E](1 / n_j + 1 / n_k)}
+$$
+Using $\alpha = 0.05$, need to specify
+\begin{itemize}
+	\item $t$ (from the design)
+	\item $F^*$ (same critical value as for $H_0: \alpha_i \equiv 0$).
+	\item $MS[E]$ (from the data)
+	\item $\bar{y}_{j+}$, $\bar{y}_{k+}$
+	\item $n_j$, $n_k$ (from the data)
+\end{itemize}
+For binding fraction data,
+$$
+\sqrt{(t - 1)(F^*)MS[E](\frac{1}{n_j} + \frac{1}{n_k})} = \sqrt{(5 - 1)(3.06)9.05(\frac{1}{4} + \frac{1}{4})} = 7.44
+$$
+If any two sample means differ by more than $7.44$, they differ significantly.
+
+\subsubsection*{Tukey}
+Tukey's method is better than Scheff\'e's method when making {\bf all pairwise} comparisons in balanced designs ($n = n_1 = n_2 = \dots =n_t$).
+It is conservative, controlling the experimentwise error rate, and has a lower type II error rate in these cases than Scheff\'e.  (It is more powerful.)
+
+For simple contrasts of the form
+$$
+\theta = \mu_j - \mu_k
+$$
+to test
+$$
+H_0: \theta = 0 \mbox{ vs } H_1: \theta \ne 0
+$$
+reject $H_0$ at level $\alpha$ if
+$$
+|\hat{\theta}| > q(t, N-t, \alpha)\sqrt{\frac{MS[E]}{n}}
+$$
+where $q(t, N-t, \alpha)$ denotes $\alpha$ level \underline{studentized range} for $t$ means and $N-t$ degrees of freedom,
+the quantity $q(t, N-t, \alpha)\sqrt{\frac{MS[E]}{n}}$ is referred to as \underline{Tukey's honestly significant difference (HSD)}.
+The studentized ranges can be calculated using R function \colorbox{shadecolor}{qtukey($1 - \alpha$, $t$, $N-t$)}. 
+
+
+
+
+
+
+
+
+
+
+
+

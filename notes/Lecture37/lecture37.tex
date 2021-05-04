@@ -1,0 +1,217 @@
+\setcounter{section}{36}
+
+\section{Lecture 37: April 26}
+
+
+\subsection*{Last time}
+\begin{itemize}
+\item Theoretical background of linear model
+\end{itemize}
+
+
+\subsection*{Today}
+\begin{itemize}
+\item Course evaluation (5/17)
+\item HW3 review
+\item Theoretical background of linear models cont.
+	\begin{itemize}
+		\item Estimability
+		\item Idempotent matrix
+		\item Projections
+		\item Geometry of least squares solution
+	\end{itemize}
+\end{itemize}
+
+\subsubsection*{Additional reference}
+\href{http://hua-zhou.github.io/teaching/st552-2013fall/ST552-2013-Fall-LecNotes.pdf}{Course notes} by Dr. Hua Zhou\\
+``A Primer on Linear Models'' by Dr. John F. Monahan
+
+\subsection*{Estimable function}
+Assume the linear mean model: $\vecc{Y} = \vecc{Xb} + \vecc{e}$, $\mbox{E}(\vecc{e}) = \vecc{0}$.
+One main interest is estimation of the underlying parameter $\vecc{b}$.
+Can $\vecc{b}$ be estimated or what functions of $\vecc{b}$ can be estimated?
+
+\begin{itemize}
+	\item A parametric function $\vecc{\Lambda b}$, $\vecc{\Lambda} \in \mathbb{R}^{m \times p}$ is said to be (linearly) \underline{estimable} if there exists an \underline{affinely unbiased estimator} of $\vecc{\Lambda b}$ for all $\vecc{b} \in \mathbb{R}^p$.  That is there exist constants $\vecc{A}\in \mathbb{R}^{m \times n}$ and $\vecc{c} \in \mathbb{R}^m$ such that $\mbox{E}(\vecc{Ay + c}) = \vecc{\Lambda b}$ for all $\vecc{b}$.
+	\item Theorem: Assuming the linear mean model, the parametric function $\vecc{\Lambda b}$ is (linearly) estimable if and only if $\mathcal{C}(\vecc{\Lambda}) \subset \mathcal{C}(\vecc{X}\transpose)$, or equivalently $\mathcal{N}(\vecc{X}) \subset \mathcal{N}(\vecc{\Lambda})$.\\
+	``$\vecc{\Lambda b}$ is estimable $\iff$ the row space of $\vecc{\Lambda}$ is contained in the row space of $\vecc{X}$ $\iff$ the null space of $\vecc{X}$ is contained in the null space of $\vecc{\Lambda}$.''\\
+	{\it Proof:}
+	\begin{pf}
+		Let $\vecc{Ay + c}$ be an affine estimator of $\vecc{\Lambda b}$.  Unbiasedness requires
+		$$
+		\mbox{E}(\vecc{Ay + c}) = \vecc{A} \mbox{E}(\vecc{y}) + \vecc{c} = \vecc{AXb + c} = \vecc{\Lambda b}
+		$$
+		for all $\vecc{b} \in \mathbb{R}^p$.
+		Taking the special value $\vecc{b} = \vecc{0}$ shows that $\vecc{c = 0}$.
+		Thus $(\vecc{AX - \Lambda})\vecc{b} = \vecc{0}$ for all $\vecc{b}$.
+		Taking special values $\vecc{b} = \vecc{e}_i$ shows that columns of the matrix $\vecc{AX - \Lambda}$ are all zeros.
+		This means $\vecc{AX} = \vecc{\Lambda}$.
+		Therefore, the matrix $\vecc{A}$ exists if and only if rows of $\vecc{\Lambda}$ are linear combinations of the rows of $\vecc{X}$, that is, if and only if $\mathcal{C}(\vecc{\Lambda}) \subset \mathcal{C}(\vecc{X}\transpose)$		
+	\end{pf}
+	\item $\vecc{\lambda} \transpose \vecc{b}$ is linearly estimable if and only if $\lambda \transpose \vecc{b}$ is a linear combination of the components in $\vecc{\mu}_Y = \mbox{E}(\vecc{Y})$
+	\begin{pf}
+		\begin{itemize}
+			\item the `if' part: $\vecc{\lambda}\transpose \vecc{b} = \vecc{a}\transpose \vecc{\mu}_Y$ for some $\vecc{a} \in \mathbb{R}^{n \times 1}$, then by definition, $\vecc{\lambda}\transpose \vecc{b}$ is estimable.
+			\item the `only if' part: if $\vecc{\lambda}\transpose \vecc{b}$ is estimable, then $\vecc{\lambda}\transpose = \vecc{a}\transpose\vecc{X}$ for some $\vecc{a} \in \mathbb{R}^{n \times 1}$. Then $\vecc{\lambda}\transpose \vecc{b} = \vecc{a}\transpose\vecc{Xb} = \vecc{a}\transpose \mbox{E}(\vecc{Y})$
+		\end{itemize}
+	\end{pf}
+	\item Corollary: $\vecc{Xb}$ is estimable.\\
+	``Expected value of any observation $\mbox{E}(y_i)$ and their linear combinations are estimable.''
+	\item Corollary: If $\vecc{X}$ has full column rank, then any linear combinations of $\vecc{b}$ are estimable.
+	\item If $\vecc{\Lambda b}$ is (linearly) estimable, then its {\it least squares estimator} $\vecc{\Lambda \hat{b}}$ is invariant to the choice of the least squares solution $\vecc{\hat{b}}$.\\
+	{\it Proof:}
+	\begin{pf}
+		Let $\vecc{\hat{b}}_1$, $\vecc{\hat{b}}_2$ be two least squares solutions. Then $\vecc{\hat{b}}_1 - \vecc{\hat{b}}_2 \in \mathcal{N}(\vecc{X}\transpose\vecc{X}) = \mathcal{N}(\vecc{X}) \subset \mathcal{N}(\vecc{\Lambda})$.
+		Hence, $\vecc{\Lambda}(\vecc{\hat{b}}_1 - \vecc{\hat{b}}_2) = \vecc{0}$, that is $\vecc{\Lambda}\vecc{\hat{b}}_1 = \vecc{\Lambda}\vecc{\hat{b}}_2$
+	\end{pf}
+	\item The least squares estimator $\vecc{\Lambda \hat{b}}$ is a linearly unbiased estimator of $\vecc{\Lambda b}$.
+	{\it Proof:}
+	\begin{pf}
+		The least squares solution takes the general form
+		$$
+		\vecc{\hat{b}} = (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \vecc{y} + [\vecc{I}_p -  (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose\vecc{X}]\vecc{q}
+		$$
+		where $\vecc{q}\in \mathbb{R}^p$ is arbitrary.
+		Thus the least squares estimator
+		$$
+		\begin{aligned}
+			\vecc{\Lambda \hat{b}} &= \vecc{\Lambda} (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \vecc{y} + \vecc{\Lambda} [\vecc{I}_p -  (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose\vecc{X}]\vecc{q}\\
+			&=  \vecc{\Lambda} (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \vecc{y} \\
+		\end{aligned}
+		$$
+		is a linear function of $\vecc{y}$.
+		Now
+		$$
+		\begin{aligned}
+			\mbox{E}(\vecc{\Lambda \hat{b}}) &= \vecc{\Lambda} (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \mbox{E}(\vecc{y}) \\
+			&=\vecc{\Lambda} (\vecc{X}\transpose\vecc{X})^-\vecc{X}\transpose \vecc{Xb} \\
+			&= \vecc{\Lambda b}\\
+		\end{aligned}
+		$$
+		since $\vecc{X}\transpose\vecc{X}(\vecc{X}\transpose\vecc{X})^-$ is a projection onto $\mathcal{C}(\vecc{X}\transpose\vecc{X}) = \mathcal{C}(\vecc{X}\transpose)$ and $\mathcal{C}(\vecc{\Lambda}\transpose) \subset \mathcal{C}(\vecc{X}\transpose)$.
+		Therefore the least squares estimator is unbiased.
+	\end{pf}
+\end{itemize}
+
+\subsubsection*{Estimability example: One-way ANOVA model}
+
+Consider the following example with one-way ANOVA model.
+$$
+Y_{ij} = \mu + \alpha_i + \epsilon_{ij} \quad i=1, 2, 3, \; j=1, 2
+$$
+In matrix form:
+$$
+\left[\begin{array}{c}
+	Y_{11}\\
+	Y_{21}\\
+	Y_{31}\\
+	Y_{12}\\
+	Y_{22}\\
+	Y_{32}\\
+\end{array}\right] = \left[ \begin{array}{cccc}
+1 & 1  & 0 & 0\\
+1 & 0  & 1 & 0\\
+1 & 0  & 0 & 1\\
+1 & 1  & 0 & 0\\
+1 & 0  & 1 & 0\\
+1 & 0  & 0 & 1\\
+\end{array}	\right] \left[\begin{array}{c}
+\mu \\
+\alpha_1 \\
+\alpha_2 \\
+\alpha_3 \\
+\end{array}\right] + 
+\left[\begin{array}{c}
+	\epsilon_{11}\\
+	\epsilon_{21}\\
+	\epsilon_{31}\\
+	\epsilon_{12}\\
+	\epsilon_{22}\\
+	\epsilon_{32}\\
+\end{array}\right]
+$$
+Note: replication doesn't help with estimability. What functions of $\vecc{\lambda}\transpose \vecc{b}$ are estimable?\\
+{\it Solutions:}
+\begin{pf}
+	$\vecc{\mu}_Y = \left[\begin{array}{c}
+		\mu + \alpha_1 \\
+		\mu + \alpha_2\\
+		\mu + \alpha_3\\
+		\mu + \alpha_1 \\
+		\mu + \alpha_2\\
+		\mu + \alpha_3\\
+	\end{array}\right] = \left[\begin{array}{c}
+	\mu_{Y_1}\\
+	\mu_{Y_2}\\
+\end{array}\right]$.\\
+$\vecc{\lambda}\transpose \vecc{b} = \vecc{a}\transpose \mbox{E}(\vecc{Y})$ for some $\vecc{a} \in \mathbb{R}^{6 \times 1}$ if an only if $\vecc{\lambda}\transpose \vecc{b} = \vecc{a}\transpose \vecc{\mu}_{Y_1}$ for some $\vecc{a} = \left[\begin{array}{c}
+	a_1\\
+	a_2\\
+	a_3\\
+\end{array}\right]$.\\
+Let $\vecc{\lambda} = \left[\begin{array}{c}
+	\lambda_0\\
+	\lambda_1\\
+	\lambda_2\\
+	\lambda_3\\			
+\end{array}\right]$.
+We have
+$$
+\begin{aligned}
+\lambda_0 \mu + \lambda_1 \alpha_1 + \lambda_2 \alpha_2 + \lambda_3 \alpha_3 &= a_1 (\mu + \alpha_1) + a_2 (\mu + \alpha_2) + a_3 (\mu + \alpha_3)\\
+&= (a_1 + a_2 + a_3) \mu + a_1 \alpha_1 + a_2 \alpha_2 + a_3 \alpha_3\\
+\end{aligned}
+$$
+$$
+\left\{\begin{array}{l}
+	\lambda_0 = a_1 + a_2 + a_3\\
+	\lambda_1 = a_1\\
+	\lambda_2 = a_2\\
+	\lambda_3 = a_3\\
+\end{array}\right. \implies \left\{ \begin{array}{l}
+a_1 = \lambda_1\\
+a_2 = \lambda_2\\
+a_3 = \lambda_3\\
+\lambda_0 = \lambda_1 + \lambda_2 + \lambda_3\\
+\end{array}\right.
+$$
+In other words, $\vecc{\lambda}\transpose \vecc{b}$ is linearly estimable if and only if $\lambda_0 = \lambda_1 + \lambda_2 + \lambda_3$.
+\end{pf}
+
+\subsubsection*{Idempotent matrix}
+Assume $\vecc{A} \in \mathbb{R}^{n \times n}$.
+\begin{itemize}
+	\item A matrix $\vecc{A} \in \mathbb{R}^{n \times n}$ is \underline{idempotent} if and only if $\vecc{A}^2 (= \vecc{AA}) = \vecc{A}$.
+	\item Any idempotent matrix $\vecc{A}$ is a generalized inverse of itself.
+	\item The only idempotent matrix of full rank is $\vecc{I}$.\\
+	{\it Proof.} 
+	\begin{pf}
+		Since $\vecc{A}$ has full rank, the inverse $\vecc{A}^{-1}$ exists.  Then $\vecc{A} = \vecc{A}^{-1}\vecc{AA} = \vecc{A}^{-1} \vecc{A} = \vecc{I}$.
+	\end{pf}
+	Interpretation: all idempotent matrices are singular except for the identity matrix.
+	\item $\vecc{A}$ is idempotent if and only if $\vecc{A}\transpose$ is idempotent if and only if $\vecc{I}_n - \vecc{A}$ is idempotent.
+	\item For a general matrix $\vecc{A} \in \mathbb{R}^{m \times n}$, the matrices $\vecc{A}^{-} \vecc{A}$ and $\vecc{A}\vecc{A}^{-} $ are idempotent and
+	$$
+	\begin{aligned}
+		\rank(\vecc{A}) = \rank(\vecc{A}^{-} \vecc{A}) &= \rank(\vecc{A} \vecc{A}^{-} )\\
+		\rank(\vecc{I}_n - \vecc{A}^{-} \vecc{A}) &= n - \rank(\vecc{A})\\
+		\rank(\vecc{I}_m - \vecc{A} \vecc{A}^{-}) &= m - \rank(\vecc{A}).\\
+	\end{aligned}
+	$$
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
